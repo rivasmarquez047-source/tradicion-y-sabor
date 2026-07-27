@@ -386,8 +386,6 @@ h3 {
 
 /* =========================================================
    5. PORTADA
-   La foto futura debe llamarse portada-principal.jpg.
-   El degradado funciona como marcador mientras no exista.
    ========================================================= */
 .hero {
   color: var(--color-blanco-calido);
@@ -404,8 +402,7 @@ h3 {
   background-color: #59402b;
   background-image:
     linear-gradient(90deg, rgba(25, 24, 16, 0.91) 0%, rgba(25, 24, 16, 0.65) 45%, rgba(25, 24, 16, 0.18) 78%),
-    linear-gradient(135deg, #6d4931 0%, #b59150 50%, #26391f 100%),
-    url("../assets/images/hero/portada-principal.jpg");
+    url("../assets/images/hero/portada-principal.png");
   background-position: center;
   background-size: cover;
 }
@@ -549,40 +546,25 @@ h3 {
   transform: scale(1.025);
 }
 
-.categoria__imagen::after,
-.historia__imagen::after {
-  position: absolute;
-  right: 0.8rem;
-  bottom: 0.8rem;
-  padding: 0.4rem 0.65rem;
-  border-radius: 2rem;
-  color: rgba(255, 253, 248, 0.94);
-  background: rgba(38, 57, 31, 0.74);
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  content: "IMAGEN PROVISIONAL";
-}
-
 .categoria--platillos .categoria__imagen {
+  background-color: #7a3624;
   background-image:
     linear-gradient(135deg, rgba(129, 48, 24, 0.18), rgba(38, 57, 31, 0.5)),
-    linear-gradient(135deg, #d6a76d, #7a3624),
-    url("../assets/images/platillos/categoria-platillos.jpg");
+    url("../assets/images/platillos/categoria-platillos.png");
 }
 
 .categoria--bebidas .categoria__imagen {
+  background-color: #755837;
   background-image:
     linear-gradient(135deg, rgba(38, 57, 31, 0.08), rgba(38, 57, 31, 0.58)),
-    linear-gradient(135deg, #c4bd73, #755837),
-    url("../assets/images/bebidas/categoria-bebidas.jpg");
+    url("../assets/images/bebidas/categoria-bebidas.png");
 }
 
 .categoria--servicios .categoria__imagen {
+  background-color: #604735;
   background-image:
     linear-gradient(135deg, rgba(181, 145, 80, 0.14), rgba(59, 41, 31, 0.62)),
-    linear-gradient(135deg, #d2b685, #604735),
-    url("../assets/images/servicios/categoria-servicios.jpg");
+    url("../assets/images/servicios/categoria-servicios.png");
 }
 
 .categoria__contenido {
@@ -892,8 +874,7 @@ h3 {
   background-color: var(--color-beige);
   background-image:
     linear-gradient(180deg, rgba(181, 145, 80, 0.1), rgba(38, 57, 31, 0.42)),
-    linear-gradient(135deg, #c6a873, #594735),
-    url("../assets/images/nosotros/nuestra-historia.jpg");
+    url("../assets/images/nosotros/nuestra-historia.png");
   background-position: center;
   background-size: cover;
   box-shadow: var(--sombra-media);

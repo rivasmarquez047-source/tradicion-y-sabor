@@ -1,1 +1,486 @@
-/* Adaptaciones para tablet y celular: se desarrollarán en la Etapa 4. */
+/* =========================================================
+   DISEÑO RESPONSIVE
+   Los estilos generales están en css/styles.css.
+   Aquí solo se modifican distribuciones según el ancho.
+   ========================================================= */
+
+/* Laptops y pantallas medianas */
+@media (max-width: 1100px) {
+  :root {
+    --ancho-contenido: 960px;
+  }
+
+  .navegacion-principal__contenido {
+    gap: 1.2rem;
+  }
+
+  .menu-principal ul {
+    gap: 1rem;
+  }
+
+  .menu-principal a {
+    font-size: 0.9rem;
+  }
+
+  .boton-pedido-header {
+    padding-inline: 1rem;
+  }
+
+  .valores__lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pie-pagina__cuadricula {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+
+  .pie-pagina__cuadricula > div:last-child {
+    grid-column: 2 / 4;
+  }
+}
+
+/* Tablets y menú móvil */
+@media (max-width: 900px) {
+  html {
+    scroll-padding-top: 7rem;
+  }
+
+  .seccion {
+    padding-block: 5.3rem;
+  }
+
+  .barra-superior__contenido {
+    min-height: 2rem;
+  }
+
+  .navegacion-principal {
+    position: relative;
+  }
+
+  .navegacion-principal__contenido {
+    min-height: 4.8rem;
+    grid-template-columns: 1fr auto;
+  }
+
+  .marca {
+    justify-self: start;
+  }
+
+  .boton-menu {
+    display: block;
+  }
+
+  .boton-menu[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(0.5rem) rotate(45deg);
+  }
+
+  .boton-menu[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .boton-menu[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-0.5rem) rotate(-45deg);
+  }
+
+  .boton-menu span {
+    transition:
+      opacity var(--transicion),
+      transform var(--transicion);
+  }
+
+  .menu-principal {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: none;
+    padding: 0.75rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--color-borde);
+    background: var(--color-crema-claro);
+    box-shadow: 0 18px 30px rgba(34, 28, 21, 0.14);
+  }
+
+  .menu-principal.abierto {
+    display: block;
+  }
+
+  .menu-principal ul {
+    width: min(100%, var(--ancho-contenido));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-inline: auto;
+  }
+
+  .menu-principal li + li {
+    border-top: 1px solid var(--color-borde);
+  }
+
+  .menu-principal a {
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    padding-inline: 0.4rem;
+    font-size: 1rem;
+  }
+
+  .menu-principal a::after {
+    display: none;
+  }
+
+  .boton-pedido-header {
+    display: none;
+  }
+
+  .hero__imagen {
+    min-height: 620px;
+    background-image:
+      linear-gradient(90deg, rgba(25, 24, 16, 0.88), rgba(25, 24, 16, 0.52)),
+      url("../assets/images/hero/portada-principal.png");
+  }
+
+  .hero__contenido {
+    padding-block: 5.5rem;
+  }
+
+  .categorias__cuadricula,
+  .productos-cuadricula,
+  .servicios__cuadricula {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .categoria:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .historia__distribucion {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .historia__imagen {
+    width: min(620px, 100%);
+    min-height: 520px;
+    margin-inline: auto;
+    border-radius: var(--radio-grande);
+  }
+
+  .contacto__distribucion {
+    grid-template-columns: 1fr;
+  }
+
+  .mapa-provisional {
+    min-height: 360px;
+  }
+
+  .pie-pagina__cuadricula {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .pie-pagina__cuadricula > div:last-child {
+    grid-column: auto;
+  }
+
+  .modal {
+    padding: 1.2rem;
+  }
+
+  .modal__contenido {
+    max-height: calc(100vh - 2.4rem);
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+
+  .modal__imagen-contenedor {
+    min-height: 500px;
+  }
+
+  .modal__informacion {
+    padding: 2.5rem;
+  }
+}
+
+/* Celulares grandes */
+@media (max-width: 700px) {
+  .contenedor {
+    width: min(calc(100% - 2rem), var(--ancho-contenido));
+  }
+
+  .seccion {
+    padding-block: 4.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2.65rem, 12vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(2rem, 9vw, 2.7rem);
+  }
+
+  .encabezado-seccion {
+    margin-bottom: 2.3rem;
+  }
+
+  .barra-superior__contenido {
+    justify-content: center;
+  }
+
+  .barra-superior .redes-sociales {
+    display: none;
+  }
+
+  .marca__nombre {
+    font-size: 1.35rem;
+  }
+
+  .marca__descripcion {
+    font-size: 0.56rem;
+  }
+
+  .menu-principal {
+    padding-inline: 1rem;
+  }
+
+  .hero__imagen {
+    min-height: 570px;
+    background-position: 62% center;
+  }
+
+  .hero__imagen::before {
+    inset: 0.75rem;
+  }
+
+  .hero__contenido {
+    padding-block: 4.5rem;
+  }
+
+  .hero__contenido > p:not(.etiqueta) {
+    font-size: 1rem;
+  }
+
+  .hero .grupo-botones,
+  .contacto .grupo-botones {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .hero .boton,
+  .contacto .boton {
+    width: 100%;
+  }
+
+  .valores__lista,
+  .categorias__cuadricula,
+  .productos-cuadricula,
+  .servicios__cuadricula {
+    grid-template-columns: 1fr;
+  }
+
+  .categoria:last-child {
+    grid-column: auto;
+  }
+
+  .categoria__imagen {
+    min-height: 215px;
+  }
+
+  .filtros {
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .filtro {
+    flex: 1 1 8rem;
+  }
+
+  .grupo-productos + .grupo-productos {
+    margin-top: 4rem;
+  }
+
+  .grupo-productos__encabezado {
+    display: block;
+  }
+
+  .grupo-productos__encabezado p {
+    margin-top: 0.4rem;
+  }
+
+  .tarjeta-producto__acciones {
+    flex-direction: column;
+  }
+
+  .tarjeta-producto__acciones .boton {
+    width: 100%;
+  }
+
+  .tarjeta-servicio {
+    min-height: 360px;
+  }
+
+  .historia__imagen {
+    min-height: 440px;
+  }
+
+  .historia__detalle {
+    grid-template-columns: 1fr;
+  }
+
+  .contacto__datos li {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .mapa-provisional {
+    min-height: 320px;
+  }
+
+  .pie-pagina__cuadricula {
+    grid-template-columns: 1fr;
+    padding-block: 4rem 3rem;
+  }
+
+  .pie-pagina__inferior {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-block: 1.2rem;
+  }
+
+  .modal {
+    align-items: start;
+    padding: 0.75rem;
+  }
+
+  .modal__contenido {
+    width: 100%;
+    max-height: calc(100vh - 1.5rem);
+    grid-template-columns: 1fr;
+  }
+
+  .modal__imagen-contenedor {
+    min-height: 245px;
+    max-height: 34vh;
+  }
+
+  .modal__informacion {
+    padding: 2rem 1.4rem;
+  }
+
+  .modal__informacion h2 {
+    padding-right: 2rem;
+    font-size: 2rem;
+  }
+
+  .modal__informacion ul {
+    grid-template-columns: 1fr;
+  }
+
+  .boton-whatsapp-flotante {
+    right: 1rem;
+    bottom: 1rem;
+    width: 3.5rem;
+    padding: 0.55rem;
+    justify-content: center;
+  }
+
+  .boton-whatsapp-flotante__texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+  .contenedor {
+    width: min(calc(100% - 1.5rem), var(--ancho-contenido));
+  }
+
+  body {
+    font-size: 0.95rem;
+  }
+
+  .barra-superior {
+    display: none;
+  }
+
+  html {
+    scroll-padding-top: 5rem;
+  }
+
+  .navegacion-principal__contenido {
+    min-height: 4.5rem;
+  }
+
+  .marca__nombre {
+    font-size: 1.2rem;
+  }
+
+  .boton-menu {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  .hero__imagen {
+    min-height: calc(100svh - 4.5rem);
+  }
+
+  .hero__contenido {
+    padding-block: 3.8rem;
+  }
+
+  .grupo-botones {
+    width: 100%;
+  }
+
+  .grupo-botones .boton {
+    width: 100%;
+  }
+
+  .valor {
+    padding: 1.15rem;
+  }
+
+  .categoria__contenido {
+    padding: 1.3rem;
+  }
+
+  .contacto__datos {
+    padding: 1.5rem;
+  }
+
+  .mapa-provisional {
+    padding: 1.2rem;
+  }
+
+  .mapa-provisional div {
+    padding: 1.4rem;
+  }
+
+  .historia__imagen {
+    min-height: 360px;
+  }
+
+  .historia__cifra {
+    width: 100%;
+  }
+
+  .modal__imagen-contenedor {
+    min-height: 210px;
+  }
+}
+
+/* Pantallas táctiles: evita que los controles queden demasiado pequeños */
+@media (pointer: coarse) {
+  .boton,
+  .filtro,
+  .menu-principal a,
+  .modal__cerrar {
+    min-height: 44px;
+  }
+}

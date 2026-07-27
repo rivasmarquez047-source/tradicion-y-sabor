@@ -1,1 +1,94 @@
-/* Animaciones discretas: se desarrollarán en la Etapa 10. */
+/*
+ * Movimiento moderno y discreto.
+ * Conserva la estética tradicional sin recargar la interfaz.
+ */
+
+@keyframes entrada-tarjeta {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulso-contador {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  45% {
+    color: var(--color-marron-oscuro);
+    background: #f0cc7d;
+    transform: scale(1.24);
+  }
+}
+
+@keyframes brillo-gastronomico {
+  0% {
+    transform: translateX(-140%) skewX(-18deg);
+  }
+
+  100% {
+    transform: translateX(260%) skewX(-18deg);
+  }
+}
+
+.tarjeta-producto,
+.tarjeta-servicio {
+  animation: entrada-tarjeta 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--indice, 0) * 70ms);
+}
+
+.hero__contenido > * {
+  animation: entrada-tarjeta 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero__contenido > :nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.hero__contenido > :nth-child(3) {
+  animation-delay: 150ms;
+}
+
+.hero__contenido > :nth-child(4) {
+  animation-delay: 220ms;
+}
+
+.tarjeta-producto__imagen-contenedor::after {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -35%;
+  z-index: 2;
+  width: 20%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 248, 221, 0.34),
+    transparent
+  );
+  content: "";
+  pointer-events: none;
+  transform: translateX(-140%) skewX(-18deg);
+}
+
+.tarjeta-producto:hover .tarjeta-producto__imagen-contenedor::after {
+  animation: brillo-gastronomico 820ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

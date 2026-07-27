@@ -42,15 +42,11 @@
 /* Tablets y menú móvil */
 @media (max-width: 900px) {
   html {
-    scroll-padding-top: 7rem;
+    scroll-padding-top: 5.2rem;
   }
 
   .seccion {
     padding-block: 5.3rem;
-  }
-
-  .barra-superior__contenido {
-    min-height: 2rem;
   }
 
   .navegacion-principal {
@@ -144,9 +140,12 @@
   }
 
   .categorias__cuadricula,
-  .productos-cuadricula,
   .servicios__cuadricula {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .productos-cuadricula {
+    grid-auto-columns: calc(50% - 0.65rem);
   }
 
   .categoria:last-child {
@@ -222,14 +221,6 @@
     margin-bottom: 2.3rem;
   }
 
-  .barra-superior__contenido {
-    justify-content: center;
-  }
-
-  .barra-superior .redes-sociales {
-    display: none;
-  }
-
   .marca__nombre {
     font-size: 1.35rem;
   }
@@ -272,9 +263,12 @@
 
   .valores__lista,
   .categorias__cuadricula,
-  .productos-cuadricula,
   .servicios__cuadricula {
     grid-template-columns: 1fr;
+  }
+
+  .productos-cuadricula {
+    grid-auto-columns: min(86%, 360px);
   }
 
   .categoria:last-child {
@@ -299,11 +293,15 @@
   }
 
   .grupo-productos__encabezado {
-    display: block;
+    align-items: center;
   }
 
   .grupo-productos__encabezado p {
     margin-top: 0.4rem;
+  }
+
+  .carrusel-controles {
+    align-self: end;
   }
 
   .tarjeta-producto__acciones {
@@ -376,6 +374,10 @@
     grid-template-columns: 1fr;
   }
 
+  .panel-carrito {
+    width: min(440px, 100%);
+  }
+
   .boton-whatsapp-flotante {
     right: 1rem;
     bottom: 1rem;
@@ -393,6 +395,11 @@
     clip-path: inset(50%);
     white-space: nowrap;
   }
+
+  .boton-carrito-flotante {
+    bottom: 1rem;
+    left: 1rem;
+  }
 }
 
 /* Celulares pequeños */
@@ -403,10 +410,6 @@
 
   body {
     font-size: 0.95rem;
-  }
-
-  .barra-superior {
-    display: none;
   }
 
   html {
@@ -473,6 +476,64 @@
   .modal__imagen-contenedor {
     min-height: 210px;
   }
+
+  .grupo-productos__encabezado {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .carrusel-controles button {
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+
+  .productos-cuadricula {
+    grid-auto-columns: 88%;
+  }
+
+  .boton-carrito-flotante {
+    width: 3.5rem;
+    justify-content: center;
+    padding: 0.55rem;
+  }
+
+  .boton-carrito-flotante > span:nth-child(2) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .boton-carrito-flotante .contador-carrito {
+    position: absolute;
+    top: -0.35rem;
+    right: -0.25rem;
+  }
+
+  .panel-carrito__encabezado {
+    padding: 1.2rem 1rem 0.9rem;
+  }
+
+  .panel-carrito__cuerpo {
+    padding: 1rem 1rem 2.5rem;
+  }
+
+  .carrito-item {
+    grid-template-columns: 5rem 1fr;
+  }
+
+  .carrito-item img {
+    width: 5rem;
+    min-height: 6.4rem;
+  }
+
+  .notificacion {
+    top: 5.2rem;
+  }
 }
 
 /* Pantallas táctiles: evita que los controles queden demasiado pequeños */
@@ -480,7 +541,9 @@
   .boton,
   .filtro,
   .menu-principal a,
-  .modal__cerrar {
+  .modal__cerrar,
+  .panel-carrito__cerrar,
+  .carrusel-controles button {
     min-height: 44px;
   }
 }

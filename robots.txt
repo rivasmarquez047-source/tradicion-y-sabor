@@ -1,0 +1,3 @@
+# Configuración provisional. Se completará en la etapa de SEO.
+User-agent: *
+Allow: /

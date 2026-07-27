@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Tradición & Sabor: cocina peruana tradicional, bebidas de la casa y atención cálida para cada ocasión."
+    >
+    <title>Tradición &amp; Sabor | Cocina tradicional peruana</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animations.css">
+
+    <script src="js/data.js" defer></script>
+    <script src="js/whatsapp.js" defer></script>
+    <script src="js/modal.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+    <header class="site-header" id="inicio">
+      <div class="barra-superior">
+        <div class="contenedor barra-superior__contenido">
+          <p data-negocio="fraseTradicion">Tradición familiar desde 1985</p>
+
+          <nav class="redes-sociales" aria-label="Redes sociales">
+            <a
+              href="#"
+              data-red-social="facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visitar Facebook de Tradición y Sabor"
+            >
+              Facebook
+            </a>
+            <a
+              href="#"
+              data-red-social="instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visitar Instagram de Tradición y Sabor"
+            >
+              Instagram
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="navegacion-principal">
+        <div class="contenedor navegacion-principal__contenido">
+          <a class="marca" href="#inicio" aria-label="Tradición y Sabor, ir al inicio">
+            <span class="marca__nombre" data-negocio="nombre">Tradición &amp; Sabor</span>
+            <span class="marca__descripcion">Cocina tradicional</span>
+          </a>
+
+          <button
+            class="boton-menu"
+            id="boton-menu"
+            type="button"
+            aria-label="Abrir menú de navegación"
+            aria-controls="menu-principal"
+            aria-expanded="false"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </button>
+
+          <nav class="menu-principal" id="menu-principal" aria-label="Navegación principal">
+            <ul>
+              <li><a href="#inicio">Inicio</a></li>
+              <li><a href="#platillos">Platillos</a></li>
+              <li><a href="#bebidas">Bebidas</a></li>
+              <li><a href="#servicios">Servicios</a></li>
+              <li><a href="#nosotros">Nosotros</a></li>
+              <li><a href="#contacto">Contacto</a></li>
+            </ul>
+          </nav>
+
+          <a class="boton boton--principal boton-pedido-header" href="#" data-whatsapp="general">
+            Haz tu pedido
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenido-principal">
+      <section class="hero" aria-labelledby="titulo-principal">
+        <div class="hero__imagen" role="img" aria-label="Ambiente cálido de un restaurante tradicional">
+          <div class="contenedor hero__contenido">
+            <p class="etiqueta">Bienvenidos</p>
+            <h1 id="titulo-principal">Tradición y sabor que se disfrutan en cada momento</h1>
+            <p>
+              Cocina tradicional preparada con ingredientes seleccionados, recetas familiares y
+              atención cercana.
+            </p>
+
+            <div class="grupo-botones">
+              <a class="boton boton--principal" href="#platillos">Ver nuestros platillos</a>
+              <a class="boton boton--secundario" href="#" data-whatsapp="general">
+                Pedir por WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="valores seccion" aria-labelledby="titulo-valores">
+        <div class="contenedor">
+          <div class="encabezado-seccion">
+            <p class="etiqueta">Nuestra esencia</p>
+            <h2 id="titulo-valores">Cocina hecha para compartir</h2>
+          </div>
+
+          <ul class="valores__lista">
+            <li class="valor">
+              <span class="valor__icono" aria-hidden="true">✦</span>
+              <div>
+                <h3>Ingredientes frescos</h3>
+                <p>Productos seleccionados por su calidad y sabor.</p>
+              </div>
+            </li>
+            <li class="valor">
+              <span class="valor__icono" aria-hidden="true">♨</span>
+              <div>
+                <h3>Recetas tradicionales</h3>
+                <p>Preparaciones que conservan nuestra historia familiar.</p>
+              </div>
+            </li>
+            <li class="valor">
+              <span class="valor__icono" aria-hidden="true">♡</span>
+              <div>
+                <h3>Atención cálida</h3>
+                <p>Un servicio cercano y personalizado para cada visitante.</p>
+              </div>
+            </li>
+            <li class="valor">
+              <span class="valor__icono" aria-hidden="true">✓</span>
+              <div>
+                <h3>Experiencia y confianza</h3>
+                <p>Años compartiendo buenos momentos alrededor de la mesa.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="categorias seccion" aria-labelledby="titulo-categorias">
+        <div class="contenedor">
+          <div class="encabezado-seccion">
+            <p class="etiqueta">Descubre</p>
+            <h2 id="titulo-categorias">Todo lo que tenemos para ti</h2>
+          </div>
+
+          <div class="categorias__cuadricula">
+            <article class="categoria categoria--platillos">
+              <div class="categoria__imagen" role="img" aria-label="Selección de platillos tradicionales"></div>
+              <div class="categoria__contenido">
+                <h3>Platillos</h3>
+                <p>Recetas peruanas preparadas para disfrutar y compartir.</p>
+                <a href="#platillos">Ver platillos <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+
+            <article class="categoria categoria--bebidas">
+              <div class="categoria__imagen" role="img" aria-label="Bebidas tradicionales y refrescantes"></div>
+              <div class="categoria__contenido">
+                <h3>Bebidas</h3>
+                <p>Sabores refrescantes y bebidas tradicionales de la casa.</p>
+                <a href="#bebidas">Ver bebidas <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+
+            <article class="categoria categoria--servicios">
+              <div class="categoria__imagen" role="img" aria-label="Mesa preparada para una celebración"></div>
+              <div class="categoria__contenido">
+                <h3>Servicios</h3>
+                <p>Soluciones especiales para reuniones, celebraciones y eventos.</p>
+                <a href="#servicios">Ver servicios <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="carta seccion" id="carta" aria-labelledby="titulo-carta">
+        <div class="contenedor">
+          <div class="encabezado-seccion">
+            <p class="etiqueta">Nuestra carta</p>
+            <h2 id="titulo-carta">Sabores preparados con cariño</h2>
+            <p>Precios y datos provisionales, fáciles de cambiar desde el archivo de datos.</p>
+          </div>
+
+          <div class="filtros" role="group" aria-label="Filtrar productos">
+            <button class="filtro activo" type="button" data-filtro="todos" aria-pressed="true">
+              Todos
+            </button>
+            <button class="filtro" type="button" data-filtro="platillo" aria-pressed="false">
+              Platillos
+            </button>
+            <button class="filtro" type="button" data-filtro="bebida" aria-pressed="false">
+              Bebidas
+            </button>
+          </div>
+
+          <section class="grupo-productos" id="platillos" data-grupo="platillo" aria-labelledby="titulo-platillos">
+            <div class="grupo-productos__encabezado">
+              <h3 id="titulo-platillos">Nuestros platillos</h3>
+              <p>Recetas tradicionales para todos los gustos.</p>
+            </div>
+            <div class="productos-cuadricula" id="lista-platillos" aria-live="polite">
+              <!-- Las tarjetas de platillos se crearán desde js/data.js en la Etapa 6. -->
+            </div>
+          </section>
+
+          <section class="grupo-productos" id="bebidas" data-grupo="bebida" aria-labelledby="titulo-bebidas">
+            <div class="grupo-productos__encabezado">
+              <h3 id="titulo-bebidas">Nuestras bebidas</h3>
+              <p>Opciones naturales, calientes y refrescantes.</p>
+            </div>
+            <div class="productos-cuadricula" id="lista-bebidas" aria-live="polite">
+              <!-- Las tarjetas de bebidas se crearán desde js/data.js en la Etapa 6. -->
+            </div>
+          </section>
+
+          <p class="mensaje-sin-resultados" id="mensaje-sin-resultados" hidden>
+            No hay productos disponibles para este filtro.
+          </p>
+        </div>
+      </section>
+
+      <section class="servicios seccion" id="servicios" aria-labelledby="titulo-servicios">
+        <div class="contenedor">
+          <div class="encabezado-seccion">
+            <p class="etiqueta">Pensamos en cada ocasión</p>
+            <h2 id="titulo-servicios">Servicios para compartir buenos momentos</h2>
+          </div>
+
+          <div class="servicios__cuadricula" id="lista-servicios">
+            <!-- Las tarjetas de servicios se crearán desde js/data.js en la Etapa 6. -->
+          </div>
+        </div>
+      </section>
+
+      <section class="historia seccion" id="nosotros" aria-labelledby="titulo-historia">
+        <div class="contenedor historia__distribucion">
+          <div
+            class="historia__imagen"
+            role="img"
+            aria-label="Familia compartiendo la tradición de su cocina"
+          ></div>
+
+          <div class="historia__contenido">
+            <p class="etiqueta">Nuestra historia</p>
+            <h2 id="titulo-historia">Una tradición familiar que sigue creciendo</h2>
+            <p>
+              <strong data-negocio="nombre">Tradición &amp; Sabor</strong> nació en
+              <span data-negocio="fundacion">1985</span> como un pequeño negocio familiar. Desde
+              entonces, compartimos recetas inspiradas en la cocina peruana y en el cariño de casa.
+            </p>
+
+            <div class="historia__detalle">
+              <article>
+                <h3>Nuestra misión</h3>
+                <p>Crear experiencias memorables mediante sabores honestos y atención cercana.</p>
+              </article>
+              <article>
+                <h3>Compromiso con la calidad</h3>
+                <p>Cuidamos cada ingrediente, preparación y detalle del servicio.</p>
+              </article>
+            </div>
+
+            <p class="historia__cifra">
+              <strong>Más de 35 años</strong>
+              <span>compartiendo momentos</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="contacto seccion" id="contacto" aria-labelledby="titulo-contacto">
+        <div class="contenedor">
+          <div class="encabezado-seccion">
+            <p class="etiqueta">Visítanos</p>
+            <h2 id="titulo-contacto">Estamos para atenderte</h2>
+          </div>
+
+          <div class="contacto__distribucion">
+            <address class="contacto__datos">
+              <h3>Información de contacto</h3>
+              <ul>
+                <li>
+                  <strong>WhatsApp:</strong>
+                  <a href="#" data-whatsapp="general" data-negocio="whatsappVisible">
+                    +51 999 999 999
+                  </a>
+                </li>
+                <li>
+                  <strong>Teléfono:</strong>
+                  <a href="tel:+51000000000" data-negocio="telefono">+51 000 000 000</a>
+                </li>
+                <li>
+                  <strong>Dirección:</strong>
+                  <span data-negocio="direccion">Dirección provisional, Lima, Perú</span>
+                </li>
+                <li>
+                  <strong>Horario:</strong>
+                  <span data-negocio="horario">Lunes a domingo, 11:00 a. m. – 10:00 p. m.</span>
+                </li>
+                <li>
+                  <strong>Correo:</strong>
+                  <a href="mailto:hola@ejemplo.com" data-negocio="correo">hola@ejemplo.com</a>
+                </li>
+              </ul>
+
+              <div class="grupo-botones">
+                <a
+                  class="boton boton--principal"
+                  href="#"
+                  data-negocio-enlace="comoLlegar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Cómo llegar
+                </a>
+                <a class="boton boton--secundario" href="#" data-whatsapp="general">
+                  Escribir por WhatsApp
+                </a>
+              </div>
+            </address>
+
+            <div class="mapa-provisional" role="region" aria-label="Ubicación del negocio">
+              <div>
+                <h3>Mapa próximamente</h3>
+                <p>Aquí podrás insertar un mapa de Google Maps sin utilizar una clave de API.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="pie-pagina">
+      <div class="contenedor pie-pagina__cuadricula">
+        <div class="pie-pagina__marca">
+          <a class="marca marca--pie" href="#inicio">
+            <span class="marca__nombre" data-negocio="nombre">Tradición &amp; Sabor</span>
+            <span class="marca__descripcion">Cocina tradicional</span>
+          </a>
+          <p>Sabores de siempre, preparados con cariño para compartir en familia.</p>
+        </div>
+
+        <div>
+          <h2 class="pie-pagina__titulo">Contáctanos</h2>
+          <ul>
+            <li><a href="#" data-whatsapp="general">Pedir por WhatsApp</a></li>
+            <li><a href="mailto:hola@ejemplo.com" data-negocio="correo">hola@ejemplo.com</a></li>
+            <li><span data-negocio="direccion">Dirección provisional, Lima, Perú</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="pie-pagina__titulo">Enlaces rápidos</h2>
+          <nav aria-label="Navegación del pie de página">
+            <ul>
+              <li><a href="#platillos">Platillos</a></li>
+              <li><a href="#bebidas">Bebidas</a></li>
+              <li><a href="#servicios">Servicios</a></li>
+              <li><a href="#nosotros">Nuestra historia</a></li>
+              <li><a href="#contacto">Contacto</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div>
+          <h2 class="pie-pagina__titulo">Horario</h2>
+          <p data-negocio="horario">Lunes a domingo, 11:00 a. m. – 10:00 p. m.</p>
+          <a class="boton boton--principal" href="#" data-whatsapp="general">Haz tu pedido</a>
+        </div>
+      </div>
+
+      <div class="contenedor pie-pagina__inferior">
+        <p>
+          © <span id="anio-actual"></span>
+          <span data-negocio="nombre">Tradición &amp; Sabor</span>. Todos los derechos reservados.
+        </p>
+        <nav aria-label="Redes sociales del pie de página">
+          <a href="#" data-red-social="facebook" target="_blank" rel="noopener noreferrer">
+            Facebook
+          </a>
+          <a href="#" data-red-social="instagram" target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
+        </nav>
+      </div>
+    </footer>
+
+    <button
+      class="boton-whatsapp-flotante"
+      id="whatsapp-flotante"
+      type="button"
+      aria-label="Realizar un pedido por WhatsApp"
+      data-whatsapp="general"
+    >
+      <span aria-hidden="true">WA</span>
+      <span class="boton-whatsapp-flotante__texto">Pedir por WhatsApp</span>
+    </button>
+
+    <div class="modal" id="modal-producto" hidden>
+      <div class="modal__fondo" data-cerrar-modal></div>
+      <section
+        class="modal__contenido"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-titulo"
+        aria-describedby="modal-descripcion"
+        tabindex="-1"
+      >
+        <button
+          class="modal__cerrar"
+          id="modal-cerrar"
+          type="button"
+          aria-label="Cerrar información del producto"
+          data-cerrar-modal
+        >
+          ×
+        </button>
+
+        <div class="modal__imagen-contenedor">
+          <img id="modal-imagen" src="" alt="">
+        </div>
+
+        <div class="modal__informacion">
+          <p class="etiqueta" id="modal-categoria"></p>
+          <h2 id="modal-titulo"></h2>
+          <p class="modal__precio" id="modal-precio"></p>
+          <p id="modal-descripcion"></p>
+
+          <h3>Ingredientes</h3>
+          <ul id="modal-ingredientes"></ul>
+
+          <div class="modal__alergenos" id="modal-alergenos">
+            <h3>Alérgenos</h3>
+            <p id="modal-alergenos-texto"></p>
+          </div>
+
+          <a class="boton boton--principal" id="modal-whatsapp" href="#" data-whatsapp="producto">
+            Pedir por WhatsApp
+          </a>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

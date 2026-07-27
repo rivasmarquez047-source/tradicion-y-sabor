@@ -135,6 +135,12 @@
       }
     });
 
+    document.addEventListener("modal:cerrar-producto", () => {
+      if (!modal.hidden) {
+        cerrar();
+      }
+    });
+
     document.addEventListener("carrito:agregado", (evento) => {
       if (!modal.hidden && evento.detail?.productoId === botonAgregar.dataset.productoId) {
         botonAgregar.textContent = "Agregado ✓";

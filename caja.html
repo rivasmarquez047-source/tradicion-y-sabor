@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vista demostrativa de caja de Tradición y Sabor.">
+    <title>Caja | Tradición &amp; Sabor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <script src="js/data.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/caja.js" defer></script>
+  </head>
+  <body class="panel-page">
+    <header class="panel-header">
+      <div class="contenedor panel-header__contenido">
+        <a class="marca" href="index.html?demo=1" aria-label="Volver a la vista del cliente">
+          <span class="marca__nombre">Tradición &amp; Sabor</span>
+          <span class="marca__descripcion">Panel de demostración</span>
+        </a>
+        <nav class="panel-navegacion" aria-label="Cambiar vista">
+          <a href="index.html?demo=1">Cliente</a>
+          <a class="activo" href="caja.html">Caja</a>
+          <a href="cocina.html">Cocina</a>
+          <a href="admin.html">Administración</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="panel-main">
+      <section class="panel-portada">
+        <div>
+          <p class="etiqueta">Control de mesas y pagos</p>
+          <h1>Vista de caja</h1>
+          <p>Consulta pedidos, registra pagos y cierra mesas durante la demostración.</p>
+        </div>
+        <span class="panel-actualizacion" id="caja-actualizacion">Estado local actualizado</span>
+      </section>
+
+      <section class="resumen-operativo" aria-label="Resumen de caja">
+        <article class="tarjeta-metrica">
+          <span>Mesas ocupadas</span>
+          <strong id="metrica-mesas">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Pedidos recibidos</span>
+          <strong id="metrica-recibidos">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Pedidos listos</span>
+          <strong id="metrica-listos">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Entregados por pagar</span>
+          <strong id="metrica-entregados">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Pedidos pagados</span>
+          <strong id="metrica-pagados">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Ventas simuladas</span>
+          <strong id="metrica-ventas">S/ 0.00</strong>
+        </article>
+      </section>
+
+      <section class="panel-bloque" aria-labelledby="titulo-tabla-pedidos">
+        <div class="panel-bloque__encabezado">
+          <h2 id="titulo-tabla-pedidos">Pedidos registrados</h2>
+          <span id="cantidad-pedidos">0 pedidos</span>
+        </div>
+        <div class="tabla-contenedor">
+          <table class="tabla-panel">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Mesa</th>
+                <th>Hora</th>
+                <th>Total</th>
+                <th>Estado del pedido</th>
+                <th>Estado del pago</th>
+                <th>Método</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-pedidos"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div class="carrito-capa" id="detalle-caja-capa" hidden></div>
+    <aside
+      class="detalle-operativo"
+      id="detalle-caja"
+      aria-labelledby="detalle-caja-titulo"
+      aria-hidden="true"
+    >
+      <div class="detalle-operativo__encabezado">
+        <div>
+          <p class="etiqueta">Detalle de mesa</p>
+          <h2 id="detalle-caja-titulo">Pedido</h2>
+        </div>
+        <button class="detalle-cerrar" id="cerrar-detalle-caja" type="button" aria-label="Cerrar detalle">×</button>
+      </div>
+      <div class="detalle-operativo__cuerpo" id="detalle-caja-cuerpo"></div>
+    </aside>
+
+    <div class="notificacion" id="notificacion-caja" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

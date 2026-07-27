@@ -16,7 +16,7 @@
     return;
   }
 
-  const todosLosProductos = [...datos.platillos, ...datos.bebidas];
+  let todosLosProductos = [];
 
   /**
    * Convierte un número al formato monetario de Perú.
@@ -121,7 +121,7 @@
     botonPedido.className = "boton boton--principal boton-pedir";
     botonPedido.type = "button";
     botonPedido.dataset.productoId = producto.id;
-    botonPedido.dataset.accion = "agregar-carrito";
+    botonPedido.dataset.accion = "personalizar-producto";
     botonPedido.textContent = producto.disponible ? "Agregar" : "No disponible";
     botonPedido.disabled = !producto.disponible;
     botonPedido.setAttribute("aria-label", `Agregar ${producto.nombre} a mi pedido`);
@@ -315,21 +315,24 @@
     }
   }
 
-  function renderizarSitio() {
-    aplicarDatosDelNegocio();
-    configurarFiltros();
-    configurarCarruseles();
-    configurarMenuMovil();
+  function renderizarProductos() {
+    const catalogo = window.ESTADO_APP?.obtenerCatalogo() || [
+      ...datos.platillos,
+      ...datos.bebidas
+    ];
+    todosLosProductos = catalogo;
+    const platillos = catalogo.filter((producto) => producto.categoria === "platillo");
+    const bebidas = catalogo.filter((producto) => producto.categoria === "bebida");
 
     renderizarColeccion(
       document.querySelector("#lista-platillos"),
-      datos.platillos,
+      platillos,
       crearTarjetaProducto
     );
 
     renderizarColeccion(
       document.querySelector("#lista-bebidas"),
-      datos.bebidas,
+      bebidas,
       crearTarjetaProducto
     );
 
@@ -342,12 +345,21 @@
     document.dispatchEvent(
       new CustomEvent("contenidoDinamicoListo", {
         detail: {
-          platillos: datos.platillos.length,
-          bebidas: datos.bebidas.length,
+          platillos: platillos.length,
+          bebidas: bebidas.length,
           servicios: datos.servicios.length
         }
       })
     );
+  }
+
+  function renderizarSitio() {
+    aplicarDatosDelNegocio();
+    configurarFiltros();
+    configurarCarruseles();
+    configurarMenuMovil();
+    renderizarProductos();
+    window.ESTADO_APP?.suscribirse(renderizarProductos);
   }
 
   /**
@@ -355,7 +367,9 @@
    */
   window.formatearPrecio = formatearPrecio;
   window.obtenerProductoPorId = function obtenerProductoPorId(id) {
-    return todosLosProductos.find((producto) => producto.id === id) || null;
+    return window.ESTADO_APP?.obtenerProducto(id) ||
+      todosLosProductos.find((producto) => producto.id === id) ||
+      null;
   };
   window.obtenerServicioPorId = function obtenerServicioPorId(id) {
     return datos.servicios.find((servicio) => servicio.id === id) || null;

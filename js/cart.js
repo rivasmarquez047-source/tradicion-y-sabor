@@ -1,28 +1,15 @@
 /*
- * Carrito demostrativo.
- * Guarda la selección en el navegador y registra un resumen local.
- * No procesa pagos ni envía información a un servidor.
+ * Carrito de la vista del cliente.
+ * Diferencia variantes del mismo producto y registra pedidos por mesa.
  */
 
 (function configurarCarrito() {
   "use strict";
 
-  const CLAVE_CARRITO = "tradicion-sabor-carrito";
-  const CLAVE_ULTIMO_PEDIDO = "tradicion-sabor-ultimo-pedido";
+  const CLAVE_CARRITO = "tradicion-sabor-carrito-v2";
+  const CLAVE_ULTIMO_PEDIDO = "tradicion-sabor-ultimo-pedido-v2";
 
   function iniciar() {
-    const datos = window.DATOS_SITIO;
-    const productos = [...(datos?.platillos || []), ...(datos?.bebidas || [])];
-    const productosPorId = new Map(productos.map((producto) => [producto.id, producto]));
-    const formatearPrecio =
-      window.formatearPrecio ||
-      ((precio) =>
-        new Intl.NumberFormat("es-PE", {
-          style: "currency",
-          currency: "PEN",
-          minimumFractionDigits: 2
-        }).format(precio));
-
     const panel = document.querySelector("#panel-carrito");
     const capa = document.querySelector(".carrito-capa");
     const lista = document.querySelector("#carrito-lista");
@@ -34,7 +21,7 @@
     const pedidoResumen = document.querySelector("#pedido-resumen");
     const botonCopiar = document.querySelector("#copiar-pedido");
     const enlaceWhatsApp = document.querySelector("#enviar-pedido-whatsapp");
-    const avisoWhatsApp = document.querySelector("#pedido-aviso-whatsapp");
+    const avisoPago = document.querySelector("#pedido-aviso-whatsapp");
     const notificacion = document.querySelector("#notificacion");
 
     if (
@@ -49,20 +36,41 @@
       !pedidoResumen ||
       !botonCopiar ||
       !enlaceWhatsApp ||
-      !avisoWhatsApp ||
+      !avisoPago ||
       !notificacion
     ) {
       return;
     }
 
+    const formatearPrecio =
+      window.formatearPrecio ||
+      ((precio) =>
+        new Intl.NumberFormat("es-PE", {
+          style: "currency",
+          currency: "PEN",
+          minimumFractionDigits: 2
+        }).format(precio));
+
+    let carrito = leerCarrito();
     let temporizadorNotificacion;
     let ultimoFoco = null;
-    let carrito = leerCarrito().filter((item) => productosPorId.has(item.id) && item.cantidad > 0);
+
+    function obtenerProducto(id) {
+      return window.ESTADO_APP?.obtenerProducto(id) || window.obtenerProductoPorId?.(id);
+    }
 
     function leerCarrito() {
       try {
         const guardado = JSON.parse(localStorage.getItem(CLAVE_CARRITO) || "[]");
-        return Array.isArray(guardado) ? guardado : [];
+        return Array.isArray(guardado)
+          ? guardado.filter(
+              (item) =>
+                item &&
+                typeof item.clave === "string" &&
+                typeof item.id === "string" &&
+                Number(item.cantidad) > 0
+            )
+          : [];
       } catch {
         return [];
       }
@@ -72,26 +80,56 @@
       try {
         localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
       } catch {
-        // La página sigue funcionando aunque el navegador bloquee el almacenamiento.
+        // La demostración continúa aunque el navegador bloquee el almacenamiento.
       }
     }
 
+    function crearClave(productoId, personalizaciones) {
+      const firma = [...personalizaciones]
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map((cambio) => `${cambio.id}:${cambio.valor}`)
+        .join("|");
+      return `${productoId}::${firma || "original"}`;
+    }
+
     function obtenerCantidadTotal() {
-      return carrito.reduce((total, item) => total + item.cantidad, 0);
+      return carrito.reduce((total, item) => total + Number(item.cantidad), 0);
     }
 
     function obtenerTotal() {
       return carrito.reduce((total, item) => {
-        const producto = productosPorId.get(item.id);
+        const producto = obtenerProducto(item.id);
         return total + (producto?.precio || 0) * item.cantidad;
       }, 0);
     }
 
-    function crearBotonCantidad(texto, accion, producto) {
+    function crearListaCambios(personalizaciones) {
+      const listaCambios = document.createElement("ul");
+      listaCambios.className = "carrito-item__cambios";
+
+      if (!personalizaciones?.length) {
+        const original = document.createElement("li");
+        original.textContent = "Preparación original";
+        listaCambios.append(original);
+        return listaCambios;
+      }
+
+      personalizaciones.forEach((cambio) => {
+        const elemento = document.createElement("li");
+        const etiqueta = document.createElement("strong");
+        etiqueta.textContent = `${cambio.etiqueta}: `;
+        elemento.append(etiqueta, cambio.texto);
+        listaCambios.append(elemento);
+      });
+
+      return listaCambios;
+    }
+
+    function crearBotonCantidad(texto, accion, item, producto) {
       const boton = document.createElement("button");
       boton.type = "button";
       boton.dataset.carritoAccion = accion;
-      boton.dataset.productoId = producto.id;
+      boton.dataset.carritoClave = item.clave;
       boton.textContent = texto;
       boton.setAttribute(
         "aria-label",
@@ -103,7 +141,11 @@
     }
 
     function crearItem(item) {
-      const producto = productosPorId.get(item.id);
+      const producto = obtenerProducto(item.id);
+      if (!producto) {
+        return null;
+      }
+
       const elemento = document.createElement("li");
       elemento.className = "carrito-item";
 
@@ -120,35 +162,42 @@
       const nombre = document.createElement("h3");
       nombre.textContent = producto.nombre;
 
+      const cambios = crearListaCambios(item.personalizaciones || []);
+
       const precio = document.createElement("p");
-      precio.textContent = formatearPrecio(producto.precio * item.cantidad);
+      precio.className = "carrito-item__subtotal";
+      precio.textContent = `Subtotal: ${formatearPrecio(producto.precio * item.cantidad)}`;
 
       const cantidad = document.createElement("div");
       cantidad.className = "control-cantidad";
-
-      const restar = crearBotonCantidad("−", "restar", producto);
+      const restar = crearBotonCantidad("−", "restar", item, producto);
       const numero = document.createElement("span");
       numero.textContent = item.cantidad;
-      numero.setAttribute("aria-label", `${item.cantidad} unidades`);
-      const sumar = crearBotonCantidad("+", "sumar", producto);
+      numero.setAttribute("aria-label", `Cantidad: ${item.cantidad}`);
+      const sumar = crearBotonCantidad("+", "sumar", item, producto);
 
       const eliminar = document.createElement("button");
       eliminar.className = "carrito-item__eliminar";
       eliminar.type = "button";
       eliminar.dataset.carritoAccion = "eliminar";
-      eliminar.dataset.productoId = producto.id;
+      eliminar.dataset.carritoClave = item.clave;
       eliminar.textContent = "Eliminar";
       eliminar.setAttribute("aria-label", `Eliminar ${producto.nombre} del pedido`);
 
       cantidad.append(restar, numero, sumar);
-      informacion.append(nombre, precio, cantidad, eliminar);
+      informacion.append(nombre, cambios, precio, cantidad, eliminar);
       elemento.append(imagen, informacion);
       return elemento;
     }
 
     function actualizarVista() {
       const fragmento = document.createDocumentFragment();
-      carrito.forEach((item) => fragmento.append(crearItem(item)));
+      carrito.forEach((item) => {
+        const elemento = crearItem(item);
+        if (elemento) {
+          fragmento.append(elemento);
+        }
+      });
       lista.replaceChildren(fragmento);
 
       const cantidad = obtenerCantidadTotal();
@@ -183,41 +232,44 @@
       }, 2400);
     }
 
-    function agregar(productoId) {
-      const producto = productosPorId.get(productoId);
-      if (!producto || !producto.disponible) {
+    function agregarVariante({ productoId, cantidad, personalizaciones = [] }) {
+      const producto = obtenerProducto(productoId);
+      if (!producto?.disponible) {
+        mostrarNotificacion("Este producto no está disponible actualmente.");
         return;
       }
 
-      const existente = carrito.find((item) => item.id === productoId);
+      const clave = crearClave(productoId, personalizaciones);
+      const existente = carrito.find((item) => item.clave === clave);
+
       if (existente) {
-        existente.cantidad += 1;
+        existente.cantidad += Number(cantidad) || 1;
       } else {
-        carrito.push({ id: productoId, cantidad: 1 });
+        carrito.push({
+          clave,
+          id: productoId,
+          cantidad: Number(cantidad) || 1,
+          personalizaciones: JSON.parse(JSON.stringify(personalizaciones))
+        });
       }
 
+      pedidoGenerado.hidden = true;
       actualizarVista();
       mostrarNotificacion(`${producto.nombre} se agregó a Mi pedido.`);
-      document.dispatchEvent(
-        new CustomEvent("carrito:agregado", {
-          detail: { productoId, cantidad: existente ? existente.cantidad : 1 }
-        })
-      );
     }
 
-    function modificarCantidad(productoId, cambio) {
-      const item = carrito.find((elemento) => elemento.id === productoId);
+    function modificarCantidad(clave, cambio) {
+      const item = carrito.find((elemento) => elemento.clave === clave);
       if (!item) {
         return;
       }
-
       item.cantidad += cambio;
       carrito = carrito.filter((elemento) => elemento.cantidad > 0);
       actualizarVista();
     }
 
-    function eliminar(productoId) {
-      carrito = carrito.filter((item) => item.id !== productoId);
+    function eliminar(clave) {
+      carrito = carrito.filter((item) => item.clave !== clave);
       actualizarVista();
     }
 
@@ -244,45 +296,50 @@
       }, 220);
     }
 
-    function crearCodigoPedido() {
-      const fecha = new Date();
-      const parteFecha = [
-        String(fecha.getFullYear()).slice(-2),
-        String(fecha.getMonth() + 1).padStart(2, "0"),
-        String(fecha.getDate()).padStart(2, "0")
-      ].join("");
-      const parteHora = `${String(fecha.getHours()).padStart(2, "0")}${String(
-        fecha.getMinutes()
-      ).padStart(2, "0")}`;
-      return `TS-${parteFecha}-${parteHora}`;
+    function crearProductosPedido() {
+      return carrito.map((item) => {
+        const producto = obtenerProducto(item.id);
+        return {
+          clave: item.clave,
+          productoId: item.id,
+          nombre: producto.nombre,
+          imagen: producto.imagen,
+          precioUnitario: producto.precio,
+          cantidad: item.cantidad,
+          personalizaciones: JSON.parse(JSON.stringify(item.personalizaciones || [])),
+          subtotal: producto.precio * item.cantidad
+        };
+      });
     }
 
-    function crearResumenPedido(codigo, campos) {
+    function crearResumenPedido(pedido) {
       const lineas = [
-        `PEDIDO DEMOSTRATIVO ${codigo}`,
-        `Cliente: ${campos.nombre}`,
-        `Teléfono: ${campos.telefono}`,
-        `Modalidad: ${campos.modalidad}`,
+        `PEDIDO ${pedido.codigo}`,
+        `Mesa: ${pedido.mesa}`,
+        `Estado: Pedido recibido`,
         "",
         "PRODUCTOS"
       ];
 
-      carrito.forEach((item) => {
-        const producto = productosPorId.get(item.id);
+      pedido.productos.forEach((item) => {
         lineas.push(
-          `${item.cantidad} × ${producto.nombre} — ${formatearPrecio(
-            producto.precio * item.cantidad
-          )}`
+          `${item.cantidad} × ${item.nombre} — ${formatearPrecio(item.subtotal)}`
         );
+        if (item.personalizaciones.length === 0) {
+          lineas.push("  Preparación original");
+        } else {
+          item.personalizaciones.forEach((cambio) => {
+            lineas.push(`  ${cambio.etiqueta}: ${cambio.texto}`);
+          });
+        }
       });
 
-      lineas.push("", `TOTAL ESTIMADO: ${formatearPrecio(obtenerTotal())}`);
-
-      if (campos.indicaciones) {
-        lineas.push("", `Indicaciones: ${campos.indicaciones}`);
-      }
-
-      lineas.push("", "Pedido registrado localmente. Pendiente de confirmación del restaurante.");
+      lineas.push(
+        "",
+        `TOTAL ESTIMADO: ${formatearPrecio(pedido.total)}`,
+        "Estado inicial: Pedido recibido",
+        "El pago se realizará al finalizar el consumo."
+      );
       return lineas.join("\n");
     }
 
@@ -299,45 +356,39 @@
       }
 
       const datosFormulario = new FormData(formulario);
-      const campos = {
-        nombre: String(datosFormulario.get("nombre") || "").trim(),
-        telefono: String(datosFormulario.get("telefono") || "").trim(),
-        modalidad: String(datosFormulario.get("modalidad") || "").trim(),
-        indicaciones: String(datosFormulario.get("indicaciones") || "").trim()
-      };
-      const codigo = crearCodigoPedido();
-      const resumen = crearResumenPedido(codigo, campos);
-      const pedido = {
-        codigo,
-        fecha: new Date().toISOString(),
-        cliente: campos,
-        productos: carrito.map((item) => ({ ...item })),
-        total: obtenerTotal(),
-        resumen
-      };
+      const mesa = String(datosFormulario.get("mesa") || "").trim();
+      const pedido = window.ESTADO_APP?.crearPedido({
+        mesa,
+        productos: crearProductosPedido(),
+        total: obtenerTotal()
+      });
 
-      try {
-        localStorage.setItem(CLAVE_ULTIMO_PEDIDO, JSON.stringify(pedido));
-      } catch {
-        // El resumen sigue visible aunque el navegador bloquee el almacenamiento.
+      if (!pedido) {
+        mostrarNotificacion("No se pudo registrar el pedido.");
+        return;
       }
 
-      pedidoCodigo.textContent = codigo;
+      const resumen = crearResumenPedido(pedido);
+      try {
+        localStorage.setItem(
+          CLAVE_ULTIMO_PEDIDO,
+          JSON.stringify({ ...pedido, resumen })
+        );
+      } catch {
+        // El resumen permanece visible aunque no pueda guardarse.
+      }
+
+      pedidoCodigo.textContent = `${pedido.codigo} · Mesa ${pedido.mesa}`;
       pedidoResumen.textContent = resumen;
       pedidoGenerado.hidden = false;
+      enlaceWhatsApp.hidden = true;
+      avisoPago.hidden = false;
 
-      const numeroWhatsApp = String(datos.negocio.whatsapp || "").replace(/\D/g, "");
-      if (numeroWhatsApp) {
-        enlaceWhatsApp.href = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(resumen)}`;
-        enlaceWhatsApp.hidden = false;
-        avisoWhatsApp.hidden = true;
-      } else {
-        enlaceWhatsApp.hidden = true;
-        avisoWhatsApp.hidden = false;
-      }
-
+      carrito = [];
+      formulario.reset();
+      actualizarVista();
       pedidoGenerado.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      mostrarNotificacion(`Pedido ${codigo} registrado en este dispositivo.`);
+      mostrarNotificacion(`Pedido ${pedido.codigo} recibido por cocina.`);
     }
 
     async function copiarResumen() {
@@ -362,32 +413,29 @@
       mostrarNotificacion("Resumen copiado.");
     }
 
+    document.addEventListener("personalizacion:confirmada", (evento) => {
+      agregarVariante(evento.detail);
+    });
+
     document.addEventListener("click", (evento) => {
       const botonAbrir = evento.target.closest("[data-abrir-carrito]");
       const botonCerrar = evento.target.closest("[data-cerrar-carrito]");
-      const botonAgregar = evento.target.closest('[data-accion="agregar-carrito"], #modal-agregar');
       const botonCantidad = evento.target.closest("[data-carrito-accion]");
 
       if (botonAbrir) {
         abrir(botonAbrir);
       }
-
       if (botonCerrar) {
         cerrar();
       }
-
-      if (botonAgregar) {
-        agregar(botonAgregar.dataset.productoId);
-      }
-
       if (botonCantidad) {
-        const { productoId, carritoAccion } = botonCantidad.dataset;
+        const { carritoClave, carritoAccion } = botonCantidad.dataset;
         if (carritoAccion === "sumar") {
-          modificarCantidad(productoId, 1);
+          modificarCantidad(carritoClave, 1);
         } else if (carritoAccion === "restar") {
-          modificarCantidad(productoId, -1);
+          modificarCantidad(carritoClave, -1);
         } else if (carritoAccion === "eliminar") {
-          eliminar(productoId);
+          eliminar(carritoClave);
         }
       }
     });
@@ -404,7 +452,7 @@
 
     window.CARRITO_SITIO = {
       abrir,
-      agregar,
+      agregar: agregarVariante,
       obtenerCantidad: obtenerCantidadTotal,
       obtenerTotal
     };

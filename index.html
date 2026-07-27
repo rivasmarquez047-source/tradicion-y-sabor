@@ -12,12 +12,16 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/panels.css">
 
     <script src="js/data.js" defer></script>
+    <script src="js/store.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/whatsapp.js" defer></script>
     <script src="js/modal.js" defer></script>
+    <script src="js/personalization.js" defer></script>
     <script src="js/cart.js" defer></script>
+    <script src="js/navigation.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
@@ -471,39 +475,22 @@
           <p>Demostración local: no realiza cobros ni envíos automáticos.</p>
 
           <label>
-            Nombre
-            <input name="nombre" type="text" autocomplete="name" required maxlength="70">
-          </label>
-
-          <label>
-            Teléfono
-            <input
-              name="telefono"
-              type="tel"
-              autocomplete="tel"
-              inputmode="tel"
-              required
-              maxlength="20"
-            >
-          </label>
-
-          <label>
-            Modalidad
-            <select name="modalidad" required>
-              <option value="Recojo en el restaurante">Recojo en el restaurante</option>
-              <option value="Delivery por coordinar">Delivery por coordinar</option>
-              <option value="Reserva de mesa">Reserva de mesa</option>
+            Número de mesa
+            <select name="mesa" required>
+              <option value="">Selecciona tu mesa</option>
+              <option value="1">Mesa 1</option>
+              <option value="2">Mesa 2</option>
+              <option value="3">Mesa 3</option>
+              <option value="4">Mesa 4</option>
+              <option value="5">Mesa 5</option>
+              <option value="6">Mesa 6</option>
+              <option value="7">Mesa 7</option>
+              <option value="8">Mesa 8</option>
+              <option value="9">Mesa 9</option>
+              <option value="10">Mesa 10</option>
+              <option value="11">Mesa 11</option>
+              <option value="12">Mesa 12</option>
             </select>
-          </label>
-
-          <label>
-            Indicaciones
-            <textarea
-              name="indicaciones"
-              rows="3"
-              maxlength="240"
-              placeholder="Ejemplo: sin picante o entrega por coordinar"
-            ></textarea>
           </label>
 
           <button class="boton boton--principal" type="submit">Registrar pedido</button>
@@ -528,14 +515,25 @@
               Enviar por WhatsApp
             </a>
           </div>
-          <p id="pedido-aviso-whatsapp">
-            El envío por WhatsApp se habilitará cuando coloques el número real en js/data.js.
-          </p>
+          <p id="pedido-aviso-whatsapp">El pago se realizará al finalizar el consumo.</p>
         </section>
       </div>
     </aside>
 
     <div class="notificacion" id="notificacion" role="status" aria-live="polite" hidden></div>
+
+    <nav
+      class="selector-vistas-demo"
+      id="selector-vistas-demo"
+      aria-label="Vistas privadas para la demostración"
+      hidden
+    >
+      <span>Modo demostración</span>
+      <a class="activo" href="index.html?demo=1">Cliente</a>
+      <a href="caja.html">Caja</a>
+      <a href="cocina.html">Cocina</a>
+      <a href="admin.html">Administración</a>
+    </nav>
 
     <div class="modal" id="modal-producto" hidden>
       <div class="modal__fondo" data-cerrar-modal></div>
@@ -579,6 +577,63 @@
             Agregar a mi pedido
           </button>
         </div>
+      </section>
+    </div>
+
+    <div class="modal modal-personalizacion" id="modal-personalizacion" hidden>
+      <div class="modal__fondo" data-cerrar-personalizacion></div>
+      <section
+        class="modal__contenido personalizacion__contenido"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="personalizacion-titulo"
+        aria-describedby="personalizacion-mensaje"
+        tabindex="-1"
+      >
+        <button
+          class="modal__cerrar"
+          type="button"
+          aria-label="Cancelar personalización"
+          data-cerrar-personalizacion
+        >×</button>
+
+        <div class="modal__imagen-contenedor">
+          <img id="personalizacion-imagen" src="" alt="">
+        </div>
+
+        <form class="modal__informacion personalizacion__formulario" id="formulario-personalizacion">
+          <p class="etiqueta">Personaliza tu pedido</p>
+          <h2 id="personalizacion-titulo"></h2>
+          <p class="modal__precio">
+            Precio base: <strong id="personalizacion-precio-base"></strong>
+          </p>
+          <p id="personalizacion-mensaje">
+            Puedes conservar la preparación original o realizar cambios opcionales.
+          </p>
+
+          <div class="personalizacion__opciones" id="personalizacion-opciones"></div>
+
+          <div class="personalizacion__cantidad">
+            <span>Cantidad</span>
+            <div class="selector-cantidad" role="group" aria-label="Seleccionar cantidad">
+              <button type="button" id="personalizacion-restar" aria-label="Disminuir cantidad">−</button>
+              <output id="personalizacion-cantidad" aria-live="polite">1</output>
+              <button type="button" id="personalizacion-sumar" aria-label="Aumentar cantidad">+</button>
+            </div>
+          </div>
+
+          <div class="personalizacion__total">
+            <span>Precio actualizado</span>
+            <strong id="personalizacion-total">S/ 0.00</strong>
+          </div>
+
+          <div class="personalizacion__acciones">
+            <button class="boton boton--secundario" type="button" data-cerrar-personalizacion>
+              Cancelar
+            </button>
+            <button class="boton boton--principal" type="submit">Agregar al pedido</button>
+          </div>
+        </form>
       </section>
     </div>
   </body>

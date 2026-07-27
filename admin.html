@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administración demostrativa de Tradición y Sabor.">
+    <title>Administración | Tradición &amp; Sabor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <script src="js/data.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/admin.js" defer></script>
+  </head>
+  <body class="panel-page">
+    <header class="panel-header">
+      <div class="contenedor panel-header__contenido">
+        <a class="marca" href="index.html?demo=1" aria-label="Volver a la vista del cliente">
+          <span class="marca__nombre">Tradición &amp; Sabor</span>
+          <span class="marca__descripcion">Panel de demostración</span>
+        </a>
+        <nav class="panel-navegacion" aria-label="Cambiar vista">
+          <a href="index.html?demo=1">Cliente</a>
+          <a href="caja.html">Caja</a>
+          <a href="cocina.html">Cocina</a>
+          <a class="activo" href="admin.html">Administración</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="panel-main">
+      <section class="panel-portada">
+        <div>
+          <p class="etiqueta">Configuración y resultados</p>
+          <h1>Administración</h1>
+          <p>Simula cambios de precios, disponibilidad, personalización y reportes locales.</p>
+        </div>
+        <button class="boton boton--secundario" id="restaurar-productos" type="button">
+          Restaurar datos originales
+        </button>
+      </section>
+
+      <section class="resumen-operativo resumen-operativo--admin" aria-label="Resumen administrativo">
+        <article class="tarjeta-metrica">
+          <span>Total de pedidos</span>
+          <strong id="admin-total-pedidos">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Ventas simuladas</span>
+          <strong id="admin-ventas">S/ 0.00</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Mesas atendidas</span>
+          <strong id="admin-mesas">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Pedidos pagados</span>
+          <strong id="admin-pagados">0</strong>
+        </article>
+        <article class="tarjeta-metrica">
+          <span>Pendientes de pago</span>
+          <strong id="admin-pendientes">0</strong>
+        </article>
+      </section>
+
+      <section class="panel-bloque panel-bloque--productos" aria-labelledby="titulo-admin-productos">
+        <div class="panel-bloque__encabezado">
+          <div>
+            <p class="etiqueta">Carta local</p>
+            <h2 id="titulo-admin-productos">Productos</h2>
+          </div>
+          <div class="filtros-admin" role="group" aria-label="Filtrar productos">
+            <button class="activo" type="button" data-filtro-admin="todos">Todos</button>
+            <button type="button" data-filtro-admin="platillo">Platillos</button>
+            <button type="button" data-filtro-admin="bebida">Bebidas</button>
+          </div>
+        </div>
+        <div class="productos-admin" id="productos-admin"></div>
+      </section>
+
+      <section class="reportes-admin" aria-label="Reportes básicos">
+        <article class="panel-bloque">
+          <div class="panel-bloque__encabezado">
+            <h2>Productos más solicitados</h2>
+          </div>
+          <ol class="ranking-productos" id="ranking-productos"></ol>
+        </article>
+
+        <article class="panel-bloque">
+          <div class="panel-bloque__encabezado">
+            <h2>Métodos de pago</h2>
+          </div>
+          <div class="metodos-pago-grid" id="reporte-metodos"></div>
+        </article>
+      </section>
+    </main>
+
+    <div class="carrito-capa" id="admin-opciones-capa" hidden></div>
+    <aside
+      class="detalle-operativo"
+      id="admin-opciones"
+      aria-labelledby="admin-opciones-titulo"
+      aria-hidden="true"
+    >
+      <div class="detalle-operativo__encabezado">
+        <div>
+          <p class="etiqueta">Personalización del producto</p>
+          <h2 id="admin-opciones-titulo">Opciones</h2>
+        </div>
+        <button class="detalle-cerrar" id="cerrar-admin-opciones" type="button" aria-label="Cerrar opciones">×</button>
+      </div>
+      <div class="detalle-operativo__cuerpo" id="admin-opciones-cuerpo"></div>
+    </aside>
+
+    <div class="notificacion" id="notificacion-admin" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

@@ -374,6 +374,10 @@
     grid-template-columns: 1fr;
   }
 
+  .personalizacion__acciones {
+    grid-template-columns: 1fr;
+  }
+
   .panel-carrito {
     width: min(440px, 100%);
   }
@@ -475,6 +479,15 @@
 
   .modal__imagen-contenedor {
     min-height: 210px;
+  }
+
+  .personalizacion__contenido .modal__imagen-contenedor {
+    max-height: 28vh;
+  }
+
+  .personalizacion__cantidad,
+  .personalizacion__total {
+    padding: 0.7rem 0.8rem;
   }
 
   .grupo-productos__encabezado {

@@ -1673,3 +1673,121 @@ h3 {
 .modal--visible .modal__contenido {
   transform: translateY(0) scale(1);
 }
+
+/* =========================================================
+   16. PERSONALIZACIÓN OPCIONAL
+   ========================================================= */
+.personalizacion__contenido {
+  width: min(980px, 100%);
+}
+
+.personalizacion__formulario {
+  align-self: stretch;
+  overflow-y: auto;
+}
+
+.personalizacion__formulario > p:not(.etiqueta, .modal__precio) {
+  margin-bottom: 1.2rem;
+  color: var(--color-texto-suave);
+}
+
+.personalizacion__opciones {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.personalizacion__campo {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--color-marron-oscuro);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.personalizacion__campo select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  color: var(--color-texto);
+  background: var(--color-blanco-calido);
+  font-weight: 400;
+}
+
+.personalizacion__original {
+  padding: 1rem;
+  border: 1px dashed var(--color-beige-oscuro);
+  border-radius: var(--radio-pequeno);
+  background: var(--color-crema);
+}
+
+.personalizacion__cantidad,
+.personalizacion__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  background: var(--color-crema-claro);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.selector-cantidad {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 2rem;
+  background: var(--color-blanco-calido);
+}
+
+.selector-cantidad button {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-crema);
+  cursor: pointer;
+  place-items: center;
+}
+
+.selector-cantidad output {
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.personalizacion__total strong {
+  color: var(--color-terracota);
+  font-size: 1.15rem;
+}
+
+.personalizacion__acciones {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 0.7rem;
+  margin-top: 1.15rem;
+}
+
+.carrito-item__cambios {
+  display: grid;
+  gap: 0.15rem;
+  margin-block: 0.35rem 0.55rem;
+  color: var(--color-texto-suave);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.carrito-item__cambios strong {
+  color: var(--color-marron);
+}
+
+.carrito-item__subtotal {
+  margin-bottom: 0.55rem !important;
+}

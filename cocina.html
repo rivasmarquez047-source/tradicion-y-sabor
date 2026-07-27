@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tablero demostrativo de cocina de Tradición y Sabor.">
+    <title>Cocina | Tradición &amp; Sabor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <script src="js/data.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/cocina.js" defer></script>
+  </head>
+  <body class="panel-page">
+    <header class="panel-header">
+      <div class="contenedor panel-header__contenido">
+        <a class="marca" href="index.html?demo=1" aria-label="Volver a la vista del cliente">
+          <span class="marca__nombre">Tradición &amp; Sabor</span>
+          <span class="marca__descripcion">Panel de demostración</span>
+        </a>
+        <nav class="panel-navegacion" aria-label="Cambiar vista">
+          <a href="index.html?demo=1">Cliente</a>
+          <a href="caja.html">Caja</a>
+          <a class="activo" href="cocina.html">Cocina</a>
+          <a href="admin.html">Administración</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="panel-main">
+      <section class="panel-portada">
+        <div>
+          <p class="etiqueta">Seguimiento de preparación</p>
+          <h1>Vista de cocina</h1>
+          <p>Los cambios de estado se reflejan automáticamente en la vista de caja.</p>
+        </div>
+        <span class="panel-actualizacion" id="cocina-actualizacion">Tablero actualizado</span>
+      </section>
+
+      <section class="tablero-cocina" aria-label="Tablero de pedidos">
+        <section class="columna-cocina columna-cocina--pendiente" aria-labelledby="titulo-pendientes">
+          <div class="columna-cocina__encabezado">
+            <h2 id="titulo-pendientes">Pendientes</h2>
+            <span id="cantidad-pendientes">0</span>
+          </div>
+          <div class="columna-cocina__lista" id="pedidos-pendientes"></div>
+        </section>
+
+        <section class="columna-cocina columna-cocina--preparando" aria-labelledby="titulo-preparando">
+          <div class="columna-cocina__encabezado">
+            <h2 id="titulo-preparando">Preparando</h2>
+            <span id="cantidad-preparando">0</span>
+          </div>
+          <div class="columna-cocina__lista" id="pedidos-preparando"></div>
+        </section>
+
+        <section class="columna-cocina columna-cocina--listo" aria-labelledby="titulo-listos">
+          <div class="columna-cocina__encabezado">
+            <h2 id="titulo-listos">Listos / entregados</h2>
+            <span id="cantidad-listos">0</span>
+          </div>
+          <div class="columna-cocina__lista" id="pedidos-listos"></div>
+        </section>
+      </section>
+    </main>
+
+    <div class="notificacion" id="notificacion-cocina" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

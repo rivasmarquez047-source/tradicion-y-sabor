@@ -49,6 +49,55 @@ window.DATOS_SITIO = {
         "Tallarines",
         "Albahaca y especias"
       ],
+      personalizacion: [
+        {
+          id: "preparacion",
+          etiqueta: "Preparación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personalizada", texto: "Personalizada" }
+          ]
+        },
+        {
+          id: "porcion",
+          etiqueta: "Porción",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personal", texto: "Personal" },
+            { valor: "familiar", texto: "Familiar" }
+          ]
+        },
+        {
+          id: "presa",
+          etiqueta: "Tipo de presa",
+          etiquetaResumen: "Presa",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "pollo", texto: "Pollo" },
+            { valor: "cerdo", texto: "Cerdo" }
+          ]
+        },
+        {
+          id: "yuca",
+          etiqueta: "Yuca",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-yuca", texto: "Con yuca" },
+            { valor: "sin-yuca", texto: "Sin yuca" }
+          ]
+        },
+        {
+          id: "picante",
+          etiqueta: "Picante",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "sin-picante", texto: "Sin picante" },
+            { valor: "bajo", texto: "Bajo" },
+            { valor: "normal", texto: "Normal" },
+            { valor: "alto", texto: "Alto" }
+          ]
+        }
+      ],
       alergenos: ["Maní", "Gluten"],
       disponible: true
     },
@@ -89,6 +138,44 @@ window.DATOS_SITIO = {
         "Ajo",
         "Arroz blanco"
       ],
+      personalizacion: [
+        {
+          id: "preparacion",
+          etiqueta: "Preparación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personalizada", texto: "Personalizada" }
+          ]
+        },
+        {
+          id: "proteina",
+          etiqueta: "Proteína",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-cerdo", texto: "Con cerdo" },
+            { valor: "sin-cerdo", texto: "Sin cerdo" }
+          ]
+        },
+        {
+          id: "picante",
+          etiqueta: "Picante",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "sin-picante", texto: "Sin picante" },
+            { valor: "bajo", texto: "Bajo" },
+            { valor: "normal", texto: "Normal" }
+          ]
+        },
+        {
+          id: "porcion",
+          etiqueta: "Porción",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personal", texto: "Personal" },
+            { valor: "familiar", texto: "Familiar" }
+          ]
+        }
+      ],
       alergenos: [],
       disponible: true
     },
@@ -108,6 +195,44 @@ window.DATOS_SITIO = {
         "Queso fresco",
         "Huevo",
         "Huacatay"
+      ],
+      personalizacion: [
+        {
+          id: "preparacion",
+          etiqueta: "Preparación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personalizada", texto: "Personalizada" }
+          ]
+        },
+        {
+          id: "huevo",
+          etiqueta: "Huevo",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-huevo", texto: "Con huevo" },
+            { valor: "sin-huevo", texto: "Sin huevo" }
+          ]
+        },
+        {
+          id: "leche",
+          etiqueta: "Leche",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-leche", texto: "Con leche" },
+            { valor: "sin-leche", texto: "Sin leche" }
+          ]
+        },
+        {
+          id: "sal",
+          etiqueta: "Nivel de sal",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "bajo", texto: "Bajo" },
+            { valor: "normal", texto: "Normal" },
+            { valor: "alto", texto: "Alto" }
+          ]
+        }
       ],
       alergenos: ["Lácteos", "Huevo"],
       disponible: true
@@ -184,6 +309,18 @@ window.DATOS_SITIO = {
       descripcion:
         "Pisco, ginger ale, limón y hielo en una mezcla ligera y refrescante.",
       ingredientes: ["Pisco quebranta", "Ginger ale", "Limón", "Hielo", "Amargo aromático"],
+      personalizacion: [
+        {
+          id: "hielo",
+          etiqueta: "Hielo",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-hielo", texto: "Con hielo" },
+            { valor: "sin-hielo", texto: "Sin hielo" },
+            { valor: "hielo-aparte", texto: "Hielo aparte" }
+          ]
+        }
+      ],
       alergenos: ["Contiene alcohol"],
       disponible: true
     },
@@ -210,6 +347,27 @@ window.DATOS_SITIO = {
       descripcion:
         "Maíz morado cocido con piña y especias, servido bien frío.",
       ingredientes: ["Maíz morado", "Piña", "Canela", "Clavo de olor", "Limón", "Azúcar"],
+      personalizacion: [
+        {
+          id: "hielo",
+          etiqueta: "Hielo",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-hielo", texto: "Con hielo" },
+            { valor: "sin-hielo", texto: "Sin hielo" },
+            { valor: "hielo-aparte", texto: "Hielo aparte" }
+          ]
+        },
+        {
+          id: "presentacion",
+          etiqueta: "Presentación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personal", texto: "Personal" },
+            { valor: "jarra", texto: "Jarra" }
+          ]
+        }
+      ],
       alergenos: [],
       disponible: true
     },
@@ -223,6 +381,27 @@ window.DATOS_SITIO = {
       descripcion:
         "Refresco casero de cebada y canela, suave y servido con bastante hielo.",
       ingredientes: ["Cebada", "Canela", "Clavo de olor", "Agua", "Azúcar", "Hielo"],
+      personalizacion: [
+        {
+          id: "hielo",
+          etiqueta: "Hielo",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-hielo", texto: "Con hielo" },
+            { valor: "sin-hielo", texto: "Sin hielo" },
+            { valor: "hielo-aparte", texto: "Hielo aparte" }
+          ]
+        },
+        {
+          id: "presentacion",
+          etiqueta: "Presentación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personal", texto: "Personal" },
+            { valor: "jarra", texto: "Jarra" }
+          ]
+        }
+      ],
       alergenos: ["Gluten"],
       disponible: true
     },
@@ -236,6 +415,27 @@ window.DATOS_SITIO = {
       descripcion:
         "Limón recién exprimido, hierbabuena y hielo para acompañar la cocina criolla.",
       ingredientes: ["Limón", "Hierbabuena", "Agua", "Azúcar", "Hielo"],
+      personalizacion: [
+        {
+          id: "hielo",
+          etiqueta: "Hielo",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "con-hielo", texto: "Con hielo" },
+            { valor: "sin-hielo", texto: "Sin hielo" },
+            { valor: "hielo-aparte", texto: "Hielo aparte" }
+          ]
+        },
+        {
+          id: "presentacion",
+          etiqueta: "Presentación",
+          opciones: [
+            { valor: "original", texto: "Preparación original — sin cambios" },
+            { valor: "personal", texto: "Personal" },
+            { valor: "jarra", texto: "Jarra" }
+          ]
+        }
+      ],
       alergenos: [],
       disponible: true
     }

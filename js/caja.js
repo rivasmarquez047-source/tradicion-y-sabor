@@ -27,7 +27,11 @@
 
   const esDelivery = (pedido) => pedido.tipoPedido === "delivery";
   const ubicacionPedido = (pedido) =>
-    esDelivery(pedido) ? "Delivery" : `Mesa ${pedido.mesa}`;
+    esDelivery(pedido)
+      ? "Delivery"
+      : pedido.paraLlevar
+        ? `Para llevar · Mesa ${pedido.mesa}`
+        : `Mesa ${pedido.mesa}`;
   const etiquetaEstadoPago = (estadoPago) =>
     ({
       pendiente: "Pendiente",

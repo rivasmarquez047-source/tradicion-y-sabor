@@ -41,7 +41,7 @@
     }, 2200);
   }
 
-  function renderMetricas(pedidos) {
+  function renderMetricas(pedidos, catalogo) {
     const pagados = pedidos.filter((pedido) => pedido.estadoPago === "pagado");
     const mesas = new Set(
       pedidos
@@ -57,6 +57,9 @@
     document.querySelector("#admin-pendientes").textContent = pedidos.filter(
       (pedido) => ["pendiente", "validacion"].includes(pedido.estadoPago)
     ).length;
+    document.querySelector("#admin-stock-menus").textContent = catalogo
+      .filter((producto) => producto.categoria === "menu")
+      .reduce((total, producto) => total + producto.stock, 0);
   }
 
   function crearTarjetaProducto(producto) {
@@ -96,6 +99,37 @@
     etiquetaPrecio.append(entradaPrecio);
     formularioPrecio.append(etiquetaPrecio, guardar);
 
+    const formularioStock = document.createElement("form");
+    formularioStock.className = "producto-admin__stock";
+    formularioStock.dataset.productoStock = producto.id;
+    const etiquetaStock = document.createElement("label");
+    etiquetaStock.textContent = "Stock";
+    const entradaStock = document.createElement("input");
+    entradaStock.type = "number";
+    entradaStock.name = "stock";
+    entradaStock.min = "0";
+    entradaStock.step = "1";
+    entradaStock.value = producto.stock;
+    entradaStock.setAttribute("aria-label", `Stock disponible de ${producto.nombre}`);
+    const guardarStock = document.createElement("button");
+    guardarStock.className = "boton-tabla";
+    guardarStock.type = "submit";
+    guardarStock.textContent = "Actualizar";
+    etiquetaStock.append(entradaStock);
+    formularioStock.append(etiquetaStock, guardarStock);
+
+    const estadoStock = document.createElement("p");
+    estadoStock.className = "producto-admin__estado-stock";
+    if (producto.stock === 0) {
+      estadoStock.classList.add("producto-admin__estado-stock--agotado");
+      estadoStock.textContent = "Sin stock";
+    } else if (producto.stock <= 5) {
+      estadoStock.classList.add("producto-admin__estado-stock--bajo");
+      estadoStock.textContent = `Stock bajo · ${producto.stock} unidades`;
+    } else {
+      estadoStock.textContent = `${producto.stock} unidades disponibles`;
+    }
+
     const disponibilidad = document.createElement("label");
     disponibilidad.className = "interruptor-admin";
     const checkbox = document.createElement("input");
@@ -125,6 +159,8 @@
       categoria,
       titulo,
       formularioPrecio,
+      formularioStock,
+      estadoStock,
       disponibilidad,
       opciones,
       editar
@@ -265,7 +301,8 @@
 
   function render() {
     const pedidos = estado.obtenerPedidos();
-    renderMetricas(pedidos);
+    const catalogo = estado.obtenerCatalogo();
+    renderMetricas(pedidos, catalogo);
     renderProductos();
     renderRanking(pedidos);
     renderMetodos(pedidos);
@@ -296,7 +333,7 @@
 
     if (evento.target.closest("#restaurar-productos")) {
       estado.restaurarProductos();
-      mostrarNotificacion("Precios, disponibilidad y opciones restaurados.");
+      mostrarNotificacion("Precios, stock, disponibilidad y opciones restaurados.");
     }
   });
 
@@ -312,6 +349,20 @@
   });
 
   document.addEventListener("submit", (evento) => {
+    const formularioStock = evento.target.closest("[data-producto-stock]");
+    if (formularioStock) {
+      evento.preventDefault();
+      const stock = Math.max(
+        0,
+        Math.floor(Number(new FormData(formularioStock).get("stock")) || 0)
+      );
+      estado.actualizarProducto(formularioStock.dataset.productoStock, { stock });
+      mostrarNotificacion(
+        stock === 0 ? "Producto marcado sin stock." : `Stock actualizado a ${stock} unidades.`
+      );
+      return;
+    }
+
     const formularioPrecio = evento.target.closest("[data-producto-precio]");
     if (formularioPrecio) {
       evento.preventDefault();

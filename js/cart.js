@@ -25,6 +25,7 @@
     const camposMesa = document.querySelector("#campos-pedido-mesa");
     const camposDelivery = document.querySelector("#campos-pedido-delivery");
     const mesaSelect = document.querySelector("#pedido-mesa");
+    const paraLlevarInput = document.querySelector("#pedido-para-llevar");
     const camposRequeridosDelivery = document.querySelectorAll("[data-delivery-required]");
     const opcionesSoloLocal = document.querySelectorAll("[data-solo-local]");
     const pagoResumenPedido = document.querySelector("#pago-resumen-pedido");
@@ -70,6 +71,7 @@
       !camposMesa ||
       !camposDelivery ||
       !mesaSelect ||
+      !paraLlevarInput ||
       !pagoResumenPedido ||
       !metodoPagoSelect ||
       !pagoInstrucciones ||
@@ -160,6 +162,12 @@
 
     function obtenerCantidadTotal() {
       return carrito.reduce((total, item) => total + Number(item.cantidad), 0);
+    }
+
+    function obtenerCantidadProducto(productoId) {
+      return carrito
+        .filter((item) => item.id === productoId)
+        .reduce((total, item) => total + Number(item.cantidad), 0);
     }
 
     function obtenerTipoPedido() {
@@ -347,6 +355,10 @@
       camposDelivery.hidden = !esDelivery;
       mesaSelect.disabled = esDelivery;
       mesaSelect.required = !esDelivery;
+      paraLlevarInput.disabled = esDelivery;
+      if (esDelivery) {
+        paraLlevarInput.checked = false;
+      }
 
       camposRequeridosDelivery.forEach((campo) => {
         campo.disabled = !esDelivery;
@@ -445,6 +457,14 @@
         return;
       }
 
+      const cantidadAgregar = Math.max(1, Number(cantidad) || 1);
+      if (obtenerCantidadProducto(productoId) + cantidadAgregar > producto.stock) {
+        mostrarNotificacion(
+          `Solo quedan ${producto.stock} unidades de ${producto.nombre}.`
+        );
+        return;
+      }
+
       const clave = crearClave(productoId, personalizaciones);
       const existente = carrito.find((item) => item.clave === clave);
       const precioCalculado =
@@ -453,13 +473,13 @@
           : producto.precio;
 
       if (existente) {
-        existente.cantidad += Number(cantidad) || 1;
+        existente.cantidad += cantidadAgregar;
         existente.precioUnitario = precioCalculado;
       } else {
         carrito.push({
           clave,
           id: productoId,
-          cantidad: Number(cantidad) || 1,
+          cantidad: cantidadAgregar,
           precioUnitario: precioCalculado,
           personalizaciones: JSON.parse(JSON.stringify(personalizaciones))
         });
@@ -476,6 +496,17 @@
       }
       const item = carrito.find((elemento) => elemento.clave === clave);
       if (!item) {
+        return;
+      }
+      const producto = obtenerProducto(item.id);
+      if (
+        cambio > 0 &&
+        producto &&
+        obtenerCantidadProducto(item.id) + cambio > producto.stock
+      ) {
+        mostrarNotificacion(
+          `Solo quedan ${producto.stock} unidades de ${producto.nombre}.`
+        );
         return;
       }
       item.cantidad += cambio;
@@ -533,6 +564,7 @@
 
     function crearResumenPedido(pedido) {
       const esDelivery = pedido.tipoPedido === "delivery";
+      const esParaLlevar = !esDelivery && pedido.paraLlevar;
       const metodo = etiquetaMetodoPago(pedido.metodoPago);
       const lineas = [
         "COMPROBANTE DE PEDIDO · DEMOSTRACIÓN",
@@ -540,8 +572,14 @@
         "Copia del cliente · Caja conserva una copia",
         "",
         `PEDIDO ${pedido.codigo}`,
-        `Tipo de pedido: ${esDelivery ? "Delivery" : "En el restaurante"}`,
-        esDelivery ? "Entrega: Delivery" : `Mesa: ${pedido.mesa}`,
+        `Tipo de pedido: ${
+          esDelivery ? "Delivery" : esParaLlevar ? "En el restaurante · Para llevar" : "En el restaurante"
+        }`,
+        esDelivery
+          ? "Entrega: Delivery"
+          : esParaLlevar
+            ? `Entrega: Para llevar · Pedido realizado desde la mesa ${pedido.mesa}`
+            : `Mesa: ${pedido.mesa}`,
         `Estado: Pedido recibido`,
       ];
 
@@ -621,6 +659,7 @@
           : "local";
       const esDelivery = tipoPedido === "delivery";
       const mesa = esDelivery ? "" : String(datosFormulario.get("mesa") || "").trim();
+      const paraLlevar = !esDelivery && datosFormulario.get("paraLlevar") === "si";
       const entrega = esDelivery
         ? {
             nombre: String(datosFormulario.get("nombreCliente") || "").trim(),
@@ -639,6 +678,7 @@
       pedidoEnConfirmacion = {
         tipoPedido,
         mesa,
+        paraLlevar,
         entrega,
         indicaciones,
         productos: crearProductosPedido(),
@@ -656,7 +696,7 @@
         ? "Selecciona Yape o Plin"
         : "Selecciona Yape, Plin, tarjeta o efectivo";
       pagoResumenPedido.textContent = `${
-        esDelivery ? "Delivery" : `Mesa ${mesa}`
+        esDelivery ? "Delivery" : paraLlevar ? `Para llevar · Mesa ${mesa}` : `Mesa ${mesa}`
       } · Total confirmado: ${formatearPrecio(pedidoEnConfirmacion.total)}`;
       formulario.hidden = true;
       formularioPago.hidden = false;
@@ -728,7 +768,10 @@
       });
 
       if (!pedido) {
-        mostrarNotificacion("No se pudo registrar el pedido.");
+        mostrarNotificacion(
+          "No se pudo registrar el pedido porque cambió el stock. Revisa las cantidades."
+        );
+        volverAModificarPedido(false);
         return;
       }
 

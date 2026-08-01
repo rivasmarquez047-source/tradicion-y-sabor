@@ -45,6 +45,14 @@
     return leer(CLAVES.productos, {});
   }
 
+  function obtenerStockInicial(producto) {
+    const stockDefinido = Number(producto.stock);
+    if (Number.isFinite(stockDefinido) && stockDefinido >= 0) {
+      return Math.floor(stockDefinido);
+    }
+    return producto.categoria === "menu" ? 20 : 30;
+  }
+
   function obtenerCatalogo() {
     const ajustes = obtenerAjustesProductos();
 
@@ -54,6 +62,13 @@
       const personalizacion = (producto.personalizacion || []).filter(
         (grupo) => !gruposDesactivados.has(grupo.id)
       );
+      const stockAjustado = Number(ajuste.stock);
+      const stock =
+        Number.isFinite(stockAjustado) && stockAjustado >= 0
+          ? Math.floor(stockAjustado)
+          : obtenerStockInicial(producto);
+      const disponibleConfigurado =
+        typeof ajuste.disponible === "boolean" ? ajuste.disponible : producto.disponible;
 
       return {
         ...clonar(producto),
@@ -61,8 +76,8 @@
           Number.isFinite(Number(ajuste.precio)) && Number(ajuste.precio) >= 0
             ? Number(ajuste.precio)
             : producto.precio,
-        disponible:
-          typeof ajuste.disponible === "boolean" ? ajuste.disponible : producto.disponible,
+        stock,
+        disponible: disponibleConfigurado && stock > 0,
         personalizacion
       };
     });
@@ -109,6 +124,21 @@
 
   function crearPedido(datosPedido) {
     const pedidos = obtenerPedidos();
+    const cantidades = new Map();
+    (datosPedido.productos || []).forEach((producto) => {
+      const id = producto.productoId || producto.id;
+      cantidades.set(id, (cantidades.get(id) || 0) + Number(producto.cantidad || 0));
+    });
+
+    const catalogo = obtenerCatalogo();
+    const sinStock = [...cantidades.entries()].some(([id, cantidad]) => {
+      const producto = catalogo.find((item) => item.id === id);
+      return !producto || !producto.disponible || cantidad <= 0 || cantidad > producto.stock;
+    });
+    if (sinStock || cantidades.size === 0) {
+      return null;
+    }
+
     const tipoPedido = datosPedido.tipoPedido === "delivery" ? "delivery" : "local";
     const recargoDelivery =
       tipoPedido === "delivery" ? Number(datosPedido.recargoDelivery) || 0 : 0;
@@ -117,6 +147,7 @@
       codigo: crearCodigoPedido(),
       tipoPedido,
       mesa: tipoPedido === "local" ? String(datosPedido.mesa || "") : "",
+      paraLlevar: tipoPedido === "local" && Boolean(datosPedido.paraLlevar),
       entrega:
         tipoPedido === "delivery"
           ? clonar(datosPedido.entrega || {})
@@ -160,7 +191,17 @@
       ]
     };
 
+    const ajustes = obtenerAjustesProductos();
+    cantidades.forEach((cantidad, id) => {
+      const producto = catalogo.find((item) => item.id === id);
+      ajustes[id] = {
+        ...(ajustes[id] || {}),
+        stock: Math.max(0, producto.stock - cantidad)
+      };
+    });
+
     pedidos.unshift(pedido);
+    guardar(CLAVES.productos, ajustes);
     guardar(CLAVES.pedidos, pedidos);
     return clonar(pedido);
   }

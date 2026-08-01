@@ -1848,6 +1848,36 @@ h3 {
   display: none;
 }
 
+.formulario-pedido .opcion-para-llevar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border: 1px dashed rgba(169, 66, 34, 0.48);
+  border-radius: var(--radio-pequeno);
+  background: rgba(169, 66, 34, 0.045);
+  cursor: pointer;
+}
+
+.opcion-para-llevar input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.18rem;
+  accent-color: var(--color-terracota);
+}
+
+.opcion-para-llevar span {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.opcion-para-llevar small {
+  color: var(--color-texto-suave);
+  font-weight: 550;
+  line-height: 1.4;
+}
+
 .formulario-delivery {
   padding: 0.9rem;
   border: 1px solid rgba(181, 145, 80, 0.38);

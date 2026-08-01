@@ -80,7 +80,9 @@
     mesa.textContent =
       pedido.tipoPedido === "delivery"
         ? `Delivery${pedido.entrega?.distrito ? ` · ${pedido.entrega.distrito}` : ""}`
-        : `Mesa ${pedido.mesa}`;
+        : pedido.paraLlevar
+          ? `PARA LLEVAR · Mesa ${pedido.mesa}`
+          : `Mesa ${pedido.mesa}`;
     encabezado.append(codigo, mesa);
 
     const tiempo = document.createElement("p");

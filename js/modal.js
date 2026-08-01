@@ -42,12 +42,16 @@
       imagen.src = producto.imagen;
       imagen.alt = `Presentación de ${producto.nombre}`;
       categoria.textContent =
-        producto.subcategoria || (producto.categoria === "bebida" ? "Bebida" : "Platillo");
+        producto.subcategoria || (producto.categoria === "adicional" ? "Adicional" : "Menú");
       titulo.textContent = producto.nombre;
       precio.textContent = window.formatearPrecio(producto.precio);
       descripcion.textContent = producto.descripcion;
+      const contenidoProducto = [
+        ...(producto.incluye || []).map((elemento) => `Incluye: ${elemento}`),
+        ...producto.ingredientes
+      ];
       ingredientes.replaceChildren(
-        ...producto.ingredientes.map((ingrediente) => {
+        ...contenidoProducto.map((ingrediente) => {
           const elemento = document.createElement("li");
           elemento.textContent = ingrediente;
           return elemento;

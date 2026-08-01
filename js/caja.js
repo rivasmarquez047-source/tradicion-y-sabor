@@ -25,6 +25,23 @@
   const capitalizar = (texto) =>
     String(texto || "").charAt(0).toUpperCase() + String(texto || "").slice(1);
 
+  const esDelivery = (pedido) => pedido.tipoPedido === "delivery";
+  const ubicacionPedido = (pedido) =>
+    esDelivery(pedido) ? "Delivery" : `Mesa ${pedido.mesa}`;
+  const etiquetaEstadoPago = (estadoPago) =>
+    ({
+      pendiente: "Pendiente",
+      validacion: "Por validar",
+      pagado: "Pagado"
+    })[estadoPago] || capitalizar(estadoPago);
+  const etiquetaMetodoPago = (metodoPago) =>
+    ({
+      yape: "Yape",
+      plin: "Plin",
+      tarjeta: "Tarjeta",
+      efectivo: "Efectivo en caja"
+    })[metodoPago] || "Sin seleccionar";
+
   function crearEstado(texto, tipo) {
     const elemento = document.createElement("span");
     elemento.className = `estado estado--${tipo}`;
@@ -55,7 +72,12 @@
   function renderMetricas(pedidos) {
     const mesas = new Set(
       pedidos
-        .filter((pedido) => pedido.estadoPedido !== "cerrado")
+        .filter(
+          (pedido) =>
+            pedido.estadoPedido !== "cerrado" &&
+            !esDelivery(pedido) &&
+            pedido.mesa
+        )
         .map((pedido) => pedido.mesa)
     );
     const pagados = pedidos.filter((pedido) => pedido.estadoPago === "pagado");
@@ -68,7 +90,7 @@
       (pedido) => pedido.estadoPedido === "listo"
     ).length;
     document.querySelector("#metrica-entregados").textContent = pedidos.filter(
-      (pedido) => pedido.estadoPedido === "entregado" && pedido.estadoPago === "pendiente"
+      (pedido) => pedido.estadoPago === "validacion"
     ).length;
     document.querySelector("#metrica-pagados").textContent = pagados.length;
     document.querySelector("#metrica-ventas").textContent = formatearPrecio(
@@ -96,7 +118,7 @@
       const fila = document.createElement("tr");
       const valores = [
         pedido.codigo,
-        `Mesa ${pedido.mesa}`,
+        ubicacionPedido(pedido),
         hora(pedido.fecha),
         formatearPrecio(pedido.total)
       ];
@@ -110,16 +132,23 @@
       const estadoPedido = document.createElement("td");
       estadoPedido.append(crearEstado(pedido.estadoPedido, pedido.estadoPedido));
       const estadoPago = document.createElement("td");
-      estadoPago.append(crearEstado(pedido.estadoPago, pedido.estadoPago));
+      estadoPago.append(
+        crearEstado(etiquetaEstadoPago(pedido.estadoPago), pedido.estadoPago)
+      );
       const metodo = document.createElement("td");
-      metodo.textContent = pedido.metodoPago ? capitalizar(pedido.metodoPago) : "—";
+      metodo.textContent = pedido.metodoPago
+        ? etiquetaMetodoPago(pedido.metodoPago)
+        : "—";
       const acciones = document.createElement("td");
       const boton = document.createElement("button");
       boton.className = "boton-tabla";
       boton.type = "button";
       boton.dataset.verPedido = pedido.codigo;
       boton.textContent = "Ver pedido";
-      boton.setAttribute("aria-label", `Ver pedido ${pedido.codigo} de la mesa ${pedido.mesa}`);
+      boton.setAttribute(
+        "aria-label",
+        `Ver pedido ${pedido.codigo} · ${ubicacionPedido(pedido)}`
+      );
       acciones.append(boton);
       fila.append(estadoPedido, estadoPago, metodo, acciones);
       fragmento.append(fila);
@@ -151,17 +180,67 @@
     return articulo;
   }
 
+  function crearDatosEntrega(pedido) {
+    const entrega = pedido.entrega || {};
+    const bloque = document.createElement("section");
+    bloque.className = "detalle-entrega";
+    const titulo = document.createElement("h3");
+    titulo.textContent = "Datos de delivery";
+    bloque.append(titulo);
+
+    [
+      ["Cliente", entrega.nombre],
+      ["Celular", entrega.celular],
+      ["Dirección", entrega.direccion],
+      ["Distrito o zona", entrega.distrito],
+      ["Referencia", entrega.referencia],
+      ["Indicaciones", pedido.indicaciones]
+    ].forEach(([etiqueta, valor]) => {
+      if (!valor) {
+        return;
+      }
+      const linea = document.createElement("p");
+      const nombre = document.createElement("strong");
+      nombre.textContent = `${etiqueta}: `;
+      linea.append(nombre, String(valor));
+      bloque.append(linea);
+    });
+
+    return bloque;
+  }
+
   function crearRecibo(pedido) {
     const recibo = document.createElement("section");
     recibo.className = "recibo";
     recibo.id = "recibo-imprimible";
     const titulo = document.createElement("h3");
     titulo.textContent = window.DATOS_SITIO.negocio.nombre;
+    const copia = document.createElement("p");
+    copia.textContent = "COMPROBANTE DEMOSTRATIVO · COPIA DE CAJA";
+    const numeroComprobante = document.createElement("p");
+    numeroComprobante.textContent = `Comprobante: ${
+      pedido.comprobante?.numero || "Pedido anterior sin correlativo"
+    }`;
     const meta = document.createElement("p");
-    meta.textContent = `${pedido.codigo} · Mesa ${pedido.mesa} · ${new Date(
+    meta.textContent = `${pedido.codigo} · ${ubicacionPedido(pedido)} · ${new Date(
       pedido.fecha
     ).toLocaleString("es-PE")}`;
-    recibo.append(titulo, meta);
+    recibo.append(titulo, copia, numeroComprobante, meta);
+
+    if (esDelivery(pedido)) {
+      const entrega = pedido.entrega || {};
+      [
+        `Cliente: ${entrega.nombre || "—"}`,
+        `Celular: ${entrega.celular || "—"}`,
+        `Dirección: ${entrega.direccion || "—"}`,
+        `Distrito o zona: ${entrega.distrito || "—"}`,
+        `Referencia: ${entrega.referencia || "—"}`
+      ].forEach((texto) => {
+        const linea = document.createElement("p");
+        linea.textContent = texto;
+        recibo.append(linea);
+      });
+    }
 
     pedido.productos.forEach((item) => {
       const linea = document.createElement("p");
@@ -182,30 +261,32 @@
       }
     });
 
+    const subtotal = document.createElement("p");
+    subtotal.textContent = `Subtotal de productos: ${formatearPrecio(
+      pedido.subtotal ?? pedido.total
+    )}`;
+    recibo.append(subtotal);
+
+    if (esDelivery(pedido)) {
+      const delivery = document.createElement("p");
+      delivery.textContent = `Delivery: ${formatearPrecio(pedido.recargoDelivery || 0)}`;
+      recibo.append(delivery);
+    }
+
     const total = document.createElement("p");
     total.innerHTML = `<strong>Total: ${formatearPrecio(pedido.total)}</strong>`;
     const metodo = document.createElement("p");
-    metodo.textContent = `Método: ${capitalizar(pedido.metodoPago)}${
-      pedido.numeroOperacion ? ` · Operación ${pedido.numeroOperacion}` : ""
+    metodo.textContent = `Método: ${etiquetaMetodoPago(pedido.metodoPago)}${
+      pedido.numeroOperacion
+        ? ` · ${
+            pedido.metodoPago === "tarjeta" ? "Referencia" : "Operación"
+          } ${pedido.numeroOperacion}`
+        : ""
     }`;
     const estadoPago = document.createElement("p");
-    estadoPago.textContent = "Estado: Pagado";
+    estadoPago.textContent = `Estado: ${etiquetaEstadoPago(pedido.estadoPago)}`;
     recibo.append(total, metodo, estadoPago);
     return recibo;
-  }
-
-  function campoPago(etiqueta, nombre, tipo = "text") {
-    const label = document.createElement("label");
-    label.textContent = etiqueta;
-    const input = document.createElement("input");
-    input.type = tipo;
-    input.name = nombre;
-    if (tipo === "number") {
-      input.min = "0";
-      input.step = "0.10";
-    }
-    label.append(input);
-    return label;
   }
 
   function renderDetalle() {
@@ -219,12 +300,12 @@
     const fragmento = document.createDocumentFragment();
 
     const meta = document.createElement("p");
-    meta.textContent = `Mesa ${pedido.mesa} · ${hora(pedido.fecha)}`;
+    meta.textContent = `${ubicacionPedido(pedido)} · ${hora(pedido.fecha)}`;
     const estados = document.createElement("div");
     estados.className = "acciones-operativas";
     estados.append(
       crearEstado(pedido.estadoPedido, pedido.estadoPedido),
-      crearEstado(pedido.estadoPago, pedido.estadoPago)
+      crearEstado(etiquetaEstadoPago(pedido.estadoPago), pedido.estadoPago)
     );
 
     const productos = document.createElement("div");
@@ -237,7 +318,11 @@
       pedido.total
     )}</strong>`;
 
-    fragmento.append(meta, estados, productos, total);
+    fragmento.append(meta, estados);
+    if (esDelivery(pedido)) {
+      fragmento.append(crearDatosEntrega(pedido));
+    }
+    fragmento.append(productos, total);
 
     if (pedido.estadoPedido === "listo") {
       const entregar = document.createElement("button");
@@ -248,51 +333,81 @@
       fragmento.append(entregar);
     }
 
-    if (pedido.estadoPago === "pendiente") {
-      const formulario = document.createElement("form");
-      formulario.className = "formulario-operativo";
-      formulario.id = "formulario-pago";
-      formulario.dataset.codigo = pedido.codigo;
+    if (pedido.estadoPago === "validacion") {
+      const validacion = document.createElement("section");
+      validacion.className = "validacion-pago";
+
       const titulo = document.createElement("h3");
-      titulo.textContent = "Registrar pago";
+      titulo.textContent = "Validar pago anticipado";
+
       const aviso = document.createElement("p");
       aviso.textContent =
-        pedido.estadoPedido === "entregado"
-          ? "Selecciona el método utilizado al finalizar el consumo."
-          : "El pago se habilitará cuando el pedido sea entregado.";
+        pedido.metodoPago === "efectivo"
+          ? "Confirma que el cliente pagó en Caja antes de aprobar el pedido."
+          : pedido.metodoPago === "tarjeta"
+            ? "Compara la referencia con el comprobante de la terminal antes de aprobar."
+            : "Compara manualmente estos datos con Yape o Plin antes de aprobar.";
 
-      const labelMetodo = document.createElement("label");
-      labelMetodo.textContent = "Método de pago";
-      const select = document.createElement("select");
-      select.name = "metodo";
-      select.required = true;
-      select.disabled = pedido.estadoPedido !== "entregado";
-      [
-        ["", "Seleccionar método"],
-        ["yape", "Yape"],
-        ["plin", "Plin"],
-        ["tarjeta", "Tarjeta"],
-        ["efectivo", "Efectivo"]
-      ].forEach(([valor, texto]) => {
-        const opcion = document.createElement("option");
-        opcion.value = valor;
-        opcion.textContent = texto;
-        select.append(opcion);
-      });
-      labelMetodo.append(select);
+      const datos = document.createElement("div");
+      datos.className = "validacion-pago__datos";
 
-      const camposDinamicos = document.createElement("div");
-      camposDinamicos.id = "campos-pago";
-      camposDinamicos.dataset.total = pedido.total;
+      const crearDato = (etiqueta, valor) => {
+        const fila = document.createElement("p");
+        const nombre = document.createElement("span");
+        const contenido = document.createElement("strong");
+        nombre.textContent = etiqueta;
+        contenido.textContent = valor;
+        fila.append(nombre, contenido);
+        return fila;
+      };
 
-      const registrar = document.createElement("button");
-      registrar.className = "boton boton--principal";
-      registrar.type = "submit";
-      registrar.disabled = pedido.estadoPedido !== "entregado";
-      registrar.textContent = "Verificar y registrar pago";
+      const metodo = crearDato(
+        "Método",
+        etiquetaMetodoPago(pedido.metodoPago)
+      );
+      const operacion = crearDato(
+        pedido.metodoPago === "tarjeta" ? "Referencia" : "Número de operación",
+        pedido.numeroOperacion || "No aplica"
+      );
+      const monto = crearDato("Monto declarado", formatearPrecio(pedido.total));
+      const comprobante = crearDato(
+        "Comprobante",
+        pedido.comprobante?.numero || "Sin correlativo"
+      );
 
-      formulario.append(titulo, aviso, labelMetodo, camposDinamicos, registrar);
-      fragmento.append(formulario);
+      const aclaracion = document.createElement("small");
+      aclaracion.textContent =
+        "La web es estática: la validación es manual y el comprobante queda guardado en este navegador.";
+
+      const confirmar = document.createElement("button");
+      confirmar.className = "boton boton--principal";
+      confirmar.type = "button";
+      confirmar.dataset.validarPago = pedido.codigo;
+      confirmar.textContent = "Confirmar pago recibido";
+
+      const imprimir = document.createElement("button");
+      imprimir.className = "boton boton--secundario";
+      imprimir.type = "button";
+      imprimir.dataset.imprimirPedido = pedido.codigo;
+      imprimir.textContent = "Imprimir copia de Caja";
+
+      const acciones = document.createElement("div");
+      acciones.className = "acciones-operativas";
+      acciones.append(confirmar, imprimir);
+
+      datos.append(metodo, operacion, monto, comprobante);
+      validacion.append(titulo, aviso, datos, aclaracion, acciones);
+      fragmento.append(validacion, crearRecibo(pedido));
+    } else if (pedido.estadoPago === "pendiente") {
+      const sinPago = document.createElement("section");
+      sinPago.className = "validacion-pago";
+      const titulo = document.createElement("h3");
+      titulo.textContent = "Pago no iniciado por el cliente";
+      const aviso = document.createElement("p");
+      aviso.textContent =
+        "Caja no selecciona el método de pago. El cliente debe confirmarlo desde Mi pedido.";
+      sinPago.append(titulo, aviso);
+      fragmento.append(sinPago);
     } else {
       const acciones = document.createElement("div");
       acciones.className = "acciones-operativas";
@@ -302,7 +417,7 @@
         cerrar.className = "boton boton--principal";
         cerrar.type = "button";
         cerrar.dataset.cerrarMesa = pedido.codigo;
-        cerrar.textContent = "Cerrar mesa";
+        cerrar.textContent = esDelivery(pedido) ? "Cerrar pedido" : "Cerrar mesa";
         acciones.append(cerrar);
       }
 
@@ -339,36 +454,6 @@
     }, 220);
   }
 
-  function renderCamposPago(metodo) {
-    const contenedor = document.querySelector("#campos-pago");
-    if (!contenedor) {
-      return;
-    }
-    const total = Number(contenedor.dataset.total);
-
-    if (metodo === "yape" || metodo === "plin") {
-      const operacion = campoPago("Número de operación (opcional)", "numeroOperacion");
-      contenedor.replaceChildren(operacion);
-    } else if (metodo === "tarjeta") {
-      const confirmacion = document.createElement("p");
-      confirmacion.className = "pedido-generado";
-      confirmacion.textContent =
-        "La transacción con tarjeta será confirmada de forma simulada al registrar el pago.";
-      contenedor.replaceChildren(confirmacion);
-    } else if (metodo === "efectivo") {
-      const monto = campoPago("Monto recibido", "montoRecibido", "number");
-      monto.querySelector("input").required = true;
-      const totalCampo = document.createElement("p");
-      totalCampo.textContent = `Total del consumo: ${formatearPrecio(total)}`;
-      const vuelto = document.createElement("p");
-      vuelto.id = "vuelto-calculado";
-      vuelto.textContent = "Vuelto: S/ 0.00";
-      contenedor.replaceChildren(monto, totalCampo, vuelto);
-    } else {
-      contenedor.replaceChildren();
-    }
-  }
-
   function render() {
     const pedidos = estado.obtenerPedidos();
     renderMetricas(pedidos);
@@ -384,6 +469,7 @@
   document.addEventListener("click", (evento) => {
     const ver = evento.target.closest("[data-ver-pedido]");
     const entregar = evento.target.closest("[data-marcar-entregado]");
+    const validarPago = evento.target.closest("[data-validar-pago]");
     const cerrar = evento.target.closest("[data-cerrar-mesa]");
     const imprimir = evento.target.closest("[data-imprimir-pedido]");
 
@@ -402,6 +488,13 @@
       });
       mostrarNotificacion("Pedido marcado como entregado.");
     }
+    if (validarPago) {
+      estado.actualizarPedido(validarPago.dataset.validarPago, {
+        estadoPago: "pagado",
+        fechaPagoValidado: new Date().toISOString()
+      });
+      mostrarNotificacion("Pago validado. El pedido ya está visible en Cocina.");
+    }
     if (cerrar) {
       estado.actualizarPedido(cerrar.dataset.cerrarMesa, {
         estadoPedido: "cerrado"
@@ -411,51 +504,6 @@
     if (imprimir) {
       window.print();
     }
-  });
-
-  document.addEventListener("change", (evento) => {
-    if (evento.target.matches('#formulario-pago select[name="metodo"]')) {
-      renderCamposPago(evento.target.value);
-    }
-  });
-
-  document.addEventListener("input", (evento) => {
-    if (evento.target.matches('input[name="montoRecibido"]')) {
-      const contenedor = document.querySelector("#campos-pago");
-      const vuelto = document.querySelector("#vuelto-calculado");
-      const cambio = Number(evento.target.value || 0) - Number(contenedor.dataset.total);
-      vuelto.textContent = `Vuelto: ${formatearPrecio(Math.max(0, cambio))}`;
-    }
-  });
-
-  document.addEventListener("submit", (evento) => {
-    if (evento.target.id !== "formulario-pago") {
-      return;
-    }
-    evento.preventDefault();
-    const formulario = evento.target;
-    if (!formulario.reportValidity()) {
-      return;
-    }
-
-    const datos = new FormData(formulario);
-    const metodo = String(datos.get("metodo") || "");
-    const pedido = estado.obtenerPedido(formulario.dataset.codigo);
-    const montoRecibido = metodo === "efectivo" ? Number(datos.get("montoRecibido")) : null;
-
-    if (metodo === "efectivo" && montoRecibido < pedido.total) {
-      mostrarNotificacion("El monto recibido es menor que el total.");
-      return;
-    }
-
-    estado.actualizarPedido(pedido.codigo, {
-      estadoPago: "pagado",
-      metodoPago: metodo,
-      numeroOperacion: String(datos.get("numeroOperacion") || ""),
-      montoRecibido,
-      vuelto: metodo === "efectivo" ? montoRecibido - pedido.total : null
-    });
-    mostrarNotificacion("Pago verificado y registrado.");
   });
 
   estado.suscribirse(render);

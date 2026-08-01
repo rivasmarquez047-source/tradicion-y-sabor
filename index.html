@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta
       name="description"
-      content="Tradición & Sabor: cocina peruana tradicional, bebidas de la casa y atención cálida para cada ocasión."
+      content="D'MARCO P.MEDRANO: menús caseros peruanos con sopa y refresco incluidos en Ica."
     >
-    <title>Tradición &amp; Sabor | Cocina tradicional peruana</title>
+    <title>D'MARCO P.MEDRANO | Cocina tradicional peruana</title>
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -29,8 +29,8 @@
     <header class="site-header" id="inicio">
       <div class="navegacion-principal">
         <div class="contenedor navegacion-principal__contenido">
-          <a class="marca" href="#inicio" aria-label="Tradición y Sabor, ir al inicio">
-            <span class="marca__nombre" data-negocio="nombre">Tradición &amp; Sabor</span>
+          <a class="marca" href="#inicio" aria-label="D'MARCO P.MEDRANO, ir al inicio">
+            <span class="marca__nombre" data-negocio="nombre">D'MARCO P.MEDRANO</span>
             <span class="marca__descripcion">Cocina tradicional</span>
           </a>
 
@@ -50,8 +50,8 @@
           <nav class="menu-principal" id="menu-principal" aria-label="Navegación principal">
             <ul>
               <li><a href="#inicio">Inicio</a></li>
-              <li><a href="#platillos">Platillos</a></li>
-              <li><a href="#bebidas">Bebidas</a></li>
+              <li><a href="#menus">Menús</a></li>
+              <li><a href="#adicionales">Adicionales</a></li>
               <li><a href="#servicios">Servicios</a></li>
               <li><a href="#nosotros">Nosotros</a></li>
               <li><a href="#contacto">Contacto</a></li>
@@ -83,10 +83,10 @@
             </p>
 
             <div class="grupo-botones">
-              <a class="boton boton--principal" href="#platillos">Ver nuestros platillos</a>
-              <a class="boton boton--secundario" href="#" data-whatsapp="general">
-                Pedir por WhatsApp
-              </a>
+              <a class="boton boton--principal" href="#menus">Ver menús de hoy</a>
+              <button class="boton boton--secundario" type="button" data-abrir-carrito>
+                Abrir mi pedido
+              </button>
             </div>
           </div>
         </div>
@@ -140,21 +140,21 @@
           </div>
 
           <div class="categorias__cuadricula">
-            <article class="categoria categoria--platillos">
-              <div class="categoria__imagen" role="img" aria-label="Selección de platillos tradicionales"></div>
+            <article class="categoria categoria--menus">
+              <div class="categoria__imagen" role="img" aria-label="Selección de menús caseros peruanos"></div>
               <div class="categoria__contenido">
-                <h3>Platillos</h3>
-                <p>Recetas peruanas preparadas para disfrutar y compartir.</p>
-                <a href="#platillos">Ver platillos <span aria-hidden="true">→</span></a>
+                <h3>Menús caseros</h3>
+                <p>Fondos peruanos con sopa y refresco incluidos.</p>
+                <a href="#menus">Ver menús <span aria-hidden="true">→</span></a>
               </div>
             </article>
 
-            <article class="categoria categoria--bebidas">
-              <div class="categoria__imagen" role="img" aria-label="Bebidas tradicionales y refrescantes"></div>
+            <article class="categoria categoria--adicionales">
+              <div class="categoria__imagen" role="img" aria-label="Porciones adicionales para el menú"></div>
               <div class="categoria__contenido">
-                <h3>Bebidas</h3>
-                <p>Sabores refrescantes y bebidas tradicionales de la casa.</p>
-                <a href="#bebidas">Ver bebidas <span aria-hidden="true">→</span></a>
+                <h3>Adicionales</h3>
+                <p>Agrega porciones extra o una gaseosa con precio independiente.</p>
+                <a href="#adicionales">Ver adicionales <span aria-hidden="true">→</span></a>
               </div>
             </article>
 
@@ -174,71 +174,95 @@
         <div class="contenedor">
           <div class="encabezado-seccion">
             <p class="etiqueta">Nuestra carta</p>
-            <h2 id="titulo-carta">Sabores preparados con cariño</h2>
-            <p>Explora la carta, descubre sus ingredientes y arma tu pedido de demostración.</p>
+            <h2 id="titulo-carta">Menús caseros preparados con cariño</h2>
+            <p>Elige tu fondo favorito. Todos los menús incluyen una sopa y un refresco.</p>
           </div>
 
           <div class="filtros" role="group" aria-label="Filtrar productos">
             <button class="filtro activo" type="button" data-filtro="todos" aria-pressed="true">
               Todos
             </button>
-            <button class="filtro" type="button" data-filtro="platillo" aria-pressed="false">
-              Platillos
+            <button class="filtro" type="button" data-filtro="menu" aria-pressed="false">
+              Menús
             </button>
-            <button class="filtro" type="button" data-filtro="bebida" aria-pressed="false">
-              Bebidas
+            <button class="filtro" type="button" data-filtro="adicional" aria-pressed="false">
+              Adicionales
             </button>
           </div>
 
-          <section class="grupo-productos" id="platillos" data-grupo="platillo" aria-labelledby="titulo-platillos">
+          <section class="grupo-productos" id="menus" data-grupo="menu" aria-labelledby="titulo-menus">
             <div class="grupo-productos__encabezado">
               <div>
-                <h3 id="titulo-platillos">Nuestros platillos iqueños</h3>
-                <p>Desliza para recorrer recetas criollas de Ica.</p>
+                <h3 id="titulo-menus">Menús caseros del día</h3>
+                <p>Comidas peruanas de barrio, completas y hechas como en casa.</p>
               </div>
-              <div class="carrusel-controles" aria-label="Controles del carrusel de platillos">
+              <div class="carrusel-controles" aria-label="Controles del carrusel de menús">
                 <button
                   type="button"
-                  data-carrusel="#lista-platillos"
+                  data-carrusel="#lista-menus"
                   data-direccion="-1"
-                  aria-label="Ver platillos anteriores"
+                  aria-label="Ver menús anteriores"
                 >←</button>
                 <button
                   type="button"
-                  data-carrusel="#lista-platillos"
+                  data-carrusel="#lista-menus"
                   data-direccion="1"
-                  aria-label="Ver siguientes platillos"
+                  aria-label="Ver siguientes menús"
                 >→</button>
               </div>
             </div>
-            <div class="productos-cuadricula" id="lista-platillos" aria-live="polite">
+            <div class="productos-cuadricula" id="lista-menus" aria-live="polite">
               <!-- Las tarjetas se crean automáticamente desde js/data.js. -->
             </div>
           </section>
 
-          <section class="grupo-productos" id="bebidas" data-grupo="bebida" aria-labelledby="titulo-bebidas">
+          <section class="grupo-productos" id="adicionales" data-grupo="adicional" aria-labelledby="titulo-adicionales">
             <div class="grupo-productos__encabezado">
               <div>
-                <h3 id="titulo-bebidas">Cócteles y refrescos</h3>
-                <p>Pisco, tragos cortos y bebidas tradicionales.</p>
+                <h3 id="titulo-adicionales">Adicionales para completar tu pedido</h3>
+                <p>Los adicionales se cobran aparte de la sopa y el refresco incluidos.</p>
               </div>
-              <div class="carrusel-controles" aria-label="Controles del carrusel de bebidas">
+              <div class="carrusel-controles" aria-label="Controles del carrusel de adicionales">
                 <button
                   type="button"
-                  data-carrusel="#lista-bebidas"
+                  data-carrusel="#lista-adicionales"
                   data-direccion="-1"
-                  aria-label="Ver bebidas anteriores"
+                  aria-label="Ver adicionales anteriores"
                 >←</button>
                 <button
                   type="button"
-                  data-carrusel="#lista-bebidas"
+                  data-carrusel="#lista-adicionales"
                   data-direccion="1"
-                  aria-label="Ver siguientes bebidas"
+                  aria-label="Ver siguientes adicionales"
                 >→</button>
               </div>
             </div>
-            <div class="productos-cuadricula" id="lista-bebidas" aria-live="polite">
+            <div class="productos-cuadricula" id="lista-adicionales" aria-live="polite">
               <!-- Las tarjetas se crean automáticamente desde js/data.js. -->
+            </div>
+
+            <div class="grupo-productos__encabezado grupo-productos__encabezado--interno">
+              <div>
+                <h4>Gaseosas adicionales</h4>
+                <p>Inca Kola, Coca-Cola, Fanta y Pepsi con precio independiente.</p>
+              </div>
+              <div class="carrusel-controles" aria-label="Controles del carrusel de gaseosas">
+                <button
+                  type="button"
+                  data-carrusel="#lista-gaseosas"
+                  data-direccion="-1"
+                  aria-label="Ver gaseosas anteriores"
+                >←</button>
+                <button
+                  type="button"
+                  data-carrusel="#lista-gaseosas"
+                  data-direccion="1"
+                  aria-label="Ver siguientes gaseosas"
+                >→</button>
+              </div>
+            </div>
+            <div class="productos-cuadricula" id="lista-gaseosas" aria-live="polite">
+              <!-- Las gaseosas se crean automáticamente desde js/data.js. -->
             </div>
           </section>
 
@@ -267,13 +291,19 @@
             class="historia__imagen"
             role="img"
             aria-label="Familia compartiendo la tradición de su cocina"
-          ></div>
+          >
+            <span class="historia__imagen-sello" aria-hidden="true">
+              <small>Una mesa con</small>
+              <strong>raíces</strong>
+              <span>en Ica</span>
+            </span>
+          </div>
 
           <div class="historia__contenido">
             <p class="etiqueta">Nuestra historia</p>
             <h2 id="titulo-historia">Un encuentro entre memoria, valle y sazón</h2>
-            <p>
-              <strong data-negocio="nombre">Tradición &amp; Sabor</strong> comenzó como una mesa
+            <p class="historia__introduccion">
+              <strong data-negocio="nombre">D'MARCO P.MEDRANO</strong> comenzó como una mesa
               familiar en Ica, donde las recetas del valle se compartían los domingos entre
               carapulcra, pallares y una jarra de chicha morada. En
               <span data-negocio="fundacion">2004</span>, esa costumbre inspiró una cocina abierta
@@ -282,19 +312,28 @@
 
             <div class="historia__detalle">
               <article>
+                <span aria-hidden="true">01 · MISIÓN</span>
                 <h3>Nuestra misión</h3>
                 <p>Celebrar la cocina iqueña con sabores honestos, hospitalidad y memoria.</p>
               </article>
               <article>
+                <span aria-hidden="true">02 · COMPROMISO</span>
                 <h3>Compromiso con la calidad</h3>
                 <p>Elegimos insumos locales y cuidamos cada preparación como si fuera domingo.</p>
               </article>
             </div>
 
-            <p class="historia__cifra">
-              <strong>Raíces de Ica</strong>
-              <span>una historia demostrativa, lista para personalizar</span>
-            </p>
+            <div class="historia__cifra">
+              <div>
+                <span>03 · NUESTRA ESENCIA</span>
+                <strong>Raíces de Ica</strong>
+              </div>
+              <ul aria-label="Valores de nuestra cocina">
+                <li>Sazón casera</li>
+                <li>Insumos locales</li>
+                <li>Hospitalidad</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -313,24 +352,26 @@
                 <li>
                   <strong>WhatsApp:</strong>
                   <a href="#" data-whatsapp="general" data-negocio="whatsappVisible">
-                    +51 999 999 999
+                    962 823 566
                   </a>
                 </li>
                 <li>
                   <strong>Teléfono:</strong>
-                  <a href="tel:+51000000000" data-negocio="telefono">+51 000 000 000</a>
+                  <a href="tel:+51962823566" data-negocio="telefono">962 823 566</a>
                 </li>
                 <li>
                   <strong>Dirección:</strong>
-                  <span data-negocio="direccion">Dirección provisional, Lima, Perú</span>
+                  <span data-negocio="direccion">
+                    Urb. La Palma A-13, al lado del colegio José Toribio Polo, Ica
+                  </span>
                 </li>
                 <li>
                   <strong>Horario:</strong>
-                  <span data-negocio="horario">Lunes a domingo, 11:00 a. m. – 10:00 p. m.</span>
+                  <span data-negocio="horario">10:00 a. m. – 3:30 p. m.</span>
                 </li>
                 <li>
                   <strong>Correo:</strong>
-                  <a href="mailto:hola@ejemplo.com" data-negocio="correo">hola@ejemplo.com</a>
+                  <a href="mailto:Demarco@gmail.com" data-negocio="correo">Demarco@gmail.com</a>
                 </li>
               </ul>
 
@@ -350,11 +391,15 @@
               </div>
             </address>
 
-            <div class="mapa-provisional" role="region" aria-label="Ubicación del negocio">
-              <div>
-                <h3>Mapa próximamente</h3>
-                <p>Aquí podrás insertar un mapa de Google Maps sin utilizar una clave de API.</p>
-              </div>
+            <div class="mapa-negocio" role="region" aria-label="Ubicación de D'MARCO P.MEDRANO">
+              <iframe
+                title="Mapa de D'MARCO P.MEDRANO en Urb. La Palma A-13, Ica"
+                src="https://www.google.com/maps?q=Urb.%20La%20Palma%20A-13%2C%20al%20lado%20del%20colegio%20Jose%20Toribio%20Polo%2C%20Ica%2C%20Peru&amp;output=embed"
+                data-negocio-mapa
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
             </div>
           </div>
         </div>
@@ -365,7 +410,7 @@
       <div class="contenedor pie-pagina__cuadricula">
         <div class="pie-pagina__marca">
           <a class="marca marca--pie" href="#inicio">
-            <span class="marca__nombre" data-negocio="nombre">Tradición &amp; Sabor</span>
+            <span class="marca__nombre" data-negocio="nombre">D'MARCO P.MEDRANO</span>
             <span class="marca__descripcion">Cocina tradicional</span>
           </a>
           <p>Sabores de siempre, preparados con cariño para compartir en familia.</p>
@@ -374,9 +419,13 @@
         <div>
           <h2 class="pie-pagina__titulo">Contáctanos</h2>
           <ul>
-            <li><a href="#" data-whatsapp="general">Pedir por WhatsApp</a></li>
-            <li><a href="mailto:hola@ejemplo.com" data-negocio="correo">hola@ejemplo.com</a></li>
-            <li><span data-negocio="direccion">Dirección provisional, Lima, Perú</span></li>
+            <li><a href="#" data-whatsapp="general">WhatsApp: 962 823 566</a></li>
+            <li><a href="mailto:Demarco@gmail.com" data-negocio="correo">Demarco@gmail.com</a></li>
+            <li>
+              <span data-negocio="direccion">
+                Urb. La Palma A-13, al lado del colegio José Toribio Polo, Ica
+              </span>
+            </li>
           </ul>
         </div>
 
@@ -384,8 +433,8 @@
           <h2 class="pie-pagina__titulo">Enlaces rápidos</h2>
           <nav aria-label="Navegación del pie de página">
             <ul>
-              <li><a href="#platillos">Platillos</a></li>
-              <li><a href="#bebidas">Bebidas</a></li>
+              <li><a href="#menus">Menús</a></li>
+              <li><a href="#adicionales">Adicionales</a></li>
               <li><a href="#servicios">Servicios</a></li>
               <li><a href="#nosotros">Nuestra historia</a></li>
               <li><a href="#contacto">Contacto</a></li>
@@ -395,15 +444,17 @@
 
         <div>
           <h2 class="pie-pagina__titulo">Horario</h2>
-          <p data-negocio="horario">Lunes a domingo, 11:00 a. m. – 10:00 p. m.</p>
-          <a class="boton boton--principal" href="#" data-whatsapp="general">Haz tu pedido</a>
+          <p data-negocio="horario">10:00 a. m. – 3:30 p. m.</p>
+          <button class="boton boton--principal" type="button" data-abrir-carrito>
+            Haz tu pedido
+          </button>
         </div>
       </div>
 
       <div class="contenedor pie-pagina__inferior">
         <p>
           © <span id="anio-actual"></span>
-          <span data-negocio="nombre">Tradición &amp; Sabor</span>. Todos los derechos reservados.
+          <span data-negocio="nombre">D'MARCO P.MEDRANO</span>. Todos los derechos reservados.
         </p>
         <nav aria-label="Redes sociales del pie de página">
           <a href="#" data-red-social="facebook" target="_blank" rel="noopener noreferrer">
@@ -415,17 +466,6 @@
         </nav>
       </div>
     </footer>
-
-    <button
-      class="boton-whatsapp-flotante"
-      id="whatsapp-flotante"
-      type="button"
-      aria-label="Realizar un pedido por WhatsApp"
-      data-whatsapp="general"
-    >
-      <span aria-hidden="true">WA</span>
-      <span class="boton-whatsapp-flotante__texto">Pedir por WhatsApp</span>
-    </button>
 
     <button
       class="boton-carrito-flotante"
@@ -461,48 +501,267 @@
 
       <div class="panel-carrito__cuerpo">
         <p class="carrito-vacio" id="carrito-vacio">
-          Aún no agregaste productos. Elige un platillo o bebida para comenzar.
+          Aún no agregaste productos. Elige un menú o adicional para comenzar.
         </p>
         <ul class="carrito-lista" id="carrito-lista" aria-live="polite"></ul>
 
-        <div class="carrito-total">
-          <span>Total estimado</span>
-          <strong id="carrito-total">S/ 0.00</strong>
+        <div class="carrito-total" aria-live="polite">
+          <div class="carrito-total__linea">
+            <span>Productos</span>
+            <strong id="carrito-subtotal">S/ 0.00</strong>
+          </div>
+          <div class="carrito-total__linea" id="carrito-fila-delivery" hidden>
+            <span>Delivery</span>
+            <strong id="carrito-recargo-delivery">S/ 5.00</strong>
+          </div>
+          <div class="carrito-total__linea carrito-total__linea--final">
+            <span>Total estimado</span>
+            <strong id="carrito-total">S/ 0.00</strong>
+          </div>
         </div>
 
         <form class="formulario-pedido" id="formulario-pedido">
           <h3>Datos para registrar el pedido</h3>
           <p>Demostración local: no realiza cobros ni envíos automáticos.</p>
 
-          <label>
-            Número de mesa
-            <select name="mesa" required>
-              <option value="">Selecciona tu mesa</option>
-              <option value="1">Mesa 1</option>
-              <option value="2">Mesa 2</option>
-              <option value="3">Mesa 3</option>
-              <option value="4">Mesa 4</option>
-              <option value="5">Mesa 5</option>
-              <option value="6">Mesa 6</option>
-              <option value="7">Mesa 7</option>
-              <option value="8">Mesa 8</option>
-              <option value="9">Mesa 9</option>
-              <option value="10">Mesa 10</option>
-              <option value="11">Mesa 11</option>
-              <option value="12">Mesa 12</option>
-            </select>
-          </label>
+          <fieldset class="tipo-pedido">
+            <legend>¿Cómo recibirás tu pedido?</legend>
+            <div class="tipo-pedido__opciones">
+              <label class="tipo-pedido__opcion">
+                <input type="radio" name="tipoPedido" value="local" checked>
+                <span>
+                  <strong>En el restaurante</strong>
+                  <small>Selecciona tu número de mesa</small>
+                </span>
+              </label>
+              <label class="tipo-pedido__opcion">
+                <input type="radio" name="tipoPedido" value="delivery">
+                <span>
+                  <strong>Delivery</strong>
+                  <small>Recargo provisional de S/ 5.00</small>
+                </span>
+              </label>
+            </div>
+          </fieldset>
 
-          <button class="boton boton--principal" type="submit">Registrar pedido</button>
+          <div class="formulario-pedido__grupo" id="campos-pedido-mesa">
+            <label>
+              Número de mesa
+              <select name="mesa" id="pedido-mesa" required>
+                <option value="">Selecciona tu mesa</option>
+                <option value="1">Mesa 1</option>
+                <option value="2">Mesa 2</option>
+                <option value="3">Mesa 3</option>
+                <option value="4">Mesa 4</option>
+                <option value="5">Mesa 5</option>
+                <option value="6">Mesa 6</option>
+                <option value="7">Mesa 7</option>
+                <option value="8">Mesa 8</option>
+                <option value="9">Mesa 9</option>
+                <option value="10">Mesa 10</option>
+                <option value="11">Mesa 11</option>
+                <option value="12">Mesa 12</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="formulario-pedido__grupo formulario-delivery" id="campos-pedido-delivery" hidden>
+            <div class="formulario-delivery__encabezado">
+              <strong>Datos para la entrega</strong>
+              <span>Delivery: + S/ 5.00</span>
+            </div>
+
+            <label>
+              Nombre completo
+              <input
+                type="text"
+                name="nombreCliente"
+                autocomplete="name"
+                maxlength="80"
+                data-delivery-required
+              >
+            </label>
+
+            <label>
+              Número de celular
+              <input
+                type="tel"
+                name="celular"
+                autocomplete="tel"
+                inputmode="tel"
+                maxlength="15"
+                pattern="[0-9 +]{9,15}"
+                placeholder="Ejemplo: 987 654 321"
+                data-delivery-required
+              >
+            </label>
+
+            <label>
+              Dirección de entrega
+              <input
+                type="text"
+                name="direccionEntrega"
+                autocomplete="street-address"
+                maxlength="140"
+                placeholder="Calle, avenida, número o urbanización"
+                data-delivery-required
+              >
+            </label>
+
+            <label>
+              Distrito o zona
+              <input
+                type="text"
+                name="distrito"
+                autocomplete="address-level2"
+                maxlength="60"
+                placeholder="Ejemplo: Ica Cercado"
+                data-delivery-required
+              >
+            </label>
+
+            <label>
+              Referencia para encontrar la dirección
+              <textarea
+                name="referencia"
+                rows="2"
+                maxlength="180"
+                placeholder="Ejemplo: frente al parque, portón de color verde"
+                data-delivery-required
+              ></textarea>
+            </label>
+
+            <label>
+              Indicaciones adicionales (opcional)
+              <textarea
+                name="indicaciones"
+                rows="2"
+                maxlength="180"
+                placeholder="Instrucciones para la entrega"
+              ></textarea>
+            </label>
+          </div>
+
+          <button class="boton boton--principal" type="submit">
+            Confirmar pedido y continuar al pago
+          </button>
+        </form>
+
+        <form
+          class="formulario-pedido formulario-pago-cliente"
+          id="formulario-pago-cliente"
+          hidden
+        >
+          <section class="pago-anticipado" aria-labelledby="pago-anticipado-titulo">
+            <span class="pago-anticipado__badge">Paso 2 · Pago antes de consumir</span>
+            <h4 id="pago-anticipado-titulo">Paga tu pedido</h4>
+            <p id="pago-resumen-pedido">
+              Revisa el pedido confirmado y selecciona el método de pago.
+            </p>
+
+            <label>
+              Método de pago
+              <select name="metodoPago" id="metodo-pago" required>
+                <option value="" id="metodo-pago-placeholder">Selecciona un método</option>
+                <option value="yape">Yape</option>
+                <option value="plin">Plin</option>
+                <option value="tarjeta" data-solo-local>Tarjeta</option>
+                <option value="efectivo" data-solo-local>Efectivo en caja</option>
+              </select>
+            </label>
+
+            <div class="pago-instrucciones" id="pago-instrucciones" hidden>
+              <div
+                class="pago-qr-demo"
+                id="pago-qr-demo"
+                aria-label="Código QR demostrativo; no realiza cobros reales"
+              >
+                <span id="pago-marca">QR</span>
+              </div>
+              <div class="pago-instrucciones__texto">
+                <span>Importe exacto</span>
+                <strong id="pago-monto">S/ 0.00</strong>
+                <p id="pago-metodo-seleccionado"></p>
+                <small>QR demostrativo · Titular y número por confirmar</small>
+              </div>
+            </div>
+
+            <div class="pago-alternativo" id="pago-alternativo" hidden>
+              <span class="pago-alternativo__icono" id="pago-alternativo-icono">S/</span>
+              <div>
+                <strong id="pago-alternativo-titulo"></strong>
+                <p id="pago-alternativo-texto"></p>
+                <small id="pago-alternativo-aviso"></small>
+              </div>
+            </div>
+
+            <label id="campo-numero-operacion" hidden>
+              Número de operación
+              <input
+                type="text"
+                name="numeroOperacion"
+                id="numero-operacion"
+                inputmode="numeric"
+                minlength="6"
+                maxlength="20"
+                pattern="[0-9A-Za-z-]{6,20}"
+                placeholder="Ejemplo: 12345678"
+                disabled
+              >
+            </label>
+
+            <label class="pago-confirmacion">
+              <input
+                type="checkbox"
+                name="confirmarPago"
+                id="confirmar-pago"
+                required
+                disabled
+              >
+              <span id="pago-confirmacion-texto">
+                Confirma el método para continuar.
+              </span>
+            </label>
+
+            <p class="pago-anticipado__aviso">
+              Demostración estática: Caja recibirá una copia del comprobante y
+              verificará el pago antes de enviarlo a Cocina.
+            </p>
+
+            <div class="pago-anticipado__acciones">
+              <button
+                class="boton boton--secundario"
+                id="modificar-pedido"
+                type="button"
+              >
+                Modificar pedido
+              </button>
+              <button
+                class="boton boton--principal"
+                id="confirmar-pago-cliente"
+                type="submit"
+                disabled
+              >
+                Confirmar pago anticipado
+              </button>
+            </div>
+          </section>
         </form>
 
         <section class="pedido-generado" id="pedido-generado" hidden aria-live="polite">
-          <p class="etiqueta">Pedido registrado en este dispositivo</p>
+          <p class="etiqueta">Comprobante guardado · Copia del cliente</p>
           <h3 id="pedido-codigo"></h3>
           <pre id="pedido-resumen"></pre>
           <div class="grupo-botones">
             <button class="boton boton--secundario" id="copiar-pedido" type="button">
               Copiar resumen
+            </button>
+            <button
+              class="boton boton--secundario"
+              id="imprimir-comprobante-cliente"
+              type="button"
+            >
+              Imprimir o guardar PDF
             </button>
             <a
               class="boton boton--principal"
@@ -515,25 +774,14 @@
               Enviar por WhatsApp
             </a>
           </div>
-          <p id="pedido-aviso-whatsapp">El pago se realizará al finalizar el consumo.</p>
+          <p id="pedido-aviso-whatsapp">
+            Caja conserva otra copia para validar el pago y atender cualquier reclamo.
+          </p>
         </section>
       </div>
     </aside>
 
     <div class="notificacion" id="notificacion" role="status" aria-live="polite" hidden></div>
-
-    <nav
-      class="selector-vistas-demo"
-      id="selector-vistas-demo"
-      aria-label="Vistas privadas para la demostración"
-      hidden
-    >
-      <span>Modo demostración</span>
-      <a class="activo" href="index.html?demo=1">Cliente</a>
-      <a href="caja.html">Caja</a>
-      <a href="cocina.html">Cocina</a>
-      <a href="admin.html">Administración</a>
-    </nav>
 
     <div class="modal" id="modal-producto" hidden>
       <div class="modal__fondo" data-cerrar-modal></div>
@@ -608,7 +856,7 @@
             Precio base: <strong id="personalizacion-precio-base"></strong>
           </p>
           <p id="personalizacion-mensaje">
-            Puedes conservar la preparación original o realizar cambios opcionales.
+            Conserva lo incluido, retíralo si no lo deseas o agrega una porción extra.
           </p>
 
           <div class="personalizacion__opciones" id="personalizacion-opciones"></div>

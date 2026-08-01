@@ -6,20 +6,52 @@
 (function configurarCarrito() {
   "use strict";
 
-  const CLAVE_CARRITO = "tradicion-sabor-carrito-v2";
-  const CLAVE_ULTIMO_PEDIDO = "tradicion-sabor-ultimo-pedido-v2";
+  const CLAVE_CARRITO = "tradicion-sabor-carrito-v4";
+  const CLAVE_ULTIMO_PEDIDO = "tradicion-sabor-ultimo-pedido-v4";
+  const RECARGO_DELIVERY =
+    Number(window.DATOS_SITIO?.negocio?.recargoDelivery) || 5;
 
   function iniciar() {
     const panel = document.querySelector("#panel-carrito");
     const capa = document.querySelector(".carrito-capa");
     const lista = document.querySelector("#carrito-lista");
     const mensajeVacio = document.querySelector("#carrito-vacio");
+    const subtotalElemento = document.querySelector("#carrito-subtotal");
+    const filaDelivery = document.querySelector("#carrito-fila-delivery");
+    const recargoDeliveryElemento = document.querySelector("#carrito-recargo-delivery");
     const totalElemento = document.querySelector("#carrito-total");
     const formulario = document.querySelector("#formulario-pedido");
+    const formularioPago = document.querySelector("#formulario-pago-cliente");
+    const camposMesa = document.querySelector("#campos-pedido-mesa");
+    const camposDelivery = document.querySelector("#campos-pedido-delivery");
+    const mesaSelect = document.querySelector("#pedido-mesa");
+    const camposRequeridosDelivery = document.querySelectorAll("[data-delivery-required]");
+    const opcionesSoloLocal = document.querySelectorAll("[data-solo-local]");
+    const pagoResumenPedido = document.querySelector("#pago-resumen-pedido");
+    const metodoPagoSelect = document.querySelector("#metodo-pago");
+    const pagoInstrucciones = document.querySelector("#pago-instrucciones");
+    const pagoQrDemo = document.querySelector("#pago-qr-demo");
+    const pagoMarca = document.querySelector("#pago-marca");
+    const pagoMetodoSeleccionado = document.querySelector("#pago-metodo-seleccionado");
+    const pagoMonto = document.querySelector("#pago-monto");
+    const pagoAlternativo = document.querySelector("#pago-alternativo");
+    const pagoAlternativoIcono = document.querySelector("#pago-alternativo-icono");
+    const pagoAlternativoTitulo = document.querySelector("#pago-alternativo-titulo");
+    const pagoAlternativoTexto = document.querySelector("#pago-alternativo-texto");
+    const pagoAlternativoAviso = document.querySelector("#pago-alternativo-aviso");
+    const campoNumeroOperacion = document.querySelector("#campo-numero-operacion");
+    const numeroOperacionInput = document.querySelector("#numero-operacion");
+    const confirmarPagoCheckbox = document.querySelector("#confirmar-pago");
+    const confirmarPagoTexto = document.querySelector("#pago-confirmacion-texto");
+    const botonConfirmarPago = document.querySelector("#confirmar-pago-cliente");
+    const botonModificarPedido = document.querySelector("#modificar-pedido");
     const pedidoGenerado = document.querySelector("#pedido-generado");
     const pedidoCodigo = document.querySelector("#pedido-codigo");
     const pedidoResumen = document.querySelector("#pedido-resumen");
     const botonCopiar = document.querySelector("#copiar-pedido");
+    const botonImprimirComprobante = document.querySelector(
+      "#imprimir-comprobante-cliente"
+    );
     const enlaceWhatsApp = document.querySelector("#enviar-pedido-whatsapp");
     const avisoPago = document.querySelector("#pedido-aviso-whatsapp");
     const notificacion = document.querySelector("#notificacion");
@@ -29,12 +61,38 @@
       !capa ||
       !lista ||
       !mensajeVacio ||
+      !subtotalElemento ||
+      !filaDelivery ||
+      !recargoDeliveryElemento ||
       !totalElemento ||
       !formulario ||
+      !formularioPago ||
+      !camposMesa ||
+      !camposDelivery ||
+      !mesaSelect ||
+      !pagoResumenPedido ||
+      !metodoPagoSelect ||
+      !pagoInstrucciones ||
+      !pagoQrDemo ||
+      !pagoMarca ||
+      !pagoMetodoSeleccionado ||
+      !pagoMonto ||
+      !pagoAlternativo ||
+      !pagoAlternativoIcono ||
+      !pagoAlternativoTitulo ||
+      !pagoAlternativoTexto ||
+      !pagoAlternativoAviso ||
+      !campoNumeroOperacion ||
+      !numeroOperacionInput ||
+      !confirmarPagoCheckbox ||
+      !confirmarPagoTexto ||
+      !botonConfirmarPago ||
+      !botonModificarPedido ||
       !pedidoGenerado ||
       !pedidoCodigo ||
       !pedidoResumen ||
       !botonCopiar ||
+      !botonImprimirComprobante ||
       !enlaceWhatsApp ||
       !avisoPago ||
       !notificacion
@@ -52,11 +110,19 @@
         }).format(precio));
 
     let carrito = leerCarrito();
+    let pedidoEnConfirmacion = null;
     let temporizadorNotificacion;
     let ultimoFoco = null;
 
     function obtenerProducto(id) {
       return window.ESTADO_APP?.obtenerProducto(id) || window.obtenerProductoPorId?.(id);
+    }
+
+    function obtenerPrecioUnitarioItem(item, producto) {
+      const precioGuardado = Number(item?.precioUnitario);
+      return Number.isFinite(precioGuardado) && precioGuardado >= 0
+        ? precioGuardado
+        : Number(producto?.precio) || 0;
     }
 
     function leerCarrito() {
@@ -96,11 +162,93 @@
       return carrito.reduce((total, item) => total + Number(item.cantidad), 0);
     }
 
-    function obtenerTotal() {
+    function obtenerTipoPedido() {
+      return formulario.querySelector('input[name="tipoPedido"]:checked')?.value === "delivery"
+        ? "delivery"
+        : "local";
+    }
+
+    function obtenerSubtotalProductos() {
       return carrito.reduce((total, item) => {
         const producto = obtenerProducto(item.id);
-        return total + (producto?.precio || 0) * item.cantidad;
+        return total + obtenerPrecioUnitarioItem(item, producto) * item.cantidad;
       }, 0);
+    }
+
+    function obtenerRecargoDelivery() {
+      return obtenerTipoPedido() === "delivery" && carrito.length > 0
+        ? RECARGO_DELIVERY
+        : 0;
+    }
+
+    function obtenerTotal() {
+      return obtenerSubtotalProductos() + obtenerRecargoDelivery();
+    }
+
+    function etiquetaMetodoPago(metodo) {
+      return (
+        {
+          yape: "Yape",
+          plin: "Plin",
+          tarjeta: "Tarjeta",
+          efectivo: "Efectivo en caja"
+        }[metodo] || "Sin seleccionar"
+      );
+    }
+
+    function actualizarPago(reiniciarConfirmacion = false) {
+      const metodo = metodoPagoSelect.value;
+      const esPagoDigital = metodo === "yape" || metodo === "plin";
+      const esTarjeta = metodo === "tarjeta";
+      const esEfectivo = metodo === "efectivo";
+      const pagoSeleccionado = esPagoDigital || esTarjeta || esEfectivo;
+      const total = pedidoEnConfirmacion?.total ?? obtenerTotal();
+
+      pagoInstrucciones.hidden = !esPagoDigital;
+      pagoAlternativo.hidden = !esTarjeta && !esEfectivo;
+      campoNumeroOperacion.hidden = !esPagoDigital;
+      numeroOperacionInput.disabled = !esPagoDigital;
+      numeroOperacionInput.required = esPagoDigital;
+      confirmarPagoCheckbox.disabled = !pagoSeleccionado;
+      botonConfirmarPago.disabled = !pagoSeleccionado;
+      pagoQrDemo.dataset.metodo = esPagoDigital ? metodo : "";
+      pagoMarca.textContent = metodo === "yape" ? "YA" : metodo === "plin" ? "PL" : "QR";
+      pagoMetodoSeleccionado.textContent =
+        metodo === "yape" ? "Pago con Yape" : metodo === "plin" ? "Pago con Plin" : "";
+      pagoMonto.textContent = formatearPrecio(total);
+
+      if (esTarjeta) {
+        pagoAlternativoIcono.textContent = "▣";
+        pagoAlternativoTitulo.textContent = "Pago con tarjeta";
+        pagoAlternativoTexto.textContent = `Importe a pagar: ${formatearPrecio(total)}`;
+        pagoAlternativoAviso.textContent =
+          "Simulación: una web estática no puede realizar cargos bancarios reales.";
+        confirmarPagoTexto.textContent =
+          "Confirmo el pago anticipado con tarjeta por el total mostrado.";
+        botonConfirmarPago.textContent = "Simular pago y generar comprobante";
+      } else if (esEfectivo) {
+        pagoAlternativoIcono.textContent = "S/";
+        pagoAlternativoTitulo.textContent = "Paga en Caja antes de consumir";
+        pagoAlternativoTexto.textContent = `Importe exacto: ${formatearPrecio(total)}`;
+        pagoAlternativoAviso.textContent =
+          "El pedido pasará a Cocina cuando Caja confirme que recibió el efectivo.";
+        confirmarPagoTexto.textContent =
+          "Entiendo que debo pagar en Caja antes de que preparen mi pedido.";
+        botonConfirmarPago.textContent = "Generar orden de pago en efectivo";
+      } else if (esPagoDigital) {
+        confirmarPagoTexto.textContent = "Confirmo que envié el monto total mostrado.";
+        botonConfirmarPago.textContent = "Enviar pago y generar comprobante";
+      } else {
+        confirmarPagoTexto.textContent = "Confirma el método para continuar.";
+        botonConfirmarPago.textContent = "Confirmar pago anticipado";
+      }
+
+      if (!esPagoDigital) {
+        numeroOperacionInput.value = "";
+      }
+      if (!pagoSeleccionado || reiniciarConfirmacion) {
+        confirmarPagoCheckbox.checked = false;
+      }
     }
 
     function crearListaCambios(personalizaciones) {
@@ -166,7 +314,9 @@
 
       const precio = document.createElement("p");
       precio.className = "carrito-item__subtotal";
-      precio.textContent = `Subtotal: ${formatearPrecio(producto.precio * item.cantidad)}`;
+      precio.textContent = `Subtotal: ${formatearPrecio(
+        obtenerPrecioUnitarioItem(item, producto) * item.cantidad
+      )}`;
 
       const cantidad = document.createElement("div");
       cantidad.className = "control-cantidad";
@@ -190,6 +340,26 @@
       return elemento;
     }
 
+    function actualizarTipoPedido() {
+      const esDelivery = obtenerTipoPedido() === "delivery";
+
+      camposMesa.hidden = esDelivery;
+      camposDelivery.hidden = !esDelivery;
+      mesaSelect.disabled = esDelivery;
+      mesaSelect.required = !esDelivery;
+
+      camposRequeridosDelivery.forEach((campo) => {
+        campo.disabled = !esDelivery;
+        campo.required = esDelivery;
+      });
+
+      filaDelivery.hidden = !esDelivery || carrito.length === 0;
+      subtotalElemento.textContent = formatearPrecio(obtenerSubtotalProductos());
+      recargoDeliveryElemento.textContent = formatearPrecio(RECARGO_DELIVERY);
+      totalElemento.textContent = formatearPrecio(obtenerTotal());
+      actualizarPago();
+    }
+
     function actualizarVista() {
       const fragmento = document.createDocumentFragment();
       carrito.forEach((item) => {
@@ -203,7 +373,7 @@
       const cantidad = obtenerCantidadTotal();
       mensajeVacio.hidden = cantidad > 0;
       lista.hidden = cantidad === 0;
-      totalElemento.textContent = formatearPrecio(obtenerTotal());
+      actualizarTipoPedido();
 
       document.querySelectorAll("[data-carrito-contador]").forEach((contador) => {
         contador.textContent = cantidad;
@@ -216,7 +386,38 @@
       });
 
       formulario.querySelector('button[type="submit"]').disabled = cantidad === 0;
+      bloquearEdicionCarrito(Boolean(pedidoEnConfirmacion));
       guardarCarrito();
+    }
+
+    function bloquearEdicionCarrito(bloquear) {
+      lista.classList.toggle("carrito-lista--bloqueada", bloquear);
+      lista.querySelectorAll("[data-carrito-accion]").forEach((boton) => {
+        boton.disabled = bloquear;
+      });
+    }
+
+    function iniciarNuevoPedido() {
+      pedidoEnConfirmacion = null;
+      formularioPago.reset();
+      formularioPago.hidden = true;
+      formulario.hidden = false;
+      pedidoGenerado.hidden = true;
+      actualizarPago();
+      bloquearEdicionCarrito(false);
+    }
+
+    function volverAModificarPedido(mostrarAviso = true) {
+      pedidoEnConfirmacion = null;
+      formularioPago.reset();
+      formularioPago.hidden = true;
+      formulario.hidden = false;
+      actualizarPago();
+      bloquearEdicionCarrito(false);
+      formulario.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (mostrarAviso) {
+        mostrarNotificacion("Puedes modificar el pedido antes de pagarlo.");
+      }
     }
 
     function mostrarNotificacion(mensaje) {
@@ -232,7 +433,12 @@
       }, 2400);
     }
 
-    function agregarVariante({ productoId, cantidad, personalizaciones = [] }) {
+    function agregarVariante({
+      productoId,
+      cantidad,
+      precioUnitario,
+      personalizaciones = []
+    }) {
       const producto = obtenerProducto(productoId);
       if (!producto?.disponible) {
         mostrarNotificacion("Este producto no está disponible actualmente.");
@@ -241,24 +447,33 @@
 
       const clave = crearClave(productoId, personalizaciones);
       const existente = carrito.find((item) => item.clave === clave);
+      const precioCalculado =
+        Number.isFinite(Number(precioUnitario)) && Number(precioUnitario) >= 0
+          ? Number(precioUnitario)
+          : producto.precio;
 
       if (existente) {
         existente.cantidad += Number(cantidad) || 1;
+        existente.precioUnitario = precioCalculado;
       } else {
         carrito.push({
           clave,
           id: productoId,
           cantidad: Number(cantidad) || 1,
+          precioUnitario: precioCalculado,
           personalizaciones: JSON.parse(JSON.stringify(personalizaciones))
         });
       }
 
-      pedidoGenerado.hidden = true;
+      iniciarNuevoPedido();
       actualizarVista();
       mostrarNotificacion(`${producto.nombre} se agregó a Mi pedido.`);
     }
 
     function modificarCantidad(clave, cambio) {
+      if (pedidoEnConfirmacion) {
+        return;
+      }
       const item = carrito.find((elemento) => elemento.clave === clave);
       if (!item) {
         return;
@@ -269,6 +484,9 @@
     }
 
     function eliminar(clave) {
+      if (pedidoEnConfirmacion) {
+        return;
+      }
       carrito = carrito.filter((item) => item.clave !== clave);
       actualizarVista();
     }
@@ -299,27 +517,48 @@
     function crearProductosPedido() {
       return carrito.map((item) => {
         const producto = obtenerProducto(item.id);
+        const precioUnitario = obtenerPrecioUnitarioItem(item, producto);
         return {
           clave: item.clave,
           productoId: item.id,
           nombre: producto.nombre,
           imagen: producto.imagen,
-          precioUnitario: producto.precio,
+          precioUnitario,
           cantidad: item.cantidad,
           personalizaciones: JSON.parse(JSON.stringify(item.personalizaciones || [])),
-          subtotal: producto.precio * item.cantidad
+          subtotal: precioUnitario * item.cantidad
         };
       });
     }
 
     function crearResumenPedido(pedido) {
+      const esDelivery = pedido.tipoPedido === "delivery";
+      const metodo = etiquetaMetodoPago(pedido.metodoPago);
       const lineas = [
-        `PEDIDO ${pedido.codigo}`,
-        `Mesa: ${pedido.mesa}`,
-        `Estado: Pedido recibido`,
+        "COMPROBANTE DE PEDIDO · DEMOSTRACIÓN",
+        `Comprobante: ${pedido.comprobante?.numero || "Sin número"}`,
+        "Copia del cliente · Caja conserva una copia",
         "",
-        "PRODUCTOS"
+        `PEDIDO ${pedido.codigo}`,
+        `Tipo de pedido: ${esDelivery ? "Delivery" : "En el restaurante"}`,
+        esDelivery ? "Entrega: Delivery" : `Mesa: ${pedido.mesa}`,
+        `Estado: Pedido recibido`,
       ];
+
+      if (esDelivery) {
+        lineas.push(
+          `Cliente: ${pedido.entrega.nombre}`,
+          `Celular: ${pedido.entrega.celular}`,
+          `Dirección: ${pedido.entrega.direccion}`,
+          `Distrito o zona: ${pedido.entrega.distrito}`,
+          `Referencia: ${pedido.entrega.referencia}`
+        );
+        if (pedido.indicaciones) {
+          lineas.push(`Indicaciones: ${pedido.indicaciones}`);
+        }
+      }
+
+      lineas.push("", "PRODUCTOS");
 
       pedido.productos.forEach((item) => {
         lineas.push(
@@ -336,14 +575,34 @@
 
       lineas.push(
         "",
+        `SUBTOTAL DE PRODUCTOS: ${formatearPrecio(pedido.subtotal)}`,
+        ...(esDelivery
+          ? [`DELIVERY: ${formatearPrecio(pedido.recargoDelivery)}`]
+          : []),
         `TOTAL ESTIMADO: ${formatearPrecio(pedido.total)}`,
         "Estado inicial: Pedido recibido",
-        "El pago se realizará al finalizar el consumo."
+        "",
+        "PAGO ANTICIPADO",
+        `Método: ${metodo}`,
+        ...(pedido.numeroOperacion
+          ? [
+              `${
+                pedido.metodoPago === "tarjeta" ? "Referencia demostrativa" : "Número de operación"
+              }: ${pedido.numeroOperacion}`
+            ]
+          : []),
+        `Monto: ${formatearPrecio(pedido.total)}`,
+        `Estado del pago: ${
+          pedido.metodoPago === "efectivo"
+            ? "Pendiente de pago y validación en Caja"
+            : "Comprobante enviado para validación"
+        }`,
+        "El pedido pasará a Cocina cuando Caja valide el pago."
       );
       return lineas.join("\n");
     }
 
-    function registrarPedido(evento) {
+    function prepararPago(evento) {
       evento.preventDefault();
 
       if (carrito.length === 0) {
@@ -356,11 +615,116 @@
       }
 
       const datosFormulario = new FormData(formulario);
-      const mesa = String(datosFormulario.get("mesa") || "").trim();
-      const pedido = window.ESTADO_APP?.crearPedido({
+      const tipoPedido =
+        String(datosFormulario.get("tipoPedido") || "") === "delivery"
+          ? "delivery"
+          : "local";
+      const esDelivery = tipoPedido === "delivery";
+      const mesa = esDelivery ? "" : String(datosFormulario.get("mesa") || "").trim();
+      const entrega = esDelivery
+        ? {
+            nombre: String(datosFormulario.get("nombreCliente") || "").trim(),
+            celular: String(datosFormulario.get("celular") || "").trim(),
+            direccion: String(datosFormulario.get("direccionEntrega") || "").trim(),
+            distrito: String(datosFormulario.get("distrito") || "").trim(),
+            referencia: String(datosFormulario.get("referencia") || "").trim()
+          }
+        : null;
+      const indicaciones = esDelivery
+        ? String(datosFormulario.get("indicaciones") || "").trim()
+        : "";
+      const subtotal = obtenerSubtotalProductos();
+      const recargoDelivery = esDelivery ? RECARGO_DELIVERY : 0;
+
+      pedidoEnConfirmacion = {
+        tipoPedido,
         mesa,
+        entrega,
+        indicaciones,
         productos: crearProductosPedido(),
-        total: obtenerTotal()
+        subtotal,
+        recargoDelivery,
+        total: subtotal + recargoDelivery
+      };
+
+      formularioPago.reset();
+      opcionesSoloLocal.forEach((opcion) => {
+        opcion.disabled = esDelivery;
+        opcion.hidden = esDelivery;
+      });
+      document.querySelector("#metodo-pago-placeholder").textContent = esDelivery
+        ? "Selecciona Yape o Plin"
+        : "Selecciona Yape, Plin, tarjeta o efectivo";
+      pagoResumenPedido.textContent = `${
+        esDelivery ? "Delivery" : `Mesa ${mesa}`
+      } · Total confirmado: ${formatearPrecio(pedidoEnConfirmacion.total)}`;
+      formulario.hidden = true;
+      formularioPago.hidden = false;
+      pedidoGenerado.hidden = true;
+      bloquearEdicionCarrito(true);
+      actualizarPago();
+      formularioPago.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      mostrarNotificacion("Pedido confirmado. Ahora selecciona cómo pagar.");
+    }
+
+    function generarNumeroComprobante() {
+      const ahora = new Date();
+      const fecha = `${String(ahora.getFullYear()).slice(-2)}${String(
+        ahora.getMonth() + 1
+      ).padStart(2, "0")}${String(ahora.getDate()).padStart(2, "0")}`;
+      const correlativo = String(Math.floor(Math.random() * 9000) + 1000);
+      return `COMP-${fecha}-${correlativo}`;
+    }
+
+    function generarReferenciaTarjeta() {
+      return `TARJ-DEMO-${String(Date.now()).slice(-8)}`;
+    }
+
+    function registrarPago(evento) {
+      evento.preventDefault();
+
+      if (!pedidoEnConfirmacion) {
+        volverAModificarPedido(false);
+        mostrarNotificacion("Confirma nuevamente los datos del pedido.");
+        return;
+      }
+
+      if (!formularioPago.reportValidity()) {
+        return;
+      }
+
+      const datosPago = new FormData(formularioPago);
+      const metodoPago = String(datosPago.get("metodoPago") || "").trim();
+      const metodosPermitidos =
+        pedidoEnConfirmacion.tipoPedido === "delivery"
+          ? ["yape", "plin"]
+          : ["yape", "plin", "tarjeta", "efectivo"];
+
+      if (!metodosPermitidos.includes(metodoPago)) {
+        mostrarNotificacion("Selecciona un método de pago disponible.");
+        return;
+      }
+
+      const esPagoDigital = metodoPago === "yape" || metodoPago === "plin";
+      const numeroOperacion = esPagoDigital
+        ? String(datosPago.get("numeroOperacion") || "").trim()
+        : metodoPago === "tarjeta"
+          ? generarReferenciaTarjeta()
+          : "";
+      const fechaPagoEnviado = new Date().toISOString();
+      const pedido = window.ESTADO_APP?.crearPedido({
+        ...pedidoEnConfirmacion,
+        pagoAnticipado: true,
+        estadoPago: "validacion",
+        metodoPago,
+        numeroOperacion,
+        fechaPagoEnviado,
+        comprobante: {
+          numero: generarNumeroComprobante(),
+          fecha: fechaPagoEnviado,
+          tipo: "Comprobante demostrativo de pedido",
+          copiaCaja: true
+        }
       });
 
       if (!pedido) {
@@ -378,17 +742,29 @@
         // El resumen permanece visible aunque no pueda guardarse.
       }
 
-      pedidoCodigo.textContent = `${pedido.codigo} · Mesa ${pedido.mesa}`;
+      pedidoCodigo.textContent = `${pedido.comprobante.numero} · ${pedido.codigo}`;
       pedidoResumen.textContent = resumen;
       pedidoGenerado.hidden = false;
       enlaceWhatsApp.hidden = true;
       avisoPago.hidden = false;
+      avisoPago.textContent =
+        pedido.metodoPago === "efectivo"
+          ? "Presenta este comprobante y paga en Caja antes de consumir. Caja conserva una copia para validación y reclamos."
+          : "Caja conserva otra copia para validar el pago y atender cualquier reclamo.";
 
       carrito = [];
+      pedidoEnConfirmacion = null;
       formulario.reset();
+      formularioPago.reset();
+      formulario.hidden = true;
+      formularioPago.hidden = true;
       actualizarVista();
       pedidoGenerado.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      mostrarNotificacion(`Pedido ${pedido.codigo} recibido por cocina.`);
+      mostrarNotificacion(
+        pedido.metodoPago === "efectivo"
+          ? `Orden ${pedido.codigo} lista para pagar en Caja.`
+          : `Comprobante ${pedido.comprobante.numero} enviado a Caja.`
+      );
     }
 
     async function copiarResumen() {
@@ -411,6 +787,14 @@
       }
 
       mostrarNotificacion("Resumen copiado.");
+    }
+
+    function imprimirComprobanteCliente() {
+      document.body.classList.add("imprimir-comprobante-cliente");
+      window.print();
+      window.setTimeout(() => {
+        document.body.classList.remove("imprimir-comprobante-cliente");
+      }, 500);
     }
 
     document.addEventListener("personalizacion:confirmada", (evento) => {
@@ -446,8 +830,27 @@
       }
     });
 
-    formulario.addEventListener("submit", registrarPedido);
+    formulario.addEventListener("change", (evento) => {
+      if (evento.target.matches('input[name="tipoPedido"]')) {
+        actualizarTipoPedido();
+      }
+    });
+
+    formularioPago.addEventListener("change", (evento) => {
+      if (evento.target.matches("#metodo-pago")) {
+        numeroOperacionInput.value = "";
+        actualizarPago(true);
+      }
+    });
+
+    formulario.addEventListener("submit", prepararPago);
+    formularioPago.addEventListener("submit", registrarPago);
+    botonModificarPedido.addEventListener("click", () => volverAModificarPedido());
     botonCopiar.addEventListener("click", copiarResumen);
+    botonImprimirComprobante.addEventListener("click", imprimirComprobanteCliente);
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("imprimir-comprobante-cliente");
+    });
     actualizarVista();
 
     window.CARRITO_SITIO = {

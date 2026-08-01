@@ -7,12 +7,12 @@
   "use strict";
 
   const CLAVES = {
-    pedidos: "tradicion-sabor-pedidos-v2",
-    productos: "tradicion-sabor-productos-v2"
+    pedidos: "tradicion-sabor-pedidos-v3",
+    productos: "tradicion-sabor-productos-v3"
   };
 
   const ESTADOS_PEDIDO = ["recibido", "preparando", "listo", "entregado", "cerrado"];
-  const ESTADOS_PAGO = ["pendiente", "pagado"];
+  const ESTADOS_PAGO = ["pendiente", "validacion", "pagado"];
 
   function clonar(valor) {
     return JSON.parse(JSON.stringify(valor));
@@ -37,8 +37,8 @@
   }
 
   function obtenerProductosBase() {
-    const datos = window.DATOS_SITIO || { platillos: [], bebidas: [] };
-    return [...datos.platillos, ...datos.bebidas];
+    const datos = window.DATOS_SITIO || { menus: [], adicionales: [] };
+    return [...datos.menus, ...datos.adicionales];
   }
 
   function obtenerAjustesProductos() {
@@ -109,18 +109,47 @@
 
   function crearPedido(datosPedido) {
     const pedidos = obtenerPedidos();
+    const tipoPedido = datosPedido.tipoPedido === "delivery" ? "delivery" : "local";
+    const recargoDelivery =
+      tipoPedido === "delivery" ? Number(datosPedido.recargoDelivery) || 0 : 0;
+    const total = Number(datosPedido.total) || 0;
     const pedido = {
       codigo: crearCodigoPedido(),
-      mesa: String(datosPedido.mesa),
+      tipoPedido,
+      mesa: tipoPedido === "local" ? String(datosPedido.mesa || "") : "",
+      entrega:
+        tipoPedido === "delivery"
+          ? clonar(datosPedido.entrega || {})
+          : null,
       fecha: new Date().toISOString(),
       actualizadoEn: new Date().toISOString(),
       productos: clonar(datosPedido.productos || []),
-      total: Number(datosPedido.total) || 0,
+      subtotal:
+        Number.isFinite(Number(datosPedido.subtotal)) && Number(datosPedido.subtotal) >= 0
+          ? Number(datosPedido.subtotal)
+          : Math.max(0, total - recargoDelivery),
+      recargoDelivery,
+      total,
       indicaciones: datosPedido.indicaciones || "",
       estadoPedido: "recibido",
-      estadoPago: "pendiente",
-      metodoPago: "",
-      numeroOperacion: "",
+      estadoPago:
+        datosPedido.estadoPago === "pagado"
+          ? "pagado"
+          : datosPedido.estadoPago === "validacion"
+            ? "validacion"
+            : "pendiente",
+      pagoAnticipado: Boolean(datosPedido.pagoAnticipado),
+      metodoPago: datosPedido.metodoPago || "",
+      numeroOperacion: datosPedido.numeroOperacion || "",
+      fechaPagoEnviado: datosPedido.fechaPagoEnviado || "",
+      comprobante: clonar(
+        datosPedido.comprobante || {
+          numero: "",
+          fecha: datosPedido.fechaPagoEnviado || "",
+          tipo: "Comprobante demostrativo de pedido",
+          copiaCaja: true
+        }
+      ),
       montoRecibido: null,
       vuelto: null,
       historial: [

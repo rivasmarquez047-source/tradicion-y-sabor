@@ -25,7 +25,7 @@
     }).format(precio);
 
   function productoBase(id) {
-    return [...datos.platillos, ...datos.bebidas].find((producto) => producto.id === id);
+    return [...datos.menus, ...datos.adicionales].find((producto) => producto.id === id);
   }
 
   function mostrarNotificacion(mensaje) {
@@ -43,7 +43,11 @@
 
   function renderMetricas(pedidos) {
     const pagados = pedidos.filter((pedido) => pedido.estadoPago === "pagado");
-    const mesas = new Set(pedidos.map((pedido) => pedido.mesa));
+    const mesas = new Set(
+      pedidos
+        .filter((pedido) => pedido.tipoPedido !== "delivery" && pedido.mesa)
+        .map((pedido) => pedido.mesa)
+    );
     document.querySelector("#admin-total-pedidos").textContent = pedidos.length;
     document.querySelector("#admin-ventas").textContent = formatearPrecio(
       pagados.reduce((total, pedido) => total + pedido.total, 0)
@@ -51,7 +55,7 @@
     document.querySelector("#admin-mesas").textContent = mesas.size;
     document.querySelector("#admin-pagados").textContent = pagados.length;
     document.querySelector("#admin-pendientes").textContent = pedidos.filter(
-      (pedido) => pedido.estadoPago === "pendiente"
+      (pedido) => ["pendiente", "validacion"].includes(pedido.estadoPago)
     ).length;
   }
 
@@ -69,7 +73,7 @@
     contenido.className = "producto-admin__contenido";
     const categoria = document.createElement("span");
     categoria.className = "producto-admin__categoria";
-    categoria.textContent = producto.categoria === "platillo" ? "Platillo" : "Bebida";
+    categoria.textContent = producto.categoria === "menu" ? "Menú" : "Adicional";
     const titulo = document.createElement("h3");
     titulo.textContent = producto.nombre;
 

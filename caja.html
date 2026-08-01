@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="acceso-verificando">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Vista demostrativa de caja de Tradición y Sabor.">
-    <title>Caja | Tradición &amp; Sabor</title>
+    <meta name="description" content="Vista demostrativa de caja de D'MARCO P.MEDRANO.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Caja | D'MARCO P.MEDRANO</title>
+    <script src="js/auth.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/panels.css">
     <script src="js/data.js" defer></script>
@@ -14,25 +16,28 @@
   <body class="panel-page">
     <header class="panel-header">
       <div class="contenedor panel-header__contenido">
-        <a class="marca" href="index.html?demo=1" aria-label="Volver a la vista del cliente">
-          <span class="marca__nombre">Tradición &amp; Sabor</span>
-          <span class="marca__descripcion">Panel de demostración</span>
+        <a class="marca" href="index.html" aria-label="Volver a la vista del cliente">
+          <span class="marca__nombre">D'MARCO P.MEDRANO</span>
+          <span class="marca__descripcion">Sistema interno</span>
         </a>
-        <nav class="panel-navegacion" aria-label="Cambiar vista">
-          <a href="index.html?demo=1">Cliente</a>
-          <a class="activo" href="caja.html">Caja</a>
-          <a href="cocina.html">Cocina</a>
-          <a href="admin.html">Administración</a>
-        </nav>
+        <div class="panel-header__acciones">
+          <nav class="panel-navegacion" aria-label="Cambiar vista">
+            <a href="index.html">Cliente</a>
+            <a class="activo" href="caja.html">Caja</a>
+            <a href="cocina.html">Cocina</a>
+            <a href="admin.html">Administración</a>
+          </nav>
+          <button class="panel-cerrar-sesion" type="button" data-cerrar-sesion>Cerrar sesión</button>
+        </div>
       </div>
     </header>
 
     <main class="panel-main">
       <section class="panel-portada">
         <div>
-          <p class="etiqueta">Control de mesas y pagos</p>
+          <p class="etiqueta">Control de pedidos y pagos</p>
           <h1>Vista de caja</h1>
-          <p>Consulta pedidos, registra pagos y cierra mesas durante la demostración.</p>
+          <p>Consulta pedidos de mesa o delivery y registra sus operaciones durante la demostración.</p>
         </div>
         <span class="panel-actualizacion" id="caja-actualizacion">Estado local actualizado</span>
       </section>
@@ -51,7 +56,7 @@
           <strong id="metrica-listos">0</strong>
         </article>
         <article class="tarjeta-metrica">
-          <span>Entregados por pagar</span>
+          <span>Pagos por validar</span>
           <strong id="metrica-entregados">0</strong>
         </article>
         <article class="tarjeta-metrica">
@@ -74,7 +79,7 @@
             <thead>
               <tr>
                 <th>Código</th>
-                <th>Mesa</th>
+                <th>Mesa / entrega</th>
                 <th>Hora</th>
                 <th>Total</th>
                 <th>Estado del pedido</th>
@@ -98,7 +103,7 @@
     >
       <div class="detalle-operativo__encabezado">
         <div>
-          <p class="etiqueta">Detalle de mesa</p>
+          <p class="etiqueta">Detalle del pedido</p>
           <h2 id="detalle-caja-titulo">Pedido</h2>
         </div>
         <button class="detalle-cerrar" id="cerrar-detalle-caja" type="button" aria-label="Cerrar detalle">×</button>

@@ -12,6 +12,7 @@
     const imagen = document.querySelector("#personalizacion-imagen");
     const titulo = document.querySelector("#personalizacion-titulo");
     const precioBase = document.querySelector("#personalizacion-precio-base");
+    const mensajeAyuda = document.querySelector("#personalizacion-mensaje");
     const opcionesContenedor = document.querySelector("#personalizacion-opciones");
     const cantidadSalida = document.querySelector("#personalizacion-cantidad");
     const totalSalida = document.querySelector("#personalizacion-total");
@@ -25,6 +26,7 @@
       !imagen ||
       !titulo ||
       !precioBase ||
+      !mensajeAyuda ||
       !opcionesContenedor ||
       !cantidadSalida ||
       !totalSalida ||
@@ -38,10 +40,22 @@
     let cantidad = 1;
     let ultimoFoco = null;
 
+    function obtenerPrecioUnitario() {
+      const extras = [...opcionesContenedor.querySelectorAll("select")].reduce(
+        (total, select) => {
+          const opcion = select.options[select.selectedIndex];
+          return total + Number(opcion?.dataset.precioAdicional || 0);
+        },
+        0
+      );
+
+      return (productoActual?.precio || 0) + extras;
+    }
+
     function actualizarTotal() {
       cantidadSalida.value = String(cantidad);
       cantidadSalida.textContent = String(cantidad);
-      totalSalida.textContent = window.formatearPrecio((productoActual?.precio || 0) * cantidad);
+      totalSalida.textContent = window.formatearPrecio(obtenerPrecioUnitario() * cantidad);
       restar.disabled = cantidad <= 1;
       sumar.disabled = cantidad >= 20;
     }
@@ -59,6 +73,7 @@
         const elemento = document.createElement("option");
         elemento.value = opcion.valor;
         elemento.textContent = opcion.texto;
+        elemento.dataset.precioAdicional = String(opcion.precioAdicional || 0);
         select.append(elemento);
       });
 
@@ -98,6 +113,10 @@
       imagen.alt = `Presentación de ${producto.nombre}`;
       titulo.textContent = producto.nombre;
       precioBase.textContent = window.formatearPrecio(producto.precio);
+      mensajeAyuda.textContent =
+        producto.categoria === "menu"
+          ? "Conserva lo incluido, retíralo si no lo deseas o agrega una porción extra."
+          : "Elige la cantidad que deseas agregar a tu pedido.";
 
       const grupos = producto.personalizacion || [];
       if (grupos.length > 0) {
@@ -137,7 +156,10 @@
           id: select.name,
           etiqueta: select.dataset.etiqueta,
           valor: select.value,
-          texto: select.options[select.selectedIndex].textContent
+          texto: select.options[select.selectedIndex].textContent,
+          precioAdicional: Number(
+            select.options[select.selectedIndex].dataset.precioAdicional || 0
+          )
         }));
 
       const hayCambioEspecifico = cambios.some((cambio) => cambio.id !== "preparacion");
@@ -170,6 +192,7 @@
     opcionesContenedor.addEventListener("change", (evento) => {
       if (evento.target.matches("select")) {
         sincronizarPreparacion(evento.target);
+        actualizarTotal();
       }
     });
 
@@ -194,6 +217,7 @@
           detail: {
             productoId: productoActual.id,
             cantidad,
+            precioUnitario: obtenerPrecioUnitario(),
             personalizaciones: obtenerCambios()
           }
         })

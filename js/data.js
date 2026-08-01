@@ -1,26 +1,77 @@
-/*
+  /*
  * DATOS EDITABLES DEL SITIO
  * Contenido demostrativo para la tesis. Sustituye estos datos cuando
  * el restaurante entregue su carta, historia y datos de contacto reales.
  */
 
+function crearPersonalizacionMenu(opcionesAdicionales = []) {
+  return [
+    {
+      id: "sopa-menu",
+      etiqueta: "Sopa del menú",
+      etiquetaResumen: "Sopa",
+      opciones: [
+        { valor: "original", texto: "Sopa incluida — sin cambios" },
+        { valor: "sin-sopa", texto: "Sin sopa" },
+        {
+          valor: "sopa-extra",
+          texto: "Agregar sopa extra (+ S/ 5.00)",
+          precioAdicional: 5
+        }
+      ]
+    },
+    {
+      id: "refresco-menu",
+      etiqueta: "Refresco del menú",
+      etiquetaResumen: "Refresco",
+      opciones: [
+        { valor: "original", texto: "Refresco incluido — sin cambios" },
+        { valor: "sin-refresco", texto: "Sin refresco" },
+        {
+          valor: "refresco-extra",
+          texto: "Agregar refresco extra (+ S/ 4.00)",
+          precioAdicional: 4
+        }
+      ]
+    },
+    {
+      id: "ensalada-extra",
+      etiqueta: "Ensalada adicional",
+      etiquetaResumen: "Extra",
+      opciones: [
+        { valor: "original", texto: "Sin ensalada extra" },
+        {
+          valor: "ensalada-extra",
+          texto: "Agregar ensalada extra (+ S/ 4.00)",
+          precioAdicional: 4
+        }
+      ]
+    },
+    ...opcionesAdicionales
+  ];
+}
+
 window.DATOS_SITIO = {
   provisional: true,
 
   negocio: {
-    nombre: "Tradición & Sabor",
+    nombre: "D'MARCO P.MEDRANO",
     eslogan: "Sabores de Ica que reúnen buenos momentos",
     fundacion: "2004",
 
-    // Escribe el número real con código de país y solo dígitos.
-    whatsapp: "",
-    whatsappVisible: "Número por confirmar",
-    telefono: "Teléfono por confirmar",
-    telefonoEnlace: "",
-    direccion: "Dirección del restaurante por confirmar, Ica, Perú",
-    horario: "Horario de atención por confirmar",
-    correo: "correo@ejemplo.com",
-    comoLlegar: "#",
+    whatsapp: "51962823566",
+    whatsappVisible: "962 823 566",
+    telefono: "962 823 566",
+    telefonoEnlace: "+51962823566",
+    direccion:
+      "Urb. La Palma A-13, al lado del colegio José Toribio Polo, Ica",
+    horario: "10:00 a. m. – 3:30 p. m.",
+    correo: "Demarco@gmail.com",
+    comoLlegar:
+      "https://www.google.com/maps/search/?api=1&query=Urb.%20La%20Palma%20A-13%2C%20al%20lado%20del%20colegio%20Jose%20Toribio%20Polo%2C%20Ica%2C%20Peru",
+    mapaEmbed:
+      "https://www.google.com/maps?q=Urb.%20La%20Palma%20A-13%2C%20al%20lado%20del%20colegio%20Jose%20Toribio%20Polo%2C%20Ica%2C%20Peru&output=embed",
+    recargoDelivery: 5,
 
     redesSociales: {
       facebook: "#",
@@ -28,343 +79,219 @@ window.DATOS_SITIO = {
     },
 
     mensajeGeneral:
-      "Hola, deseo solicitar información sobre los productos y servicios del restaurante."
+      "Hola, deseo solicitar información sobre D'MARCO P.MEDRANO."
   },
 
-  platillos: [
+  menus: [
     {
-      id: "carapulcra-sopa-seca",
-      nombre: "Carapulcra con sopa seca",
-      categoria: "platillo",
-      subcategoria: "Tradición iqueña",
-      precio: 36,
-      imagen: "assets/images/platillos/platillo-1.png",
+      id: "menu-aji-gallina",
+      nombre: "Menú Ají de Gallina",
+      categoria: "menu",
+      subcategoria: "Menú casero",
+      precio: 18,
+      imagen: "assets/images/menus/menu-aji-gallina.png",
       descripcion:
-        "El clásico mancha pecho de Ica: carapulcra de papa seca acompañada de tallarines sazonados.",
+        "Ají de gallina cremoso con arroz blanco, papa, huevo y aceituna.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
+      personalizacion: crearPersonalizacionMenu(),
       ingredientes: [
-        "Papa seca",
-        "Carne de cerdo",
-        "Maní tostado",
-        "Ají panca",
-        "Tallarines",
-        "Albahaca y especias"
+        "Pechuga de pollo",
+        "Ají amarillo",
+        "Pan",
+        "Leche",
+        "Queso",
+        "Nueces",
+        "Arroz blanco",
+        "Papa",
+        "Huevo y aceituna"
       ],
-      personalizacion: [
-        {
-          id: "preparacion",
-          etiqueta: "Preparación",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personalizada", texto: "Personalizada" }
-          ]
-        },
-        {
-          id: "porcion",
-          etiqueta: "Porción",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personal", texto: "Personal" },
-            { valor: "familiar", texto: "Familiar" }
-          ]
-        },
-        {
-          id: "presa",
-          etiqueta: "Tipo de presa",
-          etiquetaResumen: "Presa",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "pollo", texto: "Pollo" },
-            { valor: "cerdo", texto: "Cerdo" }
-          ]
-        },
-        {
-          id: "yuca",
-          etiqueta: "Yuca",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-yuca", texto: "Con yuca" },
-            { valor: "sin-yuca", texto: "Sin yuca" }
-          ]
-        },
-        {
-          id: "picante",
-          etiqueta: "Picante",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "sin-picante", texto: "Sin picante" },
-            { valor: "bajo", texto: "Bajo" },
-            { valor: "normal", texto: "Normal" },
-            { valor: "alto", texto: "Alto" }
-          ]
-        }
-      ],
-      alergenos: ["Maní", "Gluten"],
+      alergenos: ["Lácteos", "Huevo", "Gluten", "Frutos secos"],
       disponible: true
     },
     {
-      id: "cerdo-pisco-pallares",
-      nombre: "Cerdo al pisco con pallares",
-      categoria: "platillo",
-      subcategoria: "Especial de la casa",
-      precio: 38,
-      imagen: "assets/images/platillos/platillo-2.png",
+      id: "menu-arroz-pollo",
+      nombre: "Menú Arroz con Pollo",
+      categoria: "menu",
+      subcategoria: "Favorito del barrio",
+      precio: 18,
+      imagen: "assets/images/menus/menu-arroz-pollo.png",
       descripcion:
-        "Cerdo dorado con reducción de pisco iqueño y un cremoso puré de pallares.",
+        "Arroz verde al culantro con presa de pollo dorada, verduras y salsa criolla.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
+      personalizacion: crearPersonalizacionMenu(),
       ingredientes: [
-        "Lomo de cerdo",
-        "Pisco quebranta",
-        "Pallares",
-        "Cebolla morada",
-        "Ajo",
-        "Hierbas frescas"
+        "Pollo",
+        "Arroz",
+        "Culantro",
+        "Arvejas",
+        "Zanahoria",
+        "Ají amarillo",
+        "Salsa criolla"
       ],
       alergenos: [],
       disponible: true
     },
     {
-      id: "picante-pallares",
-      nombre: "Picante de pallares con cerdo",
-      categoria: "platillo",
-      subcategoria: "Cocina criolla",
-      precio: 34,
-      imagen: "assets/images/platillos/platillo-3.png",
+      id: "menu-adobo-pure",
+      nombre: "Menú Adobo con Puré",
+      categoria: "menu",
+      subcategoria: "Sazón peruana",
+      precio: 20,
+      imagen: "assets/images/menus/menu-adobo-pure.png",
       descripcion:
-        "Pallares tiernos guisados con ají panca, trozos de cerdo y arroz blanco.",
+        "Cerdo tierno en adobo de ají panca acompañado de puré de papa y salsa criolla.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
       ingredientes: [
-        "Pallares iqueños",
         "Carne de cerdo",
         "Ají panca",
-        "Cebolla roja",
         "Ajo",
-        "Arroz blanco"
+        "Cebolla",
+        "Vinagre",
+        "Papa amarilla",
+        "Leche y mantequilla"
       ],
-      personalizacion: [
-        {
-          id: "preparacion",
-          etiqueta: "Preparación",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personalizada", texto: "Personalizada" }
-          ]
-        },
-        {
-          id: "proteina",
-          etiqueta: "Proteína",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-cerdo", texto: "Con cerdo" },
-            { valor: "sin-cerdo", texto: "Sin cerdo" }
-          ]
-        },
+      personalizacion: crearPersonalizacionMenu([
         {
           id: "picante",
-          etiqueta: "Picante",
+          etiqueta: "Nivel de picante",
           opciones: [
             { valor: "original", texto: "Preparación original — sin cambios" },
             { valor: "sin-picante", texto: "Sin picante" },
             { valor: "bajo", texto: "Bajo" },
             { valor: "normal", texto: "Normal" }
           ]
-        },
-        {
-          id: "porcion",
-          etiqueta: "Porción",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personal", texto: "Personal" },
-            { valor: "familiar", texto: "Familiar" }
-          ]
         }
+      ]),
+      alergenos: ["Lácteos"],
+      disponible: true
+    },
+    {
+      id: "menu-escabeche-pollo",
+      nombre: "Menú Escabeche de Pollo",
+      categoria: "menu",
+      subcategoria: "Clásico criollo",
+      precio: 18,
+      imagen: "assets/images/menus/menu-escabeche-pollo.png",
+      descripcion:
+        "Pollo en escabeche de cebolla y ají panca con arroz, camote y aceituna.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
+      personalizacion: crearPersonalizacionMenu(),
+      ingredientes: [
+        "Pollo",
+        "Cebolla morada",
+        "Ají panca",
+        "Vinagre",
+        "Arroz blanco",
+        "Camote",
+        "Aceituna"
       ],
       alergenos: [],
       disponible: true
     },
     {
-      id: "chupe-pallares-verdes",
-      nombre: "Chupe de pallares verdes",
-      categoria: "platillo",
-      subcategoria: "Receta de valle",
-      precio: 30,
-      imagen: "assets/images/platillos/platillo-4.png",
+      id: "menu-chuleta-menestra",
+      nombre: "Menú Chuleta con Menestra",
+      categoria: "menu",
+      subcategoria: "Menú contundente",
+      precio: 20,
+      imagen: "assets/images/menus/menu-chuleta-menestra.png",
       descripcion:
-        "Chupe cremoso de pallares verdes con choclo, queso fresco y huevo.",
+        "Chuleta de cerdo dorada con lentejas guisadas, arroz blanco y salsa criolla.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
+      personalizacion: crearPersonalizacionMenu(),
       ingredientes: [
-        "Pallares verdes",
-        "Choclo",
-        "Leche",
-        "Queso fresco",
-        "Huevo",
-        "Huacatay"
+        "Chuleta de cerdo",
+        "Lentejas",
+        "Arroz blanco",
+        "Cebolla",
+        "Tomate",
+        "Ajo",
+        "Especias de la casa"
       ],
-      personalizacion: [
-        {
-          id: "preparacion",
-          etiqueta: "Preparación",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personalizada", texto: "Personalizada" }
-          ]
-        },
-        {
-          id: "huevo",
-          etiqueta: "Huevo",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-huevo", texto: "Con huevo" },
-            { valor: "sin-huevo", texto: "Sin huevo" }
-          ]
-        },
-        {
-          id: "leche",
-          etiqueta: "Leche",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-leche", texto: "Con leche" },
-            { valor: "sin-leche", texto: "Sin leche" }
-          ]
-        },
-        {
-          id: "sal",
-          etiqueta: "Nivel de sal",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "bajo", texto: "Bajo" },
-            { valor: "normal", texto: "Normal" },
-            { valor: "alto", texto: "Alto" }
-          ]
-        }
-      ],
-      alergenos: ["Lácteos", "Huevo"],
+      alergenos: [],
       disponible: true
     },
     {
-      id: "tortilla-de-raya",
-      nombre: "Tortilla de raya",
-      categoria: "platillo",
-      subcategoria: "Costa de Ica",
-      precio: 32,
-      imagen: "assets/images/platillos/platillo-5.png",
+      id: "menu-pollo-frito",
+      nombre: "Menú Pollo Frito Casero",
+      categoria: "menu",
+      subcategoria: "Hecho como en casa",
+      precio: 18,
+      imagen: "assets/images/menus/menu-pollo-frito.png",
       descripcion:
-        "Tortilla dorada de raya seca deshilachada, huevo y cebolla, servida con salsa criolla.",
+        "Presa de pollo crocante con arroz blanco, papas doradas y ensalada criolla.",
+      incluye: ["Sopa casera del día", "Refresco de la casa"],
+      personalizacion: crearPersonalizacionMenu(),
       ingredientes: [
-        "Raya seca",
-        "Huevos",
-        "Cebolla roja",
-        "Ají amarillo",
-        "Culantro",
-        "Salsa criolla"
-      ],
-      alergenos: ["Pescado", "Huevo"],
-      disponible: true
-    },
-    {
-      id: "ensalada-pallares",
-      nombre: "Ensalada iqueña de pallares",
-      categoria: "platillo",
-      subcategoria: "Entrada fresca",
-      precio: 24,
-      imagen: "assets/images/platillos/platillo-6.png",
-      descripcion:
-        "Pallares blancos con cebolla morada, tomate, limón y hierbas frescas.",
-      ingredientes: [
-        "Pallares blancos",
+        "Pollo",
+        "Harina sazonada",
+        "Arroz blanco",
+        "Papa",
         "Cebolla morada",
         "Tomate",
-        "Limón",
-        "Perejil",
-        "Aceite de oliva"
+        "Hierbas frescas"
       ],
-      alergenos: [],
+      alergenos: ["Gluten"],
       disponible: true
     }
   ],
 
-  bebidas: [
+  adicionales: [
     {
-      id: "pisco-sour",
-      nombre: "Pisco Sour",
-      categoria: "bebida",
-      subcategoria: "Cóctel clásico",
-      precio: 19,
-      imagen: "assets/images/bebidas/pisco-sour.png",
+      id: "adicional-sopa",
+      nombre: "Sopa adicional",
+      categoria: "adicional",
+      subcategoria: "Porción extra",
+      precio: 5,
+      imagen: "assets/images/adicionales/adicional-sopa.png",
       descripcion:
-        "Pisco quebranta, limón, jarabe de goma, clara de huevo y amargo de angostura.",
-      ingredientes: [
-        "Pisco quebranta",
-        "Zumo de limón",
-        "Jarabe de goma",
-        "Clara de huevo",
-        "Amargo de angostura"
-      ],
-      alergenos: ["Huevo", "Contiene alcohol"],
+        "Una porción extra de la sopa casera preparada para el menú del día.",
+      ingredientes: ["Caldo de pollo", "Fideos", "Papa", "Zanahoria", "Verduras y hierbas"],
+      alergenos: ["Gluten"],
       disponible: true
     },
     {
-      id: "chilcano-pisco",
-      nombre: "Chilcano de Pisco",
-      categoria: "bebida",
-      subcategoria: "Cóctel refrescante",
-      precio: 18,
-      imagen: "assets/images/bebidas/chilcano-de-pisco.png",
+      id: "adicional-ensalada",
+      nombre: "Ensalada adicional",
+      categoria: "adicional",
+      subcategoria: "Porción extra",
+      precio: 4,
+      imagen: "assets/images/adicionales/adicional-ensalada.png",
       descripcion:
-        "Pisco, ginger ale, limón y hielo en una mezcla ligera y refrescante.",
-      ingredientes: ["Pisco quebranta", "Ginger ale", "Limón", "Hielo", "Amargo aromático"],
+        "Una porción extra de ensalada fresca con cebolla, tomate, limón y hierbas.",
+      ingredientes: ["Cebolla morada", "Tomate", "Limón", "Culantro", "Ají suave"],
+      alergenos: [],
+      disponible: true
+    },
+    {
+      id: "adicional-refresco",
+      nombre: "Refresco adicional",
+      categoria: "adicional",
+      subcategoria: "Vaso extra",
+      precio: 4,
+      imagen: "assets/images/adicionales/adicional-refresco.png",
+      descripcion:
+        "Un vaso extra de refresco casero para acompañar el menú.",
+      ingredientes: ["Fruta o cereal del día", "Agua", "Azúcar", "Hielo"],
       personalizacion: [
         {
-          id: "hielo",
-          etiqueta: "Hielo",
+          id: "refresco",
+          etiqueta: "Refresco",
           opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-hielo", texto: "Con hielo" },
-            { valor: "sin-hielo", texto: "Sin hielo" },
-            { valor: "hielo-aparte", texto: "Hielo aparte" }
-          ]
-        }
-      ],
-      alergenos: ["Contiene alcohol"],
-      disponible: true
-    },
-    {
-      id: "capitan-iqueno",
-      nombre: "Capitán Iqueño",
-      categoria: "bebida",
-      subcategoria: "Trago corto",
-      precio: 21,
-      imagen: "assets/images/bebidas/capitan.png",
-      descripcion:
-        "Trago corto de pisco y vermut rojo, perfumado con piel de naranja.",
-      ingredientes: ["Pisco acholado", "Vermut rojo", "Hielo", "Piel de naranja"],
-      alergenos: ["Contiene alcohol"],
-      disponible: true
-    },
-    {
-      id: "chicha-morada",
-      nombre: "Chicha Morada",
-      categoria: "bebida",
-      subcategoria: "Refresco tradicional",
-      precio: 9,
-      imagen: "assets/images/bebidas/chicha-morada.png",
-      descripcion:
-        "Maíz morado cocido con piña y especias, servido bien frío.",
-      ingredientes: ["Maíz morado", "Piña", "Canela", "Clavo de olor", "Limón", "Azúcar"],
-      personalizacion: [
-        {
-          id: "hielo",
-          etiqueta: "Hielo",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-hielo", texto: "Con hielo" },
-            { valor: "sin-hielo", texto: "Sin hielo" },
-            { valor: "hielo-aparte", texto: "Hielo aparte" }
+            { valor: "original", texto: "Refresco de la casa — sin cambios" },
+            { valor: "chicha", texto: "Chicha morada" },
+            { valor: "cebada", texto: "Agua de cebada" },
+            { valor: "limonada", texto: "Limonada" }
           ]
         },
         {
-          id: "presentacion",
-          etiqueta: "Presentación",
+          id: "hielo",
+          etiqueta: "Hielo",
           opciones: [
             { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personal", texto: "Personal" },
-            { valor: "jarra", texto: "Jarra" }
+            { valor: "con-hielo", texto: "Con hielo" },
+            { valor: "sin-hielo", texto: "Sin hielo" },
+            { valor: "hielo-aparte", texto: "Hielo aparte" }
           ]
         }
       ],
@@ -372,70 +299,58 @@ window.DATOS_SITIO = {
       disponible: true
     },
     {
-      id: "agua-cebada",
-      nombre: "Agua de Cebada",
-      categoria: "bebida",
-      subcategoria: "Refresco tradicional",
-      precio: 8,
-      imagen: "assets/images/bebidas/agua-de-cebada.png",
+      id: "gaseosa-inka-kola",
+      nombre: "Inca Kola",
+      categoria: "adicional",
+      tipoAdicional: "bebida",
+      subcategoria: "Gaseosa personal",
+      precio: 5,
+      imagen: "assets/images/bebidas/gaseosa-inka-kola.png",
       descripcion:
-        "Refresco casero de cebada y canela, suave y servido con bastante hielo.",
-      ingredientes: ["Cebada", "Canela", "Clavo de olor", "Agua", "Azúcar", "Hielo"],
-      personalizacion: [
-        {
-          id: "hielo",
-          etiqueta: "Hielo",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-hielo", texto: "Con hielo" },
-            { valor: "sin-hielo", texto: "Sin hielo" },
-            { valor: "hielo-aparte", texto: "Hielo aparte" }
-          ]
-        },
-        {
-          id: "presentacion",
-          etiqueta: "Presentación",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personal", texto: "Personal" },
-            { valor: "jarra", texto: "Jarra" }
-          ]
-        }
-      ],
-      alergenos: ["Gluten"],
+        "Botella personal de Inca Kola bien fría, agregada aparte del refresco incluido.",
+      ingredientes: ["Gaseosa sabor hierba luisa"],
+      alergenos: [],
       disponible: true
     },
     {
-      id: "limonada-hierbabuena",
-      nombre: "Limonada con Hierbabuena",
-      categoria: "bebida",
-      subcategoria: "Refresco natural",
-      precio: 9,
-      imagen: "assets/images/bebidas/limonada-hierbabuena.png",
+      id: "gaseosa-coca-cola",
+      nombre: "Coca-Cola",
+      categoria: "adicional",
+      tipoAdicional: "bebida",
+      subcategoria: "Gaseosa personal",
+      precio: 5,
+      imagen: "assets/images/bebidas/gaseosa-coca-cola.png",
       descripcion:
-        "Limón recién exprimido, hierbabuena y hielo para acompañar la cocina criolla.",
-      ingredientes: ["Limón", "Hierbabuena", "Agua", "Azúcar", "Hielo"],
-      personalizacion: [
-        {
-          id: "hielo",
-          etiqueta: "Hielo",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "con-hielo", texto: "Con hielo" },
-            { valor: "sin-hielo", texto: "Sin hielo" },
-            { valor: "hielo-aparte", texto: "Hielo aparte" }
-          ]
-        },
-        {
-          id: "presentacion",
-          etiqueta: "Presentación",
-          opciones: [
-            { valor: "original", texto: "Preparación original — sin cambios" },
-            { valor: "personal", texto: "Personal" },
-            { valor: "jarra", texto: "Jarra" }
-          ]
-        }
-      ],
+        "Botella personal de Coca-Cola bien fría, agregada aparte del refresco incluido.",
+      ingredientes: ["Gaseosa sabor cola"],
+      alergenos: [],
+      disponible: true
+    },
+    {
+      id: "gaseosa-fanta",
+      nombre: "Fanta",
+      categoria: "adicional",
+      tipoAdicional: "bebida",
+      subcategoria: "Gaseosa personal",
+      precio: 5,
+      imagen: "assets/images/bebidas/gaseosa-fanta.png",
+      descripcion:
+        "Botella personal de Fanta sabor naranja, agregada aparte del refresco incluido.",
+      ingredientes: ["Gaseosa sabor naranja"],
+      alergenos: [],
+      disponible: true
+    },
+    {
+      id: "gaseosa-pepsi",
+      nombre: "Pepsi",
+      categoria: "adicional",
+      tipoAdicional: "bebida",
+      subcategoria: "Gaseosa personal",
+      precio: 5,
+      imagen: "assets/images/bebidas/gaseosa-pepsi.png",
+      descripcion:
+        "Botella personal de Pepsi bien fría, agregada aparte del refresco incluido.",
+      ingredientes: ["Gaseosa sabor cola"],
       alergenos: [],
       disponible: true
     }
@@ -446,15 +361,15 @@ window.DATOS_SITIO = {
       id: "reservas",
       titulo: "Reservas y celebraciones",
       descripcion: "Organización de mesas para cumpleaños, aniversarios y encuentros familiares.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
-      posicionImagen: "25% center",
+      imagen: "assets/images/servicios/servicio-reservas-celebraciones.webp",
+      posicionImagen: "center",
       disponible: true
     },
     {
       id: "eventos",
       titulo: "Eventos corporativos",
       descripcion: "Atención coordinada para almuerzos de empresa y reuniones de trabajo.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
+      imagen: "assets/images/servicios/servicio-eventos-corporativos.webp",
       posicionImagen: "center",
       disponible: true
     },
@@ -462,32 +377,32 @@ window.DATOS_SITIO = {
       id: "menus-grupos",
       titulo: "Menús para grupos",
       descripcion: "Propuestas de entrada, fondo y bebida adaptadas al número de invitados.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
-      posicionImagen: "70% center",
+      imagen: "assets/images/servicios/servicio-menus-grupos.webp",
+      posicionImagen: "center",
       disponible: true
     },
     {
       id: "barra-pisco",
       titulo: "Barra de pisco",
       descripcion: "Selección demostrativa de cócteles con pisco para fechas especiales.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
-      posicionImagen: "45% center",
+      imagen: "assets/images/servicios/servicio-barra-pisco.webp",
+      posicionImagen: "center",
       disponible: true
     },
     {
       id: "pedidos-llevar",
       titulo: "Pedidos para llevar",
       descripcion: "Empaque cuidadoso para disfrutar la carta donde prefieras.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
-      posicionImagen: "80% center",
+      imagen: "assets/images/servicios/servicio-pedidos-llevar.webp",
+      posicionImagen: "center",
       disponible: true
     },
     {
       id: "delivery",
       titulo: "Delivery coordinado",
       descripcion: "Entrega sujeta a zonas y horarios que el restaurante confirmará.",
-      imagen: "assets/images/servicios/categoria-servicios.png",
-      posicionImagen: "15% center",
+      imagen: "assets/images/servicios/servicio-delivery.webp",
+      posicionImagen: "center",
       disponible: true
     }
   ]

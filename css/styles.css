@@ -56,6 +56,7 @@ body {
     var(--color-crema-claro);
   font-family: var(--fuente-textos);
   font-size: 1rem;
+  font-weight: 500;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
@@ -109,7 +110,7 @@ h2,
 h3 {
   color: var(--color-marron-oscuro);
   font-family: var(--fuente-titulos);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.12;
 }
 
@@ -522,18 +523,18 @@ h3 {
   transform: scale(1.025);
 }
 
-.categoria--platillos .categoria__imagen {
+.categoria--menus .categoria__imagen {
   background-color: #7a3624;
   background-image:
     linear-gradient(135deg, rgba(129, 48, 24, 0.18), rgba(38, 57, 31, 0.5)),
-    url("../assets/images/platillos/categoria-platillos.png");
+    url("../assets/images/menus/menu-aji-gallina.png");
 }
 
-.categoria--bebidas .categoria__imagen {
+.categoria--adicionales .categoria__imagen {
   background-color: #755837;
   background-image:
     linear-gradient(135deg, rgba(38, 57, 31, 0.08), rgba(38, 57, 31, 0.58)),
-    url("../assets/images/bebidas/categoria-bebidas.png");
+    url("../assets/images/adicionales/adicional-sopa.png");
 }
 
 .categoria--servicios .categoria__imagen {
@@ -637,10 +638,19 @@ h3 {
   font-size: 2rem;
 }
 
+.grupo-productos__encabezado h4 {
+  margin-bottom: 0;
+  font-size: 1.55rem;
+}
+
 .grupo-productos__encabezado p {
   margin-bottom: 0.15rem;
   color: var(--color-texto-suave);
   font-size: 0.9rem;
+}
+
+.grupo-productos__encabezado--interno {
+  margin-top: 2.75rem;
 }
 
 .carrusel-controles {
@@ -803,7 +813,7 @@ h3 {
   color: var(--color-marron-oscuro);
   font-family: var(--fuente-titulos);
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -818,6 +828,33 @@ h3 {
   color: var(--color-texto-suave);
   font-size: 0.88rem;
   line-height: 1.55;
+}
+
+.tarjeta-producto__incluye {
+  display: grid;
+  gap: 0.38rem;
+  margin: 0 0 1rem;
+  color: var(--color-verde);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tarjeta-producto__incluye[hidden] {
+  display: none;
+}
+
+.tarjeta-producto__incluye li {
+  position: relative;
+  padding-left: 1.15rem;
+  line-height: 1.35;
+}
+
+.tarjeta-producto__incluye li::before {
+  position: absolute;
+  left: 0;
+  color: var(--color-dorado);
+  content: "✓";
+  font-weight: 900;
 }
 
 .tarjeta-producto__acciones {
@@ -852,26 +889,60 @@ h3 {
    9. SERVICIOS
    ========================================================= */
 .servicios {
-  background: var(--color-blanco-calido);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(181, 145, 80, 0.16), transparent 24rem),
+    var(--color-blanco-calido);
 }
 
 .servicios__cuadricula {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.35rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.15rem;
 }
 
 .tarjeta-servicio {
   position: relative;
-  min-height: 390px;
+  grid-column: span 4;
+  min-height: 410px;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  border-radius: var(--radio-grande);
+  border: 1px solid rgba(255, 253, 248, 0.35);
+  border-radius: clamp(1.5rem, 3vw, 2.4rem);
   color: var(--color-blanco-calido);
   background: var(--color-verde-claro);
-  box-shadow: var(--sombra-suave);
+  box-shadow: 0 18px 45px rgba(49, 34, 23, 0.14);
   isolation: isolate;
+  transition:
+    transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 420ms ease;
+}
+
+.tarjeta-servicio:nth-child(1),
+.tarjeta-servicio:nth-child(6) {
+  grid-column: span 5;
+}
+
+.tarjeta-servicio:nth-child(2),
+.tarjeta-servicio:nth-child(5) {
+  grid-column: span 3;
+}
+
+.tarjeta-servicio::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0.8rem;
+  border: 1px solid rgba(255, 253, 248, 0.28);
+  border-radius: calc(clamp(1.5rem, 3vw, 2.4rem) - 0.45rem);
+  pointer-events: none;
+  content: "";
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity 320ms ease,
+    transform 420ms ease;
 }
 
 .tarjeta-servicio__imagen {
@@ -881,112 +952,279 @@ h3 {
   height: 100%;
   inset: 0;
   object-fit: cover;
-  transition: transform 500ms ease;
+  transform: scale(1.015);
+  transition: transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .tarjeta-servicio::after {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(to top, rgba(31, 31, 21, 0.92), rgba(31, 31, 21, 0.12) 72%);
+  background:
+    linear-gradient(135deg, rgba(169, 66, 34, 0.12), transparent 50%),
+    linear-gradient(to top, rgba(28, 30, 21, 0.96), rgba(28, 30, 21, 0.1) 78%);
   content: "";
 }
 
+.tarjeta-servicio:hover {
+  box-shadow: 0 28px 58px rgba(49, 34, 23, 0.22);
+  transform: translateY(-8px);
+}
+
+.tarjeta-servicio:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .tarjeta-servicio:hover .tarjeta-servicio__imagen {
-  transform: scale(1.05);
+  transform: scale(1.09);
 }
 
 .tarjeta-servicio__contenido {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  padding: 1.55rem;
+  padding: clamp(1.4rem, 2.7vw, 2rem);
+}
+
+.tarjeta-servicio__numero {
+  width: 2.8rem;
+  height: 2.8rem;
+  display: inline-grid;
+  place-items: center;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 253, 248, 0.55);
+  border-radius: 50%;
+  color: var(--color-blanco-calido);
+  background: rgba(255, 253, 248, 0.12);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  backdrop-filter: blur(8px);
 }
 
 .tarjeta-servicio h3 {
+  max-width: 15ch;
+  margin-bottom: 0.55rem;
   color: var(--color-blanco-calido);
-  font-size: 1.7rem;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.05;
 }
 
 .tarjeta-servicio p {
+  max-width: 42ch;
   color: rgba(255, 253, 248, 0.86);
-  font-size: 0.89rem;
+  font-size: 0.9rem;
 }
 
 .tarjeta-servicio .boton--secundario {
   border-color: rgba(255, 253, 248, 0.7);
+  box-shadow: 0 8px 20px rgba(18, 18, 13, 0.16);
 }
 
 /* =========================================================
    10. HISTORIA
    ========================================================= */
 .historia {
+  position: relative;
   overflow: hidden;
-  background: var(--color-crema);
+  background:
+    radial-gradient(circle at 12% 82%, rgba(169, 66, 34, 0.11), transparent 28rem),
+    linear-gradient(145deg, var(--color-crema-claro), var(--color-crema));
+}
+
+.historia::before {
+  position: absolute;
+  top: 0.1em;
+  right: -0.06em;
+  color: rgba(109, 73, 49, 0.045);
+  font-family: var(--fuente-titulos);
+  font-size: clamp(9rem, 24vw, 22rem);
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+  content: "ICA";
 }
 
 .historia__distribucion {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
   align-items: center;
-  gap: clamp(3rem, 6vw, 6rem);
+  gap: clamp(2.5rem, 5vw, 5rem);
 }
 
 .historia__imagen {
   position: relative;
-  min-height: 600px;
-  border-radius: 45% 45% var(--radio-grande) var(--radio-grande);
+  min-height: 740px;
+  border: 0.65rem solid rgba(255, 253, 248, 0.7);
+  border-radius: 4rem 4rem 13rem 4rem;
   background-color: var(--color-beige);
   background-image:
-    linear-gradient(180deg, rgba(181, 145, 80, 0.1), rgba(38, 57, 31, 0.42)),
+    linear-gradient(180deg, rgba(181, 145, 80, 0.04), rgba(38, 57, 31, 0.34)),
     url("../assets/images/nosotros/nuestra-historia.png");
   background-position: center;
   background-size: cover;
-  box-shadow: var(--sombra-media);
+  box-shadow: 0 28px 70px rgba(61, 39, 24, 0.2);
 }
 
-.historia__contenido > p:not(.etiqueta, .historia__cifra) {
+.historia__imagen::before {
+  position: absolute;
+  z-index: -1;
+  width: 48%;
+  aspect-ratio: 1;
+  top: -2rem;
+  left: -2rem;
+  border: 1px solid rgba(169, 66, 34, 0.32);
+  border-radius: 50%;
+  content: "";
+}
+
+.historia__imagen-sello {
+  position: absolute;
+  right: -1.5rem;
+  bottom: 4rem;
+  width: 9.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 253, 248, 0.75);
+  border-radius: 50%;
+  color: var(--color-blanco-calido);
+  background: var(--color-terracota);
+  box-shadow: 0 18px 38px rgba(61, 39, 24, 0.24);
+  line-height: 1.05;
+  text-align: center;
+  transform: rotate(-6deg);
+}
+
+.historia__imagen-sello small,
+.historia__imagen-sello span {
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.historia__imagen-sello strong {
+  margin-block: 0.25rem;
+  font-family: var(--fuente-titulos);
+  font-size: 2rem;
+}
+
+.historia__contenido h2 {
+  max-width: 10ch;
+  margin-bottom: 1.5rem;
+  font-size: clamp(2.8rem, 5.2vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+}
+
+.historia__introduccion {
+  max-width: 60ch;
   color: var(--color-texto-suave);
-  font-size: 1.03rem;
+  font-size: 1.02rem;
 }
 
 .historia__detalle {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-block: 2rem;
+  gap: 0.85rem;
+  margin-block: 2rem 1rem;
 }
 
 .historia__detalle article {
-  padding: 1.35rem;
-  border-left: 3px solid var(--color-dorado);
-  background: rgba(255, 253, 248, 0.62);
+  min-height: 220px;
+  padding: clamp(1.35rem, 2.4vw, 1.8rem);
+  border: 1px solid rgba(59, 41, 31, 0.18);
+  border-radius: 1.8rem;
+  color: var(--color-blanco-calido);
+  background: var(--color-terracota);
+  transition:
+    transform 320ms ease,
+    box-shadow 320ms ease;
+}
+
+.historia__detalle article:nth-child(2) {
+  background: var(--color-verde);
+  transform: translateY(1.2rem);
+}
+
+.historia__detalle article:hover {
+  box-shadow: var(--sombra-media);
+  transform: translateY(-0.35rem);
+}
+
+.historia__detalle article:nth-child(2):hover {
+  transform: translateY(0.85rem);
+}
+
+.historia__detalle article > span,
+.historia__cifra > div > span {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
 }
 
 .historia__detalle h3 {
-  font-size: 1.2rem;
+  max-width: 12ch;
+  margin-bottom: 0.8rem;
+  color: inherit;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  line-height: 1.05;
 }
 
 .historia__detalle p {
   margin-bottom: 0;
-  color: var(--color-texto-suave);
+  color: rgba(255, 253, 248, 0.84);
   font-size: 0.86rem;
 }
 
 .historia__cifra {
-  display: inline-flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: end;
+  gap: 1.2rem;
+  margin-top: 2.2rem;
   margin-bottom: 0;
-  padding: 1rem 1.4rem;
-  border: 1px solid rgba(169, 66, 34, 0.25);
-  border-radius: var(--radio-medio);
-  color: var(--color-marron);
-  background: var(--color-blanco-calido);
+  padding: clamp(1.4rem, 2.7vw, 2rem);
+  border: 1px solid rgba(59, 41, 31, 0.2);
+  border-radius: 2rem;
+  color: var(--color-marron-oscuro);
+  background: #e2bd64;
+  box-shadow: 0 18px 45px rgba(61, 39, 24, 0.12);
 }
 
 .historia__cifra strong {
-  color: var(--color-terracota);
+  display: block;
+  color: var(--color-marron-oscuro);
   font-family: var(--fuente-titulos);
-  font-size: 1.7rem;
-  line-height: 1.2;
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  line-height: 1;
+}
+
+.historia__cifra ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historia__cifra li {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(59, 41, 31, 0.68);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 /* =========================================================
@@ -1038,33 +1276,17 @@ h3 {
   margin-top: 1.8rem;
 }
 
-.mapa-provisional {
+.mapa-negocio {
   min-height: 470px;
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-  background:
-    linear-gradient(rgba(38, 57, 31, 0.88), rgba(38, 57, 31, 0.88)),
-    repeating-linear-gradient(45deg, transparent 0 20px, rgba(255, 255, 255, 0.1) 20px 22px),
-    var(--color-verde);
-  text-align: center;
+  overflow: hidden;
+  background: var(--color-crema);
 }
 
-.mapa-provisional div {
-  max-width: 26rem;
-  padding: 2rem;
-  border: 1px solid rgba(255, 253, 248, 0.25);
-  border-radius: var(--radio-medio);
-  color: rgba(255, 253, 248, 0.8);
-  background: rgba(255, 253, 248, 0.08);
-}
-
-.mapa-provisional h3 {
-  color: var(--color-blanco-calido);
-}
-
-.mapa-provisional p {
-  margin-bottom: 0;
+.mapa-negocio iframe {
+  display: block;
+  width: 100%;
+  min-height: 470px;
+  border: 0;
 }
 
 /* =========================================================
@@ -1140,49 +1362,6 @@ h3 {
 .pie-pagina__inferior nav {
   display: flex;
   gap: 1rem;
-}
-
-/* =========================================================
-   13. BOTÓN FLOTANTE DE WHATSAPP
-   ========================================================= */
-.boton-whatsapp-flotante {
-  position: fixed;
-  right: 1.4rem;
-  bottom: 1.4rem;
-  z-index: 900;
-  display: flex;
-  min-height: 3.5rem;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.55rem 1rem 0.55rem 0.6rem;
-  border: 0;
-  border-radius: 3rem;
-  color: white;
-  background: var(--color-whatsapp);
-  box-shadow: 0 12px 30px rgba(23, 140, 74, 0.3);
-  font-size: 0.8rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition:
-    background-color var(--transicion),
-    transform var(--transicion),
-    box-shadow var(--transicion);
-}
-
-.boton-whatsapp-flotante:hover {
-  background: #0e743b;
-  box-shadow: 0 15px 35px rgba(23, 140, 74, 0.38);
-  transform: translateY(-3px);
-}
-
-.boton-whatsapp-flotante > span:first-child {
-  display: grid;
-  width: 2.35rem;
-  height: 2.35rem;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-  font-size: 0.7rem;
 }
 
 /* =========================================================
@@ -1528,10 +1707,8 @@ h3 {
 }
 
 .carrito-total {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  display: grid;
+  gap: 0.65rem;
   margin-block: 1.2rem;
   padding: 1rem 1.1rem;
   border: 1px solid rgba(181, 145, 80, 0.34);
@@ -1541,6 +1718,23 @@ h3 {
     var(--color-blanco-calido);
 }
 
+.carrito-total__linea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.carrito-total__linea[hidden] {
+  display: none;
+}
+
+.carrito-total__linea--final {
+  margin-top: 0.1rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--color-borde);
+}
+
 .carrito-total span {
   font-size: 0.82rem;
   font-weight: 750;
@@ -1548,6 +1742,10 @@ h3 {
 
 .carrito-total strong {
   color: var(--color-terracota);
+  font-size: 0.92rem;
+}
+
+.carrito-total__linea--final strong {
   font-size: 1.2rem;
 }
 
@@ -1556,6 +1754,11 @@ h3 {
   gap: 0.9rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--color-borde);
+}
+
+.formulario-pedido[hidden],
+.formulario-pago-cliente [hidden] {
+  display: none;
 }
 
 .formulario-pedido h3 {
@@ -1568,6 +1771,106 @@ h3 {
   font-size: 0.78rem;
 }
 
+.tipo-pedido {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tipo-pedido legend {
+  margin-bottom: 0.6rem;
+  color: var(--color-marron-oscuro);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.tipo-pedido__opciones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.formulario-pedido .tipo-pedido__opcion {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.8rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  background: var(--color-blanco-calido);
+  cursor: pointer;
+  transition:
+    border-color var(--transicion),
+    background-color var(--transicion),
+    box-shadow var(--transicion);
+}
+
+.formulario-pedido .tipo-pedido__opcion:has(input:checked) {
+  border-color: var(--color-terracota);
+  background: rgba(169, 66, 34, 0.06);
+  box-shadow: 0 0 0 2px rgba(169, 66, 34, 0.1);
+}
+
+.tipo-pedido__opcion input {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0.2rem 0 0;
+  accent-color: var(--color-terracota);
+}
+
+.tipo-pedido__opcion span {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.tipo-pedido__opcion strong {
+  line-height: 1.25;
+}
+
+.tipo-pedido__opcion small {
+  color: var(--color-texto-suave);
+  font-size: 0.68rem;
+  font-weight: 550;
+  line-height: 1.35;
+}
+
+.formulario-pedido__grupo {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.formulario-pedido__grupo[hidden] {
+  display: none;
+}
+
+.formulario-delivery {
+  padding: 0.9rem;
+  border: 1px solid rgba(181, 145, 80, 0.38);
+  border-radius: var(--radio-medio);
+  background: rgba(181, 145, 80, 0.07);
+}
+
+.formulario-delivery__encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--color-marron-oscuro);
+  font-size: 0.78rem;
+}
+
+.formulario-delivery__encabezado span {
+  color: var(--color-terracota);
+  font-weight: 850;
+}
+
 .formulario-pedido label {
   display: grid;
   gap: 0.35rem;
@@ -1576,7 +1879,7 @@ h3 {
   font-weight: 800;
 }
 
-.formulario-pedido input,
+.formulario-pedido input:not([type="radio"]):not([type="checkbox"]),
 .formulario-pedido select,
 .formulario-pedido textarea {
   width: 100%;
@@ -1590,6 +1893,253 @@ h3 {
 
 .formulario-pedido textarea {
   resize: vertical;
+}
+
+.pago-anticipado {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid rgba(169, 66, 34, 0.26);
+  border-radius: var(--radio-medio);
+  background:
+    linear-gradient(145deg, rgba(169, 66, 34, 0.07), rgba(181, 145, 80, 0.08)),
+    var(--color-blanco-calido);
+}
+
+.pago-anticipado__badge {
+  width: fit-content;
+  padding: 0.3rem 0.55rem;
+  border-radius: 2rem;
+  color: var(--color-blanco-calido);
+  background: var(--color-terracota);
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pago-anticipado h4 {
+  margin: -0.15rem 0 0;
+  color: var(--color-marron-oscuro);
+  font-family: var(--fuente-titulos);
+  font-size: 1.45rem;
+}
+
+.pago-anticipado > p:not(.pago-anticipado__aviso) {
+  margin: -0.35rem 0 0.1rem;
+  color: var(--color-texto-suave);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.pago-instrucciones {
+  display: grid;
+  grid-template-columns: 6.6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  background: rgba(255, 253, 248, 0.85);
+}
+
+.pago-instrucciones[hidden] {
+  display: none;
+}
+
+.pago-qr-demo {
+  position: relative;
+  display: grid;
+  width: 6.6rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 0.45rem solid white;
+  border-radius: 0.85rem;
+  color: white;
+  background:
+    repeating-conic-gradient(from 45deg, currentColor 0 25%, transparent 0 50%)
+    50% / 1rem 1rem;
+  box-shadow:
+    0 0 0 1px var(--color-borde),
+    0 10px 22px rgba(54, 37, 27, 0.12);
+  place-items: center;
+}
+
+.pago-qr-demo[data-metodo="yape"] {
+  color: #5f2582;
+}
+
+.pago-qr-demo[data-metodo="plin"] {
+  color: #008e97;
+}
+
+.pago-qr-demo::before {
+  position: absolute;
+  inset: 25%;
+  border: 0.35rem solid currentColor;
+  border-radius: 0.55rem;
+  background: white;
+  content: "";
+}
+
+.pago-qr-demo span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: currentColor;
+  font-size: 0;
+  place-items: center;
+}
+
+.pago-qr-demo span::after {
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.pago-qr-demo[data-metodo="yape"] span::after {
+  content: "YA";
+}
+
+.pago-qr-demo[data-metodo="plin"] span::after {
+  content: "PL";
+}
+
+.pago-instrucciones__texto {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.pago-instrucciones__texto > span {
+  color: var(--color-texto-suave);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pago-instrucciones__texto > strong {
+  color: var(--color-terracota);
+  font-family: var(--fuente-titulos);
+  font-size: 1.5rem;
+}
+
+.pago-instrucciones__texto p {
+  margin: 0.15rem 0 0;
+  color: var(--color-marron-oscuro);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.pago-instrucciones__texto small {
+  color: var(--color-texto-suave);
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+.pago-alternativo {
+  display: grid;
+  grid-template-columns: 3.4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  background: rgba(255, 253, 248, 0.85);
+}
+
+.pago-alternativo[hidden] {
+  display: none;
+}
+
+.pago-alternativo__icono {
+  display: grid;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  color: var(--color-blanco-calido);
+  background: var(--color-verde);
+  font-size: 1rem;
+  font-weight: 900;
+  place-items: center;
+}
+
+.pago-alternativo div {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.pago-alternativo strong {
+  color: var(--color-marron-oscuro);
+}
+
+.pago-alternativo p {
+  margin: 0;
+  color: var(--color-terracota);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.pago-alternativo small {
+  color: var(--color-texto-suave);
+  font-size: 0.64rem;
+  line-height: 1.4;
+}
+
+.formulario-pedido .pago-confirmacion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  background: rgba(255, 253, 248, 0.72);
+  cursor: pointer;
+}
+
+.formulario-pedido .pago-confirmacion input {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+  margin: 0.12rem 0 0;
+  accent-color: var(--color-terracota);
+}
+
+.formulario-pedido .pago-confirmacion span {
+  line-height: 1.4;
+}
+
+.pago-anticipado__aviso {
+  margin: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--color-borde);
+  color: var(--color-texto-suave);
+  font-size: 0.65rem;
+  line-height: 1.45;
+}
+
+.pago-anticipado__acciones {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+  gap: 0.65rem;
+}
+
+.pago-anticipado__acciones .boton {
+  width: 100%;
+}
+
+.carrito-lista--bloqueada {
+  opacity: 0.78;
+}
+
+.carrito-lista--bloqueada button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .formulario-pedido > .boton {
@@ -1790,4 +2340,30 @@ h3 {
 
 .carrito-item__subtotal {
   margin-bottom: 0.55rem !important;
+}
+
+@media print {
+  body.imprimir-comprobante-cliente * {
+    visibility: hidden !important;
+  }
+
+  body.imprimir-comprobante-cliente .pedido-generado,
+  body.imprimir-comprobante-cliente .pedido-generado * {
+    visibility: visible !important;
+  }
+
+  body.imprimir-comprobante-cliente .pedido-generado {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    background: white;
+  }
+
+  body.imprimir-comprobante-cliente .pedido-generado .grupo-botones,
+  body.imprimir-comprobante-cliente #pedido-aviso-whatsapp {
+    display: none !important;
+  }
 }

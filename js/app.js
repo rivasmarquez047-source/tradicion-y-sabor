@@ -57,7 +57,7 @@
   }
 
   /**
-   * Construye una tarjeta de platillo o bebida.
+   * Construye una tarjeta de menú o adicional.
    */
   function crearTarjetaProducto(producto, indice = 0) {
     const tarjeta = document.createElement("article");
@@ -70,9 +70,11 @@
     imagenContenedor.className = "tarjeta-producto__imagen-contenedor";
 
     const rutaRespaldo =
-      producto.categoria === "bebida"
-        ? "assets/images/bebidas/categoria-bebidas.png"
-        : "assets/images/platillos/categoria-platillos.png";
+      producto.tipoAdicional === "bebida"
+        ? "assets/images/bebidas/gaseosa-inka-kola.png"
+        : producto.categoria === "adicional"
+          ? "assets/images/adicionales/adicional-refresco.png"
+          : "assets/images/menus/menu-aji-gallina.png";
 
     const imagen = crearImagen({
       origen: producto.imagen,
@@ -84,7 +86,7 @@
     const categoria = document.createElement("span");
     categoria.className = "tarjeta-producto__categoria";
     categoria.textContent =
-      producto.subcategoria || (producto.categoria === "bebida" ? "Bebida" : "Platillo");
+      producto.subcategoria || (producto.categoria === "adicional" ? "Adicional" : "Menú");
 
     imagenContenedor.append(imagen, categoria);
 
@@ -107,6 +109,15 @@
     descripcion.className = "tarjeta-producto__descripcion";
     descripcion.textContent = producto.descripcion;
 
+    const incluye = document.createElement("ul");
+    incluye.className = "tarjeta-producto__incluye";
+    incluye.hidden = !producto.incluye?.length;
+    (producto.incluye || []).forEach((elemento) => {
+      const item = document.createElement("li");
+      item.textContent = elemento;
+      incluye.append(item);
+    });
+
     const acciones = document.createElement("div");
     acciones.className = "tarjeta-producto__acciones";
 
@@ -127,7 +138,7 @@
     botonPedido.setAttribute("aria-label", `Agregar ${producto.nombre} a mi pedido`);
 
     acciones.append(botonIngredientes, botonPedido);
-    contenido.append(encabezado, descripcion, acciones);
+    contenido.append(encabezado, descripcion, incluye, acciones);
     tarjeta.append(imagenContenedor, contenido);
 
     return tarjeta;
@@ -144,7 +155,7 @@
 
     const imagen = crearImagen({
       origen: servicio.imagen,
-      textoAlternativo: `Imagen demostrativa del servicio ${servicio.titulo}`,
+      textoAlternativo: `Imagen representativa del servicio ${servicio.titulo}`,
       respaldo: "assets/images/servicios/categoria-servicios.png",
       clase: "tarjeta-servicio__imagen"
     });
@@ -152,6 +163,11 @@
 
     const contenido = document.createElement("div");
     contenido.className = "tarjeta-servicio__contenido";
+
+    const numero = document.createElement("span");
+    numero.className = "tarjeta-servicio__numero";
+    numero.setAttribute("aria-hidden", "true");
+    numero.textContent = String(indice + 1).padStart(2, "0");
 
     const titulo = document.createElement("h3");
     titulo.textContent = servicio.titulo;
@@ -168,7 +184,7 @@
     boton.disabled = !servicio.disponible;
     boton.setAttribute("aria-label", `Solicitar información sobre ${servicio.titulo}`);
 
-    contenido.append(titulo, descripcion, boton);
+    contenido.append(numero, titulo, descripcion, boton);
     tarjeta.append(imagen, contenido);
 
     return tarjeta;
@@ -309,6 +325,12 @@
       }
     });
 
+    document.querySelectorAll("[data-negocio-mapa]").forEach((mapa) => {
+      if (negocio.mapaEmbed) {
+        mapa.src = negocio.mapaEmbed;
+      }
+    });
+
     const anioActual = document.querySelector("#anio-actual");
     if (anioActual) {
       anioActual.textContent = new Date().getFullYear();
@@ -317,22 +339,35 @@
 
   function renderizarProductos() {
     const catalogo = window.ESTADO_APP?.obtenerCatalogo() || [
-      ...datos.platillos,
-      ...datos.bebidas
+      ...datos.menus,
+      ...datos.adicionales
     ];
     todosLosProductos = catalogo;
-    const platillos = catalogo.filter((producto) => producto.categoria === "platillo");
-    const bebidas = catalogo.filter((producto) => producto.categoria === "bebida");
+    const menus = catalogo.filter((producto) => producto.categoria === "menu");
+    const adicionales = catalogo.filter(
+      (producto) =>
+        producto.categoria === "adicional" && producto.tipoAdicional !== "bebida"
+    );
+    const gaseosas = catalogo.filter(
+      (producto) =>
+        producto.categoria === "adicional" && producto.tipoAdicional === "bebida"
+    );
 
     renderizarColeccion(
-      document.querySelector("#lista-platillos"),
-      platillos,
+      document.querySelector("#lista-menus"),
+      menus,
       crearTarjetaProducto
     );
 
     renderizarColeccion(
-      document.querySelector("#lista-bebidas"),
-      bebidas,
+      document.querySelector("#lista-adicionales"),
+      adicionales,
+      crearTarjetaProducto
+    );
+
+    renderizarColeccion(
+      document.querySelector("#lista-gaseosas"),
+      gaseosas,
       crearTarjetaProducto
     );
 
@@ -345,8 +380,8 @@
     document.dispatchEvent(
       new CustomEvent("contenidoDinamicoListo", {
         detail: {
-          platillos: platillos.length,
-          bebidas: bebidas.length,
+          menus: menus.length,
+          adicionales: adicionales.length + gaseosas.length,
           servicios: datos.servicios.length
         }
       })

@@ -144,6 +144,14 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .tarjeta-servicio,
+  .tarjeta-servicio:nth-child(1),
+  .tarjeta-servicio:nth-child(2),
+  .tarjeta-servicio:nth-child(5),
+  .tarjeta-servicio:nth-child(6) {
+    grid-column: auto;
+  }
+
   .productos-cuadricula {
     grid-auto-columns: calc(50% - 0.65rem);
   }
@@ -158,17 +166,23 @@
   }
 
   .historia__imagen {
-    width: min(620px, 100%);
-    min-height: 520px;
+    width: min(680px, 100%);
+    min-height: 640px;
     margin-inline: auto;
-    border-radius: var(--radio-grande);
+    border-radius: 3rem 3rem 9rem 3rem;
+  }
+
+  .historia__imagen-sello {
+    right: 1rem;
+    bottom: 2rem;
   }
 
   .contacto__distribucion {
     grid-template-columns: 1fr;
   }
 
-  .mapa-provisional {
+  .mapa-negocio,
+  .mapa-negocio iframe {
     min-height: 360px;
   }
 
@@ -313,15 +327,28 @@
   }
 
   .tarjeta-servicio {
-    min-height: 360px;
+    min-height: 390px;
   }
 
   .historia__imagen {
-    min-height: 440px;
+    min-height: 520px;
   }
 
   .historia__detalle {
     grid-template-columns: 1fr;
+  }
+
+  .historia__detalle article:nth-child(2),
+  .historia__detalle article:nth-child(2):hover {
+    transform: none;
+  }
+
+  .historia__cifra {
+    grid-template-columns: 1fr;
+  }
+
+  .historia__cifra ul {
+    justify-content: flex-start;
   }
 
   .contacto__datos li {
@@ -329,7 +356,8 @@
     gap: 0.15rem;
   }
 
-  .mapa-provisional {
+  .mapa-negocio,
+  .mapa-negocio iframe {
     min-height: 320px;
   }
 
@@ -380,24 +408,6 @@
 
   .panel-carrito {
     width: min(440px, 100%);
-  }
-
-  .boton-whatsapp-flotante {
-    right: 1rem;
-    bottom: 1rem;
-    width: 3.5rem;
-    padding: 0.55rem;
-    justify-content: center;
-  }
-
-  .boton-whatsapp-flotante__texto {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   .boton-carrito-flotante {
@@ -461,20 +471,30 @@
     padding: 1.5rem;
   }
 
-  .mapa-provisional {
-    padding: 1.2rem;
-  }
-
-  .mapa-provisional div {
-    padding: 1.4rem;
+  .mapa-negocio,
+  .mapa-negocio iframe {
+    min-height: 300px;
   }
 
   .historia__imagen {
-    min-height: 360px;
+    min-height: 420px;
+    border-width: 0.4rem;
+    border-radius: 2rem 2rem 6rem 2rem;
+  }
+
+  .historia__imagen-sello {
+    right: 0.7rem;
+    bottom: 1rem;
+    width: 7.3rem;
+  }
+
+  .historia__imagen-sello strong {
+    font-size: 1.55rem;
   }
 
   .historia__cifra {
     width: 100%;
+    border-radius: 1.5rem;
   }
 
   .modal__imagen-contenedor {
@@ -533,6 +553,28 @@
 
   .panel-carrito__cuerpo {
     padding: 1rem 1rem 2.5rem;
+  }
+
+  .tipo-pedido__opciones {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario-delivery__encabezado {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .pago-instrucciones {
+    grid-template-columns: 1fr;
+  }
+
+  .pago-qr-demo {
+    justify-self: center;
+  }
+
+  .pago-anticipado__acciones {
+    grid-template-columns: 1fr;
   }
 
   .carrito-item {

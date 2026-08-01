@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Acceso interno a Caja, Cocina y Administración de D'MARCO P.MEDRANO.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Acceso interno | D'MARCO P.MEDRANO</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/access.css">
+    <script src="js/auth.js"></script>
+    <script src="js/login.js" defer></script>
+  </head>
+  <body class="acceso-page">
+    <a class="skip-link" href="#formulario-acceso">Saltar al formulario de acceso</a>
+
+    <main class="acceso-principal">
+      <section class="acceso-presentacion" aria-labelledby="acceso-marca">
+        <a class="acceso-volver" href="index.html">← Volver a la página del cliente</a>
+
+        <div class="acceso-presentacion__contenido">
+          <p class="acceso-etiqueta">Gestión del restaurante</p>
+          <h1 id="acceso-marca">D'MARCO<br>P.MEDRANO</h1>
+          <p>
+            Un solo punto de entrada para consultar pedidos, coordinar la cocina y revisar la
+            administración.
+          </p>
+        </div>
+
+        <div class="acceso-presentacion__pie">
+          <span>Acceso interno</span>
+          <span>Ica · Perú</span>
+        </div>
+      </section>
+
+      <section class="acceso-panel" aria-labelledby="titulo-acceso">
+        <div class="acceso-panel__encabezado">
+          <p class="etiqueta">Área privada</p>
+          <h2 id="titulo-acceso">Ingresa al panel</h2>
+          <p>Selecciona la vista que deseas abrir y escribe la contraseña asignada.</p>
+        </div>
+
+        <form class="acceso-formulario" id="formulario-acceso" novalidate>
+          <fieldset class="acceso-vistas">
+            <legend>¿A qué vista deseas ingresar?</legend>
+
+            <label class="acceso-vista">
+              <input type="radio" name="vista" value="caja" checked>
+              <span aria-hidden="true">01</span>
+              <strong>Caja</strong>
+              <small>Pedidos y pagos</small>
+            </label>
+
+            <label class="acceso-vista">
+              <input type="radio" name="vista" value="cocina">
+              <span aria-hidden="true">02</span>
+              <strong>Cocina</strong>
+              <small>Preparación</small>
+            </label>
+
+            <label class="acceso-vista">
+              <input type="radio" name="vista" value="admin">
+              <span aria-hidden="true">03</span>
+              <strong>Administración</strong>
+              <small>Control general</small>
+            </label>
+          </fieldset>
+
+          <div class="acceso-campo">
+            <label for="clave-acceso">Contraseña</label>
+            <div class="acceso-clave">
+              <input
+                id="clave-acceso"
+                name="clave"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Escribe la contraseña"
+                required
+              >
+              <button
+                id="alternar-clave"
+                type="button"
+                aria-label="Mostrar u ocultar la contraseña"
+                aria-pressed="false"
+              >
+                Mostrar
+              </button>
+            </div>
+          </div>
+
+          <p class="acceso-mensaje" id="mensaje-acceso" role="status" aria-live="polite" hidden></p>
+
+          <button class="boton boton--principal acceso-ingresar" id="boton-ingresar" type="submit">
+            Ingresar al panel
+          </button>
+
+          <p class="acceso-nota">
+            Demostración estática: la sesión permanece activa durante dos horas en esta pestaña.
+          </p>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

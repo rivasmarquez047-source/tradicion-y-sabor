@@ -1,10 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="acceso-verificando">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Administración demostrativa de Tradición y Sabor.">
-    <title>Administración | Tradición &amp; Sabor</title>
+    <meta name="description" content="Administración demostrativa de D'MARCO P.MEDRANO.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Administración | D'MARCO P.MEDRANO</title>
+    <script src="js/auth.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/panels.css">
     <script src="js/data.js" defer></script>
@@ -14,16 +16,19 @@
   <body class="panel-page">
     <header class="panel-header">
       <div class="contenedor panel-header__contenido">
-        <a class="marca" href="index.html?demo=1" aria-label="Volver a la vista del cliente">
-          <span class="marca__nombre">Tradición &amp; Sabor</span>
-          <span class="marca__descripcion">Panel de demostración</span>
+        <a class="marca" href="index.html" aria-label="Volver a la vista del cliente">
+          <span class="marca__nombre">D'MARCO P.MEDRANO</span>
+          <span class="marca__descripcion">Sistema interno</span>
         </a>
-        <nav class="panel-navegacion" aria-label="Cambiar vista">
-          <a href="index.html?demo=1">Cliente</a>
-          <a href="caja.html">Caja</a>
-          <a href="cocina.html">Cocina</a>
-          <a class="activo" href="admin.html">Administración</a>
-        </nav>
+        <div class="panel-header__acciones">
+          <nav class="panel-navegacion" aria-label="Cambiar vista">
+            <a href="index.html">Cliente</a>
+            <a href="caja.html">Caja</a>
+            <a href="cocina.html">Cocina</a>
+            <a class="activo" href="admin.html">Administración</a>
+          </nav>
+          <button class="panel-cerrar-sesion" type="button" data-cerrar-sesion>Cerrar sesión</button>
+        </div>
       </div>
     </header>
 
@@ -57,7 +62,7 @@
           <strong id="admin-pagados">0</strong>
         </article>
         <article class="tarjeta-metrica">
-          <span>Pendientes de pago</span>
+          <span>Pagos por validar</span>
           <strong id="admin-pendientes">0</strong>
         </article>
       </section>
@@ -70,8 +75,8 @@
           </div>
           <div class="filtros-admin" role="group" aria-label="Filtrar productos">
             <button class="activo" type="button" data-filtro-admin="todos">Todos</button>
-            <button type="button" data-filtro-admin="platillo">Platillos</button>
-            <button type="button" data-filtro-admin="bebida">Bebidas</button>
+            <button type="button" data-filtro-admin="menu">Menús</button>
+            <button type="button" data-filtro-admin="adicional">Adicionales</button>
           </div>
         </div>
         <div class="productos-admin" id="productos-admin"></div>

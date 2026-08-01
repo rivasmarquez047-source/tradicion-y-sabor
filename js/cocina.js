@@ -77,7 +77,10 @@
     const codigo = document.createElement("strong");
     codigo.textContent = pedido.codigo;
     const mesa = document.createElement("span");
-    mesa.textContent = `Mesa ${pedido.mesa}`;
+    mesa.textContent =
+      pedido.tipoPedido === "delivery"
+        ? `Delivery${pedido.entrega?.distrito ? ` · ${pedido.entrega.distrito}` : ""}`
+        : `Mesa ${pedido.mesa}`;
     encabezado.append(codigo, mesa);
 
     const tiempo = document.createElement("p");
@@ -91,7 +94,22 @@
     const productos = document.createElement("ul");
     productos.className = "pedido-cocina__productos";
     pedido.productos.forEach((item) => productos.append(crearProducto(item)));
-    tarjeta.append(encabezado, tiempo, productos);
+    tarjeta.append(encabezado, tiempo);
+
+    if (pedido.tipoPedido === "delivery") {
+      const entrega = document.createElement("p");
+      entrega.className = "pedido-cocina__entrega";
+      entrega.textContent = [
+        pedido.entrega?.nombre,
+        pedido.entrega?.celular,
+        pedido.entrega?.direccion
+      ]
+        .filter(Boolean)
+        .join(" · ");
+      tarjeta.append(entrega);
+    }
+
+    tarjeta.append(productos);
 
     const acciones = document.createElement("div");
     acciones.className = "pedido-cocina__acciones";
@@ -141,7 +159,10 @@
   function render() {
     const pedidos = estado
       .obtenerPedidos()
-      .filter((pedido) => pedido.estadoPedido !== "cerrado");
+      .filter(
+        (pedido) =>
+          pedido.estadoPedido !== "cerrado" && pedido.estadoPago === "pagado"
+      );
     const pendientes = pedidos.filter((pedido) => pedido.estadoPedido === "recibido");
     const preparando = pedidos.filter((pedido) => pedido.estadoPedido === "preparando");
     const listos = pedidos.filter((pedido) =>
@@ -167,7 +188,7 @@
 
     const nombres = {
       preparando: "Pedido en preparación.",
-      listo: "Pedido listo para la mesa.",
+      listo: "Pedido listo para entregar.",
       entregado: "Pedido entregado; queda pendiente de pago."
     };
     estado.actualizarPedido(boton.dataset.pedidoCodigo, {
